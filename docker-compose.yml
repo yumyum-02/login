@@ -5,7 +5,7 @@ services:
       - ./src:/var/www/html
     ports:
       - "8080:8080"
-    command: php -S 0.0.0.0:8080 -t /var/www/html
+    command: sh -c "docker-php-ext-install pdo_mysql && php -S 0.0.0.0:8080 -t /var/www/html"
   mysql:
     image: mysql:8.0
     environment:

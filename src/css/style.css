@@ -1,0 +1,30 @@
+div {
+  text-align: center;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  margin: 0 auto 10px auto;
+}
+
+p > label {
+  width: 100px;
+  text-align: right;
+}
+
+p > input {
+  flex: 1;
+  max-width: 200px;
+}
+
+a {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.err-msg {
+  color: red;
+  font-weight: bold;
+}
