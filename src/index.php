@@ -1,7 +1,5 @@
 <?php
-
-session_start();
-session_regenerate_id();
+require_once './bootstrap.php';
 
 if (!isset($_SESSION['user'])) {
   $msg = urlencode("ログインしてください。");
@@ -10,5 +8,4 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once './logout.php';
-
 require_once './template/index_template.php';

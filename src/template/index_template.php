@@ -9,8 +9,8 @@
 
 <body>
   <?php
-  echo 'ID：' . htmlspecialchars($_SESSION['user']['login_id'], ENT_QUOTES, 'UTF-8') . '<br>';
-  echo 'ユーザー名：' . htmlspecialchars($_SESSION['user']['name'], ENT_QUOTES, 'UTF-8');
+  echo 'ID：' . escape($_SESSION['user']['login_id']) . '<br>';
+  echo 'ユーザー名：' . escape($_SESSION['user']['name']);
   ?>
   <form action="#" method="post">
     <input type="submit" name="logout" value="ログアウト">

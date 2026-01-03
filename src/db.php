@@ -32,3 +32,8 @@ function getUsersInfo(): array
 
   return $users_info;
 }
+
+function escape($value)
+{
+  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}

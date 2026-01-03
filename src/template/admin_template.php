@@ -9,10 +9,6 @@
 
 <body>
   <?php
-  function escape($value)
-  {
-    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-  }
   foreach ($users_info as $user) {
     echo 'ログインID: ' . escape($user['login_id']) . '<br>';
     echo '名前: ' . escape($user['name']) . '<br><br>';
