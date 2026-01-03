@@ -16,3 +16,19 @@ function connectDb()
     exit();
   }
 }
+
+function getUsersInfo(): array
+{
+  $pdo = connectDb();
+
+  $sql = '
+        SELECT login_id, name
+        FROM users
+    ';
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute();
+
+  $users_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  return $users_info;
+}

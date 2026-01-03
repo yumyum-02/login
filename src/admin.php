@@ -1,39 +1,18 @@
 <?php
-require './db.php';
-
-session_start();
-session_regenerate_id();
+require_once './bootstrap.php';
+require_once './logout.php';
 
 if (!isset($_SESSION['user'])) {
   header('Location: ./noset.php');
   exit();
 }
 
-if (isset($_POST['logout'])) {
-
-  if (empty($_SESSION['logout_token']) || ($_SESSION['logout_token'] !== $_POST['logout_token'])) exit('不正な投稿です');
-  if (isset($_SESSION['logout_token'])) unset($_SESSION['logout_token']);
-  if (isset($_POST['logout_token'])) unset($_POST['logout_token']);
-
-  $_SESSION = array();
-  if (isset($_COOKIE["PHPSESSID"])) setcookie("PHPSESSID", '', time() - 1800, '/');
-  session_destroy();
-
-  $msg = urlencode("ログアウトしました。");
-  header('Location: ./login.php?msg=' . $msg);
-  exit();
-}
-
-$pdo = connectDb();
-$sql = ('
-    SELECT login_id, name
-    FROM users
-    ');
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-
-$user_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$users_info = getUsersInfo();
 
 $pdo = null;
 $stmt = null;
+
+$token = sha1(uniqid(mt_rand(), true));
+$_SESSION['logout_token'] = $token;
+
 require './template/admin_template.php';

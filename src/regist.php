@@ -1,8 +1,5 @@
 <?php
-require './db.php';
-
-session_start();
-session_regenerate_id();
+require './bootstrap.php';
 
 if (
   isset($_POST['regist_btn']) &&
@@ -59,4 +56,4 @@ if (
   $stmt = null;
 }
 
-require './template/regist_template.php';
+require_once './template/regist_template.php';

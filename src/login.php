@@ -1,8 +1,5 @@
 <?php
-require './db.php';
-
-session_start();
-session_regenerate_id();
+require_once './bootstrap.php';
 
 if (isset($_GET['msg'])) $success_logout_msg = $_GET['msg'];
 
@@ -50,4 +47,4 @@ if (
   $stmt = null;
 }
 
-require './template/login_template.php';
+require_once './template/login_template.php';

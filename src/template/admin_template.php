@@ -9,17 +9,19 @@
 
 <body>
   <?php
-  foreach ($user_info as $user) {
-    echo 'ログインID: ' . htmlspecialchars($user['login_id'], ENT_QUOTES, 'UTF-8') . '<br>';
-    echo '名前: ' . htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') . '<br><br>';
+  function escape($value)
+  {
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+  }
+  foreach ($users_info as $user) {
+    echo 'ログインID: ' . escape($user['login_id']) . '<br>';
+    echo '名前: ' . escape($user['name']) . '<br><br>';
   }
   ?>
   <form action="#" method="post">
     <input type="submit" name="logout" value="ログアウト">
 
     <?php
-    $token = sha1(uniqid(mt_rand(), true));
-    $_SESSION['logout_token'] = $token;
     echo '<input type="hidden" name="logout_token" value="' . $token . '" />';
     ?>
   </form>
