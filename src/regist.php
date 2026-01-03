@@ -19,7 +19,7 @@ if (
   if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
 
   $name = $_POST['name'];
-  $ligin_id = $_POST['login_id'];
+  $login_id = $_POST['login_id'];
   $password = $_POST['password'];
 
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
