@@ -4,10 +4,6 @@ require './db.php';
 session_start();
 session_regenerate_id();
 
-const DB_HOST = 'mysql:dbname=login_db;host=mysql;charset=utf8';
-const DB_USER = 'root';
-const DB_PASSWORD = 'secret';
-
 if (
   isset($_POST['regist_btn']) &&
   (isset($_POST['name']) && $_POST['name'] != '') &&
