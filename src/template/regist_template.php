@@ -23,8 +23,8 @@
 
       <?php
       // 不正リクエストチェック用のトークン生成
-      $token = bin2hex(random_bytes(32));
-      $_SESSION['regist_token'] = $token;
+      $token = bin2hex(random_bytes(32)); //ランダムでユニークなIDを生成し　bin2hex=バイナリデータを16進数文字列に変換 random_bytes(32)=32バイトのランダムなバイナリデータを生成
+      $_SESSION['regist_token'] = $token; //セッションにトークンを保存。後でフォームが送信されたときに、送信されてきたトークンとセッション内のトークンを照合して、正当なリクエストかどうか確認
       echo '<input type="hidden" name="regist_token" value="' . $token . '" />';
       ?>
     </form>

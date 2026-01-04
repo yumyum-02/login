@@ -3,6 +3,12 @@ require_once './bootstrap.php';
 
 if (isset($_GET['msg'])) $success_logout_msg = $_GET['msg'];
 
+$login_msg = '';
+if (isset($_SESSION['msg'])) {
+  $login_msg = $_SESSION['msg'];
+  unset($_SESSION['msg']); // 一度表示したら消す
+}
+
 if (
   isset($_POST['login_btn']) &&
   (isset($_POST['login_id']) && $_POST['login_id'] != '') &&

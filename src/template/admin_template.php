@@ -8,6 +8,7 @@
 </head>
 
 <body>
+  <!-- ユーザー情報の表示 -->
   <?php
   foreach ($users_info as $user) {
     echo 'ログインID: ' . escape($user['login_id']) . '<br>';
@@ -16,7 +17,6 @@
   ?>
   <form action="#" method="post">
     <input type="submit" name="logout" value="ログアウト">
-
     <?php
     echo '<input type="hidden" name="logout_token" value="' . $token . '" />';
     ?>

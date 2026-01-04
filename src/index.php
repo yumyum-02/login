@@ -1,9 +1,10 @@
 <?php
 require_once './bootstrap.php';
 
+// sessionにuser情報がなければログイン画面へリダイレクト
 if (!isset($_SESSION['user'])) {
-  $msg = urlencode("ログインしてください。");
-  header('Location: ./login.php?msg=' . $msg);
+  $_SESSION['msg'] = "ログインしてください。";
+  header('Location: ./login.php');
   exit();
 }
 

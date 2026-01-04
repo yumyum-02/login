@@ -7,12 +7,12 @@ function connectDb()
 
   try {
     $pdo = new PDO($db_host, $db_user, $db_password, [
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-      PDO::ATTR_EMULATE_PREPARES => false,
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, //エラーモードを例外に設定（デフォルトでは PDO は エラーが発生しても警告を出すだけで処理は続くためエラーが出たらcatchでエラーメッセージを出すようにしている）
+      PDO::ATTR_EMULATE_PREPARES => false, //後から値を差し込むモードを無効化(安全性を高めるため)
     ]);
     return $pdo;
   } catch (PDOException $e) {
-    echo '接続失敗' . $e->getMessage();
+    echo '接続失敗' . $e->getMessage(); // $e->getMessage()はデバッグやログに正確な原因を表示する
     exit();
   }
 }
@@ -20,25 +20,26 @@ function connectDb()
 // ログイン時のユーザー情報取得
 function getUserLogin($login_id): array
 {
+  // PDOでデータベースに接続
   $pdo = connectDb();
+  // 、userテーブルからログインIDに一致するレコードを取得
   $sql = ('
     SELECT login_id, password, name
     FROM users
     WHERE login_id = :LOGIN_ID
-    '); //ログインIDに一致するレコードを取得
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); //ログインIDをセットしている
-  $stmt->execute();
-  // PDOでデータベースに接続し、userテーブルからログインIDに一致するレコードを取得
-
-  $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); //FETCH_ASSOC=連想配列として取得
-  return $user_info;
+    '); // WHEREでユーザーIDが入力された値と同じレコードだけを取り出す
+  $stmt = $pdo->prepare($sql); // SQL文をデータベースに送る準備 prepare() を使うと、後で値を安全にbindValue()で入れられる
+  $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); // 準備したSQLの中の :LOGIN_ID という穴に、変数 $login_id の値を入れて、安全に実行できるようにする( PDO::PARAM_STR=文字列として扱う)
+  $stmt->execute(); //データベースに送って結果を出す
+  $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); // 返ってきたデータを連想配列の形に変換して全部取得(FETCH_ASSOC=連想配列として取得)
+  return $user_info; // user_infoを外でも使えるように返す
 }
 
 //　会員登録時のユーザー情報取得
 function getUserRegister($login_id): array
 {
   $pdo = connectDb();
+  // usersテーブルからログインIDに一致するレコードを取得 一意のIDしか許可しないのでチェックしている
   $sql = ('
   SELECT login_id
   FROM users
@@ -55,16 +56,17 @@ function getUserRegister($login_id): array
 function getUsersInfo(): array
 {
   $pdo = connectDb();
-  $sql = '
+  $sql = ('
         SELECT login_id, name
         FROM users
-    ';
+    ');
   $stmt = $pdo->prepare($sql);
   $stmt->execute();
   $users_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $users_info;
 }
 
+// XSS対策用エスケープ関数
 function escape($value)
 {
   return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
