@@ -1,6 +1,4 @@
 <?php
-require './bootstrap.php';
-
 if (
   isset($_POST['regist_btn']) &&
   (isset($_POST['name']) && $_POST['name'] != '') &&
@@ -18,12 +16,21 @@ if (
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
   try {
-    $user_info = getUserRegister($login_id);
+    $pdo = connectDb();
+
+    $sql = ('
+    SELECT login_id
+    FROM users
+    WHERE login_id = :LOGIN_ID;
+    ');
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); // PARAM_STR=名前やアドレスなどのテキストデータをデータベースに挿入したり更新したりする際に利用
+    $stmt->execute();
+    $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); //FETCH_ASSOC=連想配列として取得
 
     if (count($user_info)) {
       $err_msg = 'そのIDはすでに使用されています。';
     } else {
-      $pdo = connectDb();
       $sql = ('
       INSERT INTO users (name, login_id, password)
       VALUES (:NAME, :LOGIN_ID, :PASSWORD);
@@ -46,5 +53,3 @@ if (
   $pdo = null;
   $stmt = null;
 }
-
-require_once './template/regist_template.php';

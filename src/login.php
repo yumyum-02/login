@@ -16,18 +16,7 @@ if (
   $password = $_POST['password'];
 
   try {
-    $pdo = connectDb();
-    $sql = ('
-    SELECT login_id, password, name
-    FROM users
-    WHERE login_id = :LOGIN_ID
-    '); //ログインIDに一致するレコードを取得
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); //ログインIDをセットしている
-    $stmt->execute();
-    // PDOでデータベースに接続し、userテーブルからログインIDに一致するレコードを取得
-
-    $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $user_info = getUserLogin($login_id);
 
     if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
       $_SESSION['user'] = array(
