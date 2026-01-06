@@ -1,4 +1,6 @@
 <?php
+require './bootstrap.php';
+
 if (
   // 会員登録ボタンが押され、かつ各フォームが入力されている場合
   isset($_POST['regist_btn']) &&
