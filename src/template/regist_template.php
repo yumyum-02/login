@@ -15,7 +15,7 @@
     <!-- 登録エラーメッセージ -->
     <?php if (isset($err_msg)) echo '<p class="err-msg">' . $err_msg . '</p>'; ?>
 
-    <form action="#" method="post">
+    <form action="./exec_register.php" method="post">
       <p><label for="name">ニックネーム</label><input type="text" name="name"></p>
       <p><label for="login_id">ID</label><input type="text" name="login_id"></p>
       <p><label for="password">パスワード</label><input type="password" name="password"></p>
