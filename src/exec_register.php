@@ -2,18 +2,13 @@
 require './bootstrap.php';
 
 if (
-  // 会員登録ボタンが押され、かつ各フォームが入力されている場合
-  isset($_POST['regist_btn']) &&
+  // 各フォームが入力されている場合
   (isset($_POST['name']) && $_POST['name'] != '') &&
   (isset($_POST['login_id']) && $_POST['login_id'] != '') &&
   (isset($_POST['password']) && $_POST['password'] != '')
 ) {
-  // 不正リクエストチェック
-  // トークンがセッションに存在しない、または一致しない場合は処理を中止
-  if (empty($_SESSION['regist_token']) || ($_SESSION['regist_token'] !== $_POST['regist_token'])) exit('不正なリクエストです');
-  // トークンの破棄（1回限り有効にするため）
-  if (isset($_SESSION['regist_token'])) unset($_SESSION['regist_token']);
-  if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
+  // 不正リクエストチェック トークンの照合
+  require './cef_tolen.php';
 
   $name = $_POST['name'];
   $login_id = $_POST['login_id'];
@@ -28,6 +23,8 @@ if (
     // すでに登録されているIDの場合はエラーメッセージを表示
     if (count($user_info)) {
       $err_msg = 'そのIDはすでに使用されています。';
+      require './template/regist_template.php';
+      exit();
     } else {
       // 登録されていないIDの場合は、usersテーブルに新規登録
       // PDOでデータベースに接続
