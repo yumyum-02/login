@@ -17,7 +17,7 @@ function connectDb()
   }
 }
 
-// ログイン時のユーザー情報取得
+// login_idに一致しているusersテーブルのレコードを取得して返す
 function getUserLogin($login_id): array
 {
   // PDOでデータベースに接続
@@ -66,7 +66,8 @@ function getUsersInfo(): array
   return $users_info;
 }
 
-// XSS対策用エスケープ関数
+// クロスサイトスクリプティング(XSS)対策用エスケープ関数
+// 今回はユーザー情報を出しているページで使用
 function escape($value)
 {
   return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');

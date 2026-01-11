@@ -10,7 +10,7 @@
 <body>
   <!-- ログインIDとユーザー名の表示 -->
   <?php
-  echo 'ID：' . escape($_SESSION['user']['login_id']) . '<br>';
+  echo 'ID：' . escape($_SESSION['user']['login_id']) . '<br>'; // escape=クロスサイトスクリプティング対策用に文字列で認識するように指定
   echo 'ユーザー名：' . escape($_SESSION['user']['name']);
   ?>
   <form action="#" method="post">

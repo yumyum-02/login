@@ -30,6 +30,8 @@ if (
     $user_info = getUserLogin($login_id);
 
     // 取得した情報と入力されたパスワードを照合
+    //password_verify = ハッシュ化されたパスワードの照合
+    // $user_info に要素が1件以上あるかパスワードが一致している時
     if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
       $_SESSION['user'] = array(
         'name'     => $user_info[0]['name'],
