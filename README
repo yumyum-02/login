@@ -1,3 +1,4 @@
 make build
 make up
-docker exec -it mysql mysql -u root -p < db_data.sql
+
+db_dataにあるテーブルを作成
