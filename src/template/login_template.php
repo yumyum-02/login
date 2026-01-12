@@ -20,10 +20,13 @@
       <input type="submit" value="ログイン" name="login_btn">
 
       <?php
-      $token = bin2hex(random_bytes(32));
-      $_SESSION['login_token'] = $token;
-      echo '<input type="hidden" name="login_token" value="' . $token . '" />';
+      if (!isset($_SESSION['login_token'])) {
+        $token = bin2hex(random_bytes(32));
+        $_SESSION['login_token'] = $token;
+      }
       ?>
+      <input type="hidden" name="login_token" value="<?= htmlspecialchars($_SESSION['login_token']) ?>">
+
     </form>
 
     <a href="./regist.php">会員登録はこちら</a>

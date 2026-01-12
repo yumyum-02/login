@@ -18,10 +18,12 @@
     <input type="submit" name="logout" value="ログアウト">
     <!-- 外部から勝手にログアウトではなくこの画面からログアウトしたことを照会している -->
     <?php
-    $token = bin2hex(random_bytes(32)); //ランダムでユニークなIDを生成し　bin2hex=バイナリデータを16進数文字列に変換 random_bytes(32)=32バイトのランダムなバイナリデータを生成
-    $_SESSION['logout_token'] = $token; //セッションにトークンを保存。後でフォームが送信されたときに、送信されてきたトークンとセッション内のトークンを照合して、正当なリクエストかどうか確認
-    echo '<input type="hidden" name="logout_token" value="' . $token . '" />'; //サーバーは $_POST['logout_token'] と $_SESSION['logout_token'] を照合して正当性チェックする
+    if (!isset($_SESSION['logout_token'])) {
+      $_SESSION['logout_token'] = bin2hex(random_bytes(32));
+    }
     ?>
+    <input type="hidden" name="logout_token" value="<?= htmlspecialchars($_SESSION['logout_token']) ?>">
+
   </form>
 </body>
 

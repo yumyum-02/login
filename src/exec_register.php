@@ -8,7 +8,11 @@ if (
   (isset($_POST['password']) && $_POST['password'] != '')
 ) {
   // 不正リクエストチェック トークンの照合
-  require './cef_tolen.php';
+  // トークンがセッションに存在しない、または一致しない場合は処理を中止
+  if (empty($_SESSION['regist_token']) || ($_SESSION['regist_token'] !== $_POST['regist_token'])) exit('不正なリクエストです');
+  // トークンの破棄（1回限り有効にするため）
+  if (isset($_SESSION['regist_token'])) unset($_SESSION['regist_token']);
+  if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
 
   $name = $_POST['name'];
   $login_id = $_POST['login_id'];
