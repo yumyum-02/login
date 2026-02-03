@@ -18,18 +18,21 @@ function connectDb()
 }
 
 // login_idに一致しているusersテーブルのレコードを取得して返す
-function getUserLogin($login_id): array
+function getUserLogin(string $login): array
 {
   // PDOでデータベースに接続
   $pdo = connectDb();
   // 、userテーブルからログインIDに一致するレコードを取得
-  $sql = ('
-    SELECT login_id, password, name
+  $sql = '
+    SELECT login_id, password, name, email
     FROM users
     WHERE login_id = :LOGIN_ID
-    '); // WHEREでユーザーIDが入力された値と同じレコードだけを取り出す
+          OR email = :EMAIL
+          LIMIT 1
+    '; // WHEREでユーザーIDが入力された値と同じレコードだけを取り出す
   $stmt = $pdo->prepare($sql); // SQL文をデータベースに送る準備 prepare() を使うと、後で値を安全にbindValue()で入れられる
-  $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); // 準備したSQLの中の :LOGIN_ID という穴に、変数 $login_id の値を入れて、安全に実行できるようにする( PDO::PARAM_STR=文字列として扱う)
+  $stmt->bindValue(':LOGIN_ID', $login, PDO::PARAM_STR); // 準備したSQLの中の:login_id という穴に、変数 $login_id の値を入れて、安全に実行できるようにする( PDO::PARAM_STR=文字列として扱う)
+  $stmt->bindValue(':EMAIL', $login, PDO::PARAM_STR);
   $stmt->execute(); //データベースに送って結果を出す
   $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); // 返ってきたデータを連想配列の形に変換して全部取得(FETCH_ASSOC=連想配列として取得)
   return $user_info; // user_infoを外でも使えるように返す

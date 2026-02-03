@@ -15,7 +15,7 @@
     <?php if (isset($err_msg)) echo '<p class="err-msg">' . $err_msg . '</p>'; ?>
     <?php if ($login_msg !== ''): ?><p class="login-msg"><?= htmlspecialchars($login_msg) ?></p><?php endif; ?>
     <form action="" method="post">
-      <p><label for="login_id">ID</label><input type="text" name="login_id"></p>
+      <p><label for="login_id">IDもしくはメールアドレス</label><input type="text" name="login_id"></p>
       <p><label for="password">パスワード</label><input type="password" name="password"></p>
       <input type="submit" value="ログイン" name="login_btn">
 

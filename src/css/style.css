@@ -10,7 +10,7 @@ p {
 }
 
 p > label {
-  width: 100px;
+  width: 200px;
   text-align: right;
 }
 
