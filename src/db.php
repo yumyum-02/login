@@ -17,21 +17,19 @@ function connectDb()
   }
 }
 
-// login_idに一致しているusersテーブルのレコードを取得して返す
+// emailに一致しているusersテーブルのレコードを取得して返す
 function getUserLogin(string $login): array
 {
   // PDOでデータベースに接続
   $pdo = connectDb();
-  // 、userテーブルからログインIDに一致するレコードを取得
+  // userテーブルからemailに一致するレコードを取得
   $sql = '
-    SELECT login_id, password, name, email
+    SELECT email, password, name, email
     FROM users
-    WHERE login_id = :LOGIN_ID
-          OR email = :EMAIL
+    WHERE email = :EMAIL
           LIMIT 1
     '; // WHEREでユーザーIDが入力された値と同じレコードだけを取り出す
   $stmt = $pdo->prepare($sql); // SQL文をデータベースに送る準備 prepare() を使うと、後で値を安全にbindValue()で入れられる
-  $stmt->bindValue(':LOGIN_ID', $login, PDO::PARAM_STR); // 準備したSQLの中の:login_id という穴に、変数 $login_id の値を入れて、安全に実行できるようにする( PDO::PARAM_STR=文字列として扱う)
   $stmt->bindValue(':EMAIL', $login, PDO::PARAM_STR);
   $stmt->execute(); //データベースに送って結果を出す
   $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); // 返ってきたデータを連想配列の形に変換して全部取得(FETCH_ASSOC=連想配列として取得)
@@ -39,17 +37,17 @@ function getUserLogin(string $login): array
 }
 
 //　会員登録時のユーザー情報取得
-function getUserRegister($login_id): array
+function getUserRegister($email): array
 {
   $pdo = connectDb();
-  // usersテーブルからログインIDに一致するレコードを取得 一意のIDしか許可しないのでチェックしている
+  // usersテーブルからemailに一致するレコードを取得 一意のIDしか許可しないのでチェックしている
   $sql = ('
-  SELECT login_id
+  SELECT email
   FROM users
-  WHERE login_id = :LOGIN_ID;
+  WHERE email = :EMAIL;
   ');
   $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':LOGIN_ID', $login_id, PDO::PARAM_STR); // PARAM_STR=名前やアドレスなどのテキストデータをデータベースに挿入したり更新したりする際に利用
+  $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR); // PARAM_STR=名前やアドレスなどのテキストデータをデータベースに挿入したり更新したりする際に利用
   $stmt->execute();
   $user_info = $stmt->fetchAll(PDO::FETCH_ASSOC); //FETCH_ASSOC=連想配列として取得
   return $user_info;
@@ -60,7 +58,7 @@ function getUsersInfo(): array
 {
   $pdo = connectDb();
   $sql = ('
-        SELECT login_id, name
+        SELECT email, name
         FROM users
     ');
   $stmt = $pdo->prepare($sql);

@@ -11,7 +11,7 @@
   <!-- ユーザー情報の表示 -->
   <?php
   foreach ($users_info as $user) {
-    echo 'ログインID: ' . escape($user['login_id']) . '<br>';
+    echo 'メールアドレス: ' . escape($user['email']) . '<br>';
     echo '名前: ' . escape($user['name']) . '<br><br>';
   }
   ?>

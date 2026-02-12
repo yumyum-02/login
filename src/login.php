@@ -12,7 +12,7 @@ if (isset($_SESSION['msg'])) {
 if (
   // ログインボタンが押され、かつ各フォームが入力されている場合
   isset($_POST['login_btn']) &&
-  (isset($_POST['login_id']) && $_POST['login_id'] != '') &&
+  (isset($_POST['email']) && $_POST['email'] != '') &&
   (isset($_POST['password']) && $_POST['password'] != '')
 ) {
   // 不正リクエストチェック
@@ -22,12 +22,12 @@ if (
   if (isset($_SESSION['login_token'])) unset($_SESSION['login_token']);
   if (isset($_POST['login_token'])) unset($_POST['login_token']);
 
-  $login_id = $_POST['login_id'];
+  $email = $_POST['email'];
   $password = $_POST['password'];
 
   try {
     // ユーザー情報の取得 db.phpの関数を使用
-    $user_info = getUserLogin($login_id);
+    $user_info = getUserLogin($email);
 
     // 取得した情報と入力されたパスワードを照合
     //password_verify = ハッシュ化されたパスワードの照合
@@ -35,7 +35,7 @@ if (
     if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
       $_SESSION['user'] = array(
         'name'     => $user_info[0]['name'],
-        'login_id' => $user_info[0]['login_id'],
+        'email' => $user_info[0]['email'],
       ); // セッションにユーザー情報を保存
       // ログイン成功後、メイン画面へリダイレクト
       header('Location: ./index.php');

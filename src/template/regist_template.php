@@ -17,7 +17,12 @@
 
     <form action="./exec_register.php" method="post">
       <p><label for="name">ニックネーム</label><input type="text" name="name"></p>
-      <p><label for="login_id">ID</label><input type="text" name="login_id"></p>
+      <p><label for="email">メールアドレス</label><input type="text" name="email"></p>
+      <?php if (!empty($errors)): ?>
+        <?php foreach ($errors as $error): ?>
+          <p style="color:red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endforeach; ?>
+    <?php endif; ?>
       <p><label for="password">パスワード</label><input type="password" name="password"></p>
       <input type="submit" value="登録" name="regist_btn">
 
