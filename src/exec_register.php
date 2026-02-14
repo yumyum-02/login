@@ -15,32 +15,35 @@ if (
   if (isset($_SESSION['regist_token'])) unset($_SESSION['regist_token']);
   if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
 
-  $name = $_POST['name'];
-  $email = $_POST['email'] ?? '';
-  $password = $_POST['password'];
+  $name = getPostValueTrim('name');
+  $email = getPostValueTrim('email');
+  $password = $_POST['password'] ?? ''; // パスワードは空白削除しない
   // パスワードのハッシュ化
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
+  // バリデーション
   // バリデーションのためのエラー配列を用意
   $errors = [];
+  // メールアドレスのバリデーション（形式と長さを分けてエラーを特定しやすくする）
+  if (!isValidateEmailFormat($email)) {
+    $errors[] = 'メールアドレスの形式が正しくありません。';
+  }
+  if (!isValidateEmailLength($email)) {
+    $errors[] = 'メールアドレスは255文字以内で入力してください。';
+  }
+  // エラーがあれば登録処理を中止してフォームに戻る
+  if (!empty($errors)) {
+    require './template/regist_template.php';
+    exit();
+  }
 
   try {
     // すでに登録されているIDかどうか確認 db.phpの関数を使用
     $user_info = getUserRegister($email);
 
-    // メールアドレスのバリデーション
-    if (!validationLoginMail($email)) {
-      $errors[] = 'メールアドレスの形式が正しくありません。';
-    }
-    // エラーがあれば登録処理を中止してフォームに戻る
-    if (!empty($errors)) {
-      require './template/regist_template.php';
-      exit();
-    }
-
-    // すでに登録されているメールアドレスの場合はエラーメッセージを表示
+    // すでに登録されているメールアドレスの場合はエラーに追加
     if (count($user_info)) {
-      $err_msg = 'そのメールアドレスはすでに使用されています。';
+      $errors[] = 'そのメールアドレスはすでに使用されています。';
       require './template/regist_template.php';
       exit();
     } else {

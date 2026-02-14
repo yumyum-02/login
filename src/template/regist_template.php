@@ -12,17 +12,18 @@
   <div>
     <h2>会員登録画面</h2>
 
-    <!-- 登録エラーメッセージ -->
-    <?php if (isset($err_msg)) echo '<p class="err-msg">' . $err_msg . '</p>'; ?>
+    <!-- 登録エラーメッセージ（形式エラー・重複エラーを $errors で一元表示） -->
+    <?php if (!empty($errors)): ?>
+      <ul class="err-msg">
+        <?php foreach ($errors as $error): ?>
+          <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
 
     <form action="./exec_register.php" method="post">
       <p><label for="name">ニックネーム</label><input type="text" name="name"></p>
       <p><label for="email">メールアドレス</label><input type="text" name="email"></p>
-      <?php if (!empty($errors)): ?>
-        <?php foreach ($errors as $error): ?>
-          <p style="color:red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
-        <?php endforeach; ?>
-    <?php endif; ?>
       <p><label for="password">パスワード</label><input type="password" name="password"></p>
       <input type="submit" value="登録" name="regist_btn">
 

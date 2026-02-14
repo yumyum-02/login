@@ -1,25 +1,22 @@
 <?php
 
-// string は「文字列型」という意味で、「$email は文字列型ですよ」という宣言 :boolは「戻り値は真偽値ですよ」という宣言
-function validationLoginMail(string $email): bool
+// フォームからの入力値を取得し、前後の空白を削除して返す
+function getPostValueTrim(string $key): string
 {
+  // キーがあるかまずチェック
+  $value = $_POST[$key] ?? '';
   // 前後の空白を削除
-  $email = trim($email);
+  return trim($value);
+}
 
-  // 空文字チェック
-  if ($email === ''){
-    return false;
-  }
+// メールアドレスの形式が正しいか（filter_var でチェック）
+function isValidateEmailFormat(string $email): bool
+{
+  return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
 
-  // メールアドレス形式チェック
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-    return false;
-  }
-
-  // 長さチェック（DB が VARCHAR(255) を想定）
-  if (mb_strlen($email) > 255) {
-    return false;
-  }
-
-  return true;
+// メールアドレスの長さが DB 制約（255文字）以内か
+function isValidateEmailLength(string $email): bool
+{
+  return mb_strlen($email) <= 255;
 }
