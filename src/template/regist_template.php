@@ -16,6 +16,10 @@
           <div class="card-body p-4">
             <h2 class="card-title text-center mb-4">会員登録</h2>
 
+            <?php if (isset($_GET['msg'])): ?>
+              <div class="alert alert-success" role="alert"><?= htmlspecialchars($_GET['msg'], ENT_QUOTES, 'UTF-8') ?></div>
+            <?php endif; ?>
+
             <!-- 登録エラーメッセージ（形式エラー・重複エラーを $errors で一元表示） -->
             <?php if (!empty($errors)): ?>
               <div class="alert alert-danger" role="alert">

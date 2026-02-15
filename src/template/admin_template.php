@@ -46,6 +46,12 @@
   </nav>
 
   <main class="container py-4">
+    <?php if (isset($_GET['msg'])): ?>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= htmlspecialchars($_GET['msg'], ENT_QUOTES, 'UTF-8') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+      </div>
+    <?php endif; ?>
     <div class="d-flex justify-content-between align-items-start mb-4">
       <div>
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>
@@ -67,6 +73,7 @@
               <tr>
                 <th>メールアドレス</th>
                 <th>名前</th>
+                <th class="text-end" style="width: 100px;">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -74,6 +81,15 @@
                 <tr>
                   <td><?= escape($user['email']) ?></td>
                   <td><?= escape($user['name']) ?></td>
+                  <td class="text-end">
+                    <form action="./admin.php" method="post" class="d-inline delete-form" data-name="<?= escape($user['name']) ?>">
+                      <input type="hidden" name="delete_user_id" value="<?= (int)$user['id'] ?>">
+                      <input type="hidden" name="delete_token" value="<?= htmlspecialchars($_SESSION['delete_token']) ?>">
+                      <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_user">
+                        <i class="bi bi-trash"></i> 削除
+                      </button>
+                    </form>
+                  </td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -84,6 +100,16 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('.delete-form').forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        var name = form.getAttribute('data-name') || 'このユーザー';
+        if (!confirm('「' + name + '」を削除しますか？\n削除されたユーザーは同じ情報で再登録できます。')) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
