@@ -5,37 +5,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>会員登録画面</title>
-  <link rel="stylesheet" href="./css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
-  <div>
-    <h2>会員登録画面</h2>
+<body class="bg-light min-vh-100 d-flex align-items-center py-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h2 class="card-title text-center mb-4">会員登録</h2>
 
-    <!-- 登録エラーメッセージ（形式エラー・重複エラーを $errors で一元表示） -->
-    <?php if (!empty($errors)): ?>
-      <ul class="err-msg">
-        <?php foreach ($errors as $error): ?>
-          <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
+            <!-- 登録エラーメッセージ（形式エラー・重複エラーを $errors で一元表示） -->
+            <?php if (!empty($errors)): ?>
+              <div class="alert alert-danger" role="alert">
+                <ul class="mb-0 ps-3">
+                  <?php foreach ($errors as $error): ?>
+                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
 
-    <form action="./exec_register.php" method="post">
-      <p><label for="name">ユーザー名</label><input type="text" name="name"></p>
-      <p><label for="email">メールアドレス</label><input type="text" name="email"></p>
-      <p><label for="password">パスワード</label><input type="password" name="password"></p>
-      <input type="submit" value="登録" name="regist_btn">
+            <form action="./exec_register.php" method="post">
+              <div class="mb-3">
+                <label for="name" class="form-label">ユーザー名</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="半角英数字で入力" value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">メールアドレス</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="example@email.com" value="<?= isset($email) ? htmlspecialchars($email, ENT_QUOTES, 'UTF-8') : '' ?>">
+              </div>
+              <div class="mb-4">
+                <label for="password" class="form-label">パスワード</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="半角英数字と記号を含む8文字以上">
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" name="regist_btn">登録する</button>
+              </div>
 
-      <?php
-      // 不正リクエストチェック用のトークン生成
-      $token = bin2hex(random_bytes(32)); //ランダムでユニークなIDを生成し　bin2hex=バイナリデータを16進数文字列に変換 random_bytes(32)=32バイトのランダムなバイナリデータを生成
-      $_SESSION['regist_token'] = $token; //セッションにトークンを保存。後でフォームが送信されたときに、送信されてきたトークンとセッション内のトークンを照合して、正当なリクエストかどうか確認
-      echo '<input type="hidden" name="regist_token" value="' . $token . '" />';
-      ?>
-    </form>
+              <?php
+              // 不正リクエストチェック用のトークン生成
+              $token = bin2hex(random_bytes(32));
+              $_SESSION['regist_token'] = $token;
+              echo '<input type="hidden" name="regist_token" value="' . $token . '" />';
+              ?>
+            </form>
 
-    <a href="./login.php">ログイン画面へ戻る</a>
+            <hr class="my-4">
+            <p class="text-center mb-0">
+              <a href="./login.php" class="text-decoration-none">← ログイン画面へ戻る</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 

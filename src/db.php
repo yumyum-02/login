@@ -58,13 +58,24 @@ function getUsersInfo(): array
 {
   $pdo = connectDb();
   $sql = ('
-        SELECT email, name
+        SELECT id, email, name
         FROM users
     ');
   $stmt = $pdo->prepare($sql);
   $stmt->execute();
   $users_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $users_info;
+}
+
+// ユーザー削除（ID指定）
+function deleteUserById(int $id): int
+{
+  $pdo = connectDb();
+  $sql = 'DELETE FROM users WHERE id = :ID';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':ID', $id, PDO::PARAM_INT);
+  $stmt->execute();
+  return $stmt->rowCount();
 }
 
 // クロスサイトスクリプティング(XSS)対策用エスケープ関数

@@ -36,7 +36,7 @@ function isValidateEmailLength(string $email): bool
 // パスワードの形式：半角英数字と記号（スペース不可）
 function isValidatePasswordFormat(string $password): bool
 {
-  return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)[A-Za-z0-9\W]$/', $password) === 1;
+  return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)[A-Za-z0-9\W]+$/', $password) === 1;
 }
 
 /** パスワードが10文字以上64文字未満（10〜63文字）か */
