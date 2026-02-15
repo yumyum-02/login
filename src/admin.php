@@ -29,7 +29,7 @@ if (isset($_POST['delete_user']) && isset($_POST['delete_user_id']) && isset($_P
             setcookie('PHPSESSID', '', time() - 1800, '/');
           }
           session_destroy();
-          header('Location: ./regist.php?msg=' . urlencode('ユーザーを削除しました。同じ情報で再度登録できます。'));
+          header('Location: ./regist.php?msg=' . urlencode('ユーザーを削除しました。'));
           exit();
         }
         header('Location: ./admin.php?msg=' . urlencode('ユーザーを削除しました。'));
