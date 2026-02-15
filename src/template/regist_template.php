@@ -22,7 +22,7 @@
     <?php endif; ?>
 
     <form action="./exec_register.php" method="post">
-      <p><label for="name">ニックネーム</label><input type="text" name="name"></p>
+      <p><label for="name">ユーザー名</label><input type="text" name="name"></p>
       <p><label for="email">メールアドレス</label><input type="text" name="email"></p>
       <p><label for="password">パスワード</label><input type="password" name="password"></p>
       <input type="submit" value="登録" name="regist_btn">

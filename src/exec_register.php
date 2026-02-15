@@ -24,12 +24,26 @@ if (
   // バリデーション
   // バリデーションのためのエラー配列を用意
   $errors = [];
+  // ユーザー名のバリデーション
+  if (!isValidateUserName($name)) {
+    $errors[] = 'ユーザー名は半角英数字で入力してください。';
+  }
+  if (!isValidateUserNameLength($name)) {
+    $errors[] = 'ユーザー名は255文字以内で入力してください。';
+  }
   // メールアドレスのバリデーション（形式と長さを分けてエラーを特定しやすくする）
   if (!isValidateEmailFormat($email)) {
     $errors[] = 'メールアドレスの形式が正しくありません。';
   }
   if (!isValidateEmailLength($email)) {
     $errors[] = 'メールアドレスは255文字以内で入力してください。';
+  }
+  // パスワードのバリデーション
+  if (!isValidatePasswordFormat($password)) {
+    $errors[] = 'パスワードは半角英数字と記号で入力してください。';
+  }
+  if (!isValidatePasswordLength($password)) {
+    $errors[] = 'パスワードは8文字以上100文字以内で入力してください。';
   }
   // エラーがあれば登録処理を中止してフォームに戻る
   if (!empty($errors)) {
