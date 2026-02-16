@@ -16,6 +16,16 @@
           <div class="card-body p-4">
             <h2 class="card-title text-center mb-4">ログイン</h2>
 
+            <?php if (!empty($errors)): ?>
+              <div class="alert alert-danger" role="alert">
+                <ul class="mb-0 ps-3">
+                  <?php foreach ($errors as $error): ?>
+                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
+
             <?php if (isset($success_logout_msg)): ?>
               <div class="alert alert-success" role="alert"><?= htmlspecialchars($success_logout_msg, ENT_QUOTES, 'UTF-8') ?></div>
             <?php endif; ?>

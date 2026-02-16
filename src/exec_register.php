@@ -1,6 +1,5 @@
 <?php
 require './bootstrap.php';
-require_once __DIR__ . '/validation.php'; //バリデーションの呼び出し
 
 if (
   // 各フォームが入力されている場合
@@ -15,9 +14,9 @@ if (
   if (isset($_SESSION['regist_token'])) unset($_SESSION['regist_token']);
   if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
 
-  $name = getPostValueTrim('name');
-  $email = getPostValueTrim('email');
-  $password = $_POST['password'] ?? ''; // パスワードは空白削除しない
+  $name = getTrimmedPostValue('name');
+  $email = getTrimmedPostValue('email');
+  $password = $_POST['password'] ?? '';
   // パスワードのハッシュ化
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -25,24 +24,25 @@ if (
   // バリデーションのためのエラー配列を用意
   $errors = [];
   // ユーザー名のバリデーション
-  if (!isValidateUserName($name)) {
+  if (!isUserName($name)) {
     $errors[] = 'ユーザー名は半角英数字で入力してください。';
   }
-  if (!isValidateUserNameLength($name)) {
+  if (!isUserNameLength($name)) {
     $errors[] = 'ユーザー名は255文字以内で入力してください。';
   }
   // メールアドレスのバリデーション（形式と長さを分けてエラーを特定しやすくする）
-  if (!isValidateEmailFormat($email)) {
+  if (!isEmailFormat($email)) {
     $errors[] = 'メールアドレスの形式が正しくありません。';
   }
-  if (!isValidateEmailLength($email)) {
-    $errors[] = 'メールアドレスは255文字以内で入力してください。';
+  // メールアドレスはローカルパートが最大64文字 + ドメインが255文字 + ＠で 合計320文字 MAX
+  if (!isWithinLength($email, 320)) {
+    $errors[] = 'メールアドレスは320文字以内で入力してください。';
   }
   // パスワードのバリデーション
-  if (!isValidatePasswordFormat($password)) {
+  if (!isPasswordFormat($password)) {
     $errors[] = 'パスワードは半角英数字と記号で入力してください。';
   }
-  if (!isValidatePasswordLength($password)) {
+  if (!isPasswordLength($password)) {
     $errors[] = 'パスワードは8文字以上100文字以内で入力してください。';
   }
   // エラーがあれば登録処理を中止してフォームに戻る
@@ -50,6 +50,8 @@ if (
     require './template/regist_template.php';
     exit();
   }
+
+  $email = mb_strtolower($email, 'UTF-8');
 
   try {
     // すでに登録されているIDかどうか確認 db.phpの関数を使用

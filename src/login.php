@@ -22,8 +22,34 @@ if (
   if (isset($_SESSION['login_token'])) unset($_SESSION['login_token']);
   if (isset($_POST['login_token'])) unset($_POST['login_token']);
 
-  $email = $_POST['email'];
-  $password = $_POST['password'];
+  $email = getTrimmedPostValue('email');
+  $password = $_POST['password'] ?? '';
+  // パスワードのハッシュ化
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+  // バリデーション
+  // バリデーションのためのエラー配列を用意
+  $errors = [];
+  // メールアドレスのバリデーション
+  if (!isEmailFormat($email)) {
+    $errors[] = 'メールアドレスの形式が正しくありません。';
+  }
+  if (!isWithinLength($email, 320)) {
+    $errors[] = 'メールアドレスは320文字以内で入力してください。';
+  }
+  // パスワードのバリデーション
+  if (!isPasswordFormat($password)) {
+    $errors[] = 'パスワードは半角英数字と記号で入力してください。';
+  }
+  if (!isPasswordLength($password)) {
+    $errors[] = 'パスワードは8文字以上100文字以内で入力してください。';
+  }
+  // エラーがあれば登録処理を中止してフォームに戻る
+  if (!empty($errors)) {
+    require './template/login_template.php';
+    exit();
+  }
+
 
   try {
     // ユーザー情報の取得 db.phpの関数を使用
