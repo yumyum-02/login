@@ -17,32 +17,30 @@ if (
   $name = getTrimmedPostValue('name');
   $email = getTrimmedPostValue('email');
   $password = $_POST['password'] ?? '';
-  // パスワードのハッシュ化
-  $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
   // バリデーション
   // バリデーションのためのエラー配列を用意
   $errors = [];
   // ユーザー名のバリデーション
-  if (!isUserName($name)) {
-    $errors[] = 'ユーザー名は半角英数字で入力してください。';
+  if (!isSafeInput($name)) {
+    $errors[] = '使用できない文字が含まれています。';
   }
-  if (!isUserNameLength($name)) {
-    $errors[] = 'ユーザー名は255文字以内で入力してください。';
+  if (!isWithinLength($name, 3, 16)) {
+    $errors[] = 'ユーザー名は16文字以内で入力してください。';
   }
   // メールアドレスのバリデーション（形式と長さを分けてエラーを特定しやすくする）
   if (!isEmailFormat($email)) {
     $errors[] = 'メールアドレスの形式が正しくありません。';
   }
   // メールアドレスはローカルパートが最大64文字 + ドメインが255文字 + ＠で 合計320文字 MAX
-  if (!isWithinLength($email, 320)) {
+  if (!isWithinLength($email, null , 320)) {
     $errors[] = 'メールアドレスは320文字以内で入力してください。';
   }
   // パスワードのバリデーション
   if (!isPasswordFormat($password)) {
     $errors[] = 'パスワードは半角英数字と記号で入力してください。';
   }
-  if (!isPasswordLength($password)) {
+  if (!isWithinLength($password, 8 , 100)) {
     $errors[] = 'パスワードは8文字以上100文字以内で入力してください。';
   }
   // エラーがあれば登録処理を中止してフォームに戻る
@@ -52,6 +50,9 @@ if (
   }
 
   $email = mb_strtolower($email, 'UTF-8');
+
+  // パスワードのハッシュ化
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
   try {
     // すでに登録されているIDかどうか確認 db.phpの関数を使用

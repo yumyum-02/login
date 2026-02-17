@@ -9,15 +9,9 @@ function getTrimmedPostValue(string $key): string
 }
 
 // ユーザー名
-function isUserName(string $name): bool
+function isSafeInput(string $value): bool
 {
-  return preg_match('/^[a-zA-Z0-9]+$/', $name) === 1;
-}
-
-// ユーザー名の長さが DB 制約（255文字）以内か
-function isUserNameLength(string $name): bool
-{
-  return mb_strlen($name) <= 255;
+  return preg_match('/[\r\n<>]/u', $value) !== 1;
 }
 
 // メールアドレスの形式が正しいか（filter_var でチェック）
@@ -27,20 +21,23 @@ function isEmailFormat(string $email): bool
 }
 
 // 長さのバリデーション
-function isWithinLength(string $value, int $maxLength): bool
+function isWithinLength(string $value, ?int $minLength, ?int $maxLength): bool
 {
-    return mb_strlen($value) <= $maxLength;
+  $length = mb_strlen($value);
+
+  if ($minLength !== null && $length < $minLength) {
+    return false;
+  }
+
+  if ($maxLength !== null && $length > $maxLength) {
+    return false;
+  }
+
+  return true;
 }
 
 // パスワードの形式：半角英数字と記号（スペース不可）
 function isPasswordFormat(string $password): bool
 {
   return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)[A-Za-z0-9\W]+$/', $password) === 1;
-}
-
-/** パスワードが10文字以上64文字未満（10〜63文字）か */
-function isPasswordLength(string $password): bool
-{
-  $len = mb_strlen($password);
-  return $len >= 10 && $len < 64;
 }

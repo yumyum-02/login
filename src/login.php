@@ -24,31 +24,22 @@ if (
 
   $email = getTrimmedPostValue('email');
   $password = $_POST['password'] ?? '';
-  // パスワードのハッシュ化
-  $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
   // バリデーション
   // バリデーションのためのエラー配列を用意
   $errors = [];
-  // メールアドレスのバリデーション
-  if (!isEmailFormat($email)) {
-    $errors[] = 'メールアドレスの形式が正しくありません。';
-  }
-  if (!isWithinLength($email, 320)) {
-    $errors[] = 'メールアドレスは320文字以内で入力してください。';
-  }
-  // パスワードのバリデーション
-  if (!isPasswordFormat($password)) {
-    $errors[] = 'パスワードは半角英数字と記号で入力してください。';
-  }
-  if (!isPasswordLength($password)) {
-    $errors[] = 'パスワードは8文字以上100文字以内で入力してください。';
+  // メールアドレスとパスワードのバリデーション
+  if (!isEmailFormat($email) || !isWithinLength($email, null , 320) || !isPasswordFormat($password) || !isWithinLength($password, 8 , 100)) {
+    $errors[] = 'メールアドレスもしくはパスワードに誤りがあります。';
   }
   // エラーがあれば登録処理を中止してフォームに戻る
   if (!empty($errors)) {
     require './template/login_template.php';
     exit();
   }
+
+  // パスワードのハッシュ化
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
 
   try {

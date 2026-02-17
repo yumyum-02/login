@@ -34,7 +34,7 @@
             <form action="./exec_register.php" method="post">
               <div class="mb-3">
                 <label for="name" class="form-label">ユーザー名</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="半角英数字で入力" value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
+                <input type="text" class="form-control" id="name" name="name" placeholder="3文字以上16文字以内の半角英数日本語" value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス</label>
