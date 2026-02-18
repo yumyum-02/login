@@ -39,5 +39,5 @@ function isWithinLength(string $value, ?int $minLength, ?int $maxLength): bool
 // パスワードの形式：半角英数字と記号（スペース不可）
 function isPasswordFormat(string $password): bool
 {
-  return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)[A-Za-z0-9\W]+$/', $password) === 1;
+  return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[_-])[a-zA-Z0-9_-]+$/', $password) === 1;
 }
