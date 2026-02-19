@@ -34,7 +34,9 @@
             <form action="./exec_register.php" method="post">
               <div class="mb-3">
                 <label for="name" class="form-label">ユーザー名</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="3文字以上16文字以内の半角英数日本語" value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
+                <p class="form-text mb-0">※漢字、ひらがな、カタカナ、半角英字、半角数字のいずれか</p>
+                <p class="form-text">※3文字以上16文字以内</p>
+                <input type="text" class="form-control" id="name" name="name" placeholder="田中 太郎" value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス</label>
@@ -42,7 +44,9 @@
               </div>
               <div class="mb-4">
                 <label for="password" class="form-label">パスワード</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="半角英数字と記号を含む8文字以上">
+                <p class="form-text mb-0">※半角英字・半角数字・記号（ ! @ # $ % ^ & * ( ) - _ + = ）</p>
+                <p class="form-text">※16文字以上64文字以内</p>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password$001">
               </div>
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary btn-lg" name="regist_btn">登録する</button>

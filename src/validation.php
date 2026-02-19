@@ -9,9 +9,10 @@ function getTrimmedPostValue(string $key): string
 }
 
 // ユーザー名
-function isSafeInput(string $value): bool
+function isUserNameFormat(string $value): bool
 {
-  return preg_match('/[\r\n<>]/u', $value) !== 1;
+  return  preg_match('/^[a-zA-Z0-9\x{3041}-\x{3096}\x{30A1}-\x{30FC}\x{4E00}-\x{9FFF
+  }\x{3400}-\x{4DBF}]+$/u', $value) !== 1;
 }
 
 // メールアドレスの形式が正しいか（filter_var でチェック）
@@ -39,5 +40,5 @@ function isWithinLength(string $value, ?int $minLength, ?int $maxLength): bool
 // パスワードの形式：半角英数字と記号（スペース不可）
 function isPasswordFormat(string $password): bool
 {
-  return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[_-])[a-zA-Z0-9_-]+$/', $password) === 1;
+  return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]) (?=.*[!@#$%^&*()\-_+=])[a-zA-Z0-9_-]+$/', $password) === 1;
 }

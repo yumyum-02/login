@@ -22,7 +22,7 @@ if (
   // バリデーションのためのエラー配列を用意
   $errors = [];
   // ユーザー名のバリデーション
-  if (!isSafeInput($name)) {
+  if (!isUserNameFormat($name)) {
     $errors[] = '使用できない文字が含まれています。';
   }
   if (!isWithinLength($name, 3, 16)) {
