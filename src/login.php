@@ -9,12 +9,7 @@ if (isset($_SESSION['msg'])) {
   unset($_SESSION['msg']); // 一度表示したら消す
 }
 
-if (
-  // ログインボタンが押され、かつ各フォームが入力されている場合
-  isset($_POST['login_btn']) &&
-  (isset($_POST['email']) && $_POST['email'] != '') &&
-  (isset($_POST['password']) && $_POST['password'] != '')
-) {
+if (isset($_POST['login_btn'])) {
   // 不正リクエストチェック
   // トークンがセッションに存在しない、または一致しない場合は処理を中止
   if (empty($_SESSION['login_token']) || ($_SESSION['login_token'] !== $_POST['login_token'])) exit('不正なリクエストです');
@@ -27,13 +22,39 @@ if (
 
   // バリデーション
   // バリデーションのためのエラー配列を用意
-  $errors = [];
-  // メールアドレスとパスワードのバリデーション
-  if (!isEmailFormat($email) || !isWithinLength($email, null , 320) || !isPasswordFormat($password) || !isWithinLength($password, 8 , 100)) {
-    $errors[] = 'メールアドレスもしくはパスワードに誤りがあります。';
+  $errors = [
+    'email' => [],
+    'password' => []
+  ];
+
+  // メールアドレスのバリデーション
+  if (isEmpty($email)) {
+    $errors['email'][] = 'メールアドレスを入力してください。';
+  } else {
+    if (!isEmailFormat($email)) {
+      $errors['email'][] = 'メールアドレスの形式が正しくありません。';
+    }
+    if (!isWithinLength($email, null, 320)) {
+      $errors['email'][] = 'メールアドレスは320文字以内で入力してください。';
+    }
   }
-  // エラーがあれば登録処理を中止してフォームに戻る
-  if (!empty($errors)) {
+
+  // パスワードのバリデーション
+  if (isEmpty($password)) {
+    $errors['password'][] = 'パスワードを入力してください。';
+  } else {
+    if (!isPasswordFormat($password)) {
+      $errors['password'][] = 'パスワードの形式が正しくありません。';
+    }
+    if (!isWithinLength($password, 8, 100)) {
+      $errors['password'][] = 'パスワードは8文字以上100文字以内で入力してください。';
+    }
+  }
+
+  // エラーチェック
+  $hasErrors = !empty($errors['email']) || !empty($errors['password']);
+  // エラーがあればログイン処理を中止してフォームに戻る
+  if ($hasErrors) {
     require './template/login_template.php';
     exit();
   }
