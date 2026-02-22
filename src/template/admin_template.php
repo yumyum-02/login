@@ -82,13 +82,7 @@
                   <td><?= escape($user['email']) ?></td>
                   <td><?= escape($user['name']) ?></td>
                   <td class="text-end">
-                    <form action="./admin.php" method="post" class="d-inline delete-form" data-name="<?= escape($user['name']) ?>">
-                      <input type="hidden" name="delete_user_id" value="<?= (int)$user['id'] ?>">
-                      <input type="hidden" name="delete_token" value="<?= htmlspecialchars($_SESSION['delete_token']) ?>">
-                      <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_user">
-                        <i class="bi bi-trash"></i> 削除
-                      </button>
-                    </form>
+                    <a href="delete_user.php?id=<?= $user['id'] ?>&token=<?=$_SESSION['delete_token'] ?>" class="btn btn-outline-danger btn-sm"onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -100,7 +94,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  <!-- <script>
     document.querySelectorAll('.delete-form').forEach(function(form) {
       form.addEventListener('submit', function(e) {
         var name = form.getAttribute('data-name') || 'このユーザー';
@@ -109,7 +103,7 @@
         }
       });
     });
-  </script>
+  </script> -->
 </body>
 
 </html>
