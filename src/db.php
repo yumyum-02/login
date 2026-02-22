@@ -24,7 +24,7 @@ function getUserLogin(string $login): array
   $pdo = connectDb();
   // userテーブルからemailに一致するレコードを取得
   $sql = '
-    SELECT email, password, name
+    SELECT id, email, password, name
     FROM users
     WHERE email = :EMAIL
           LIMIT 1

@@ -51,7 +51,8 @@ if (
     // $user_info に要素が1件以上あるかパスワードが一致している時
     if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
       $_SESSION['user'] = array(
-        'name'     => $user_info[0]['name'],
+        'id'    => $user_info[0]['id'],
+        'name'  => $user_info[0]['name'],
         'email' => $user_info[0]['email'],
       ); // セッションにユーザー情報を保存
       // ログイン成功後、メイン画面へリダイレクト

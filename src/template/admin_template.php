@@ -72,7 +72,8 @@
             <thead class="table-light">
               <tr>
                 <th>メールアドレス</th>
-                <th>名前</th>
+                <th>ユーザー名</th>
+                <th>ユーザーID</th>
                 <th class="text-end" style="width: 100px;">操作</th>
               </tr>
             </thead>
@@ -81,6 +82,7 @@
                 <tr>
                   <td><?= escape($user['email']) ?></td>
                   <td><?= escape($user['name']) ?></td>
+                  <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
                     <a href="delete_user.php?id=<?= $user['id'] ?>&token=<?=$_SESSION['delete_token'] ?>" class="btn btn-outline-danger btn-sm"onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
@@ -94,16 +96,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- <script>
-    document.querySelectorAll('.delete-form').forEach(function(form) {
-      form.addEventListener('submit', function(e) {
-        var name = form.getAttribute('data-name') || 'このユーザー';
-        if (!confirm('「' + name + '」を削除しますか？\n削除されたユーザーは同じ情報で再登録できます。')) {
-          e.preventDefault();
-        }
-      });
-    });
-  </script> -->
 </body>
 
 </html>

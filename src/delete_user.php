@@ -20,23 +20,15 @@ if (!$user_id){
 
 //　削除処理
 try {
-  $pdo = connectDb();
-
-  // 削除対象ユーザーの情報を取得
-  $sql = 'SELECT email FROM users WHERE id = :id';
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-  $stmt->execute();
-  $target_user = $stmt->fetch(PDO::FETCH_ASSOC);
-
   // ログイン中のユーザーは削除不可
-  if ($target_user && $target_user['email'] === $_SESSION['user']['email']) {
+  if (isset($_SESSION['user']['id']) && $user_id === (int)$_SESSION['user']['id']) {
     $_SESSION['msg'] = 'ログイン中のユーザー情報は削除できません';
     header('Location: ./admin.php');
     exit();
   }
 
   // 削除実行
+  $pdo = connectDb();
   $sql = 'DELETE FROM users WHERE id = :id';
   $stmt = $pdo->prepare($sql);
   $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
