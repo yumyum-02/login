@@ -11,8 +11,7 @@ function getTrimmedPostValue(string $key): string
 // ユーザー名
 function isUserNameFormat(string $value): bool
 {
-  return  preg_match('/^[a-zA-Z0-9\x{3041}-\x{3096}\x{30A1}-\x{30FC}\x{4E00}-\x{9FFF
-  }\x{3400}-\x{4DBF}]+$/u', $value) !== 1;
+  return  preg_match('/^[a-zA-Z0-9\x{3041}-\x{3096}\x{30A1}-\x{30FC}\x{4E00}-\x{9FFF}\x{3400}-\x{4DBF}]+$/u', $value) !== 1;
 }
 
 // メールアドレスの形式が正しいか（filter_var でチェック）
