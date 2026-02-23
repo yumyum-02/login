@@ -1,15 +1,15 @@
 <?php
 require_once './bootstrap.php';
 
-// ログインチェック
-if(!isset($_SESSION['user'])){
-  header('Location: ./login.php');
-  exit();
-}
-
-// トークン検証
+// CSRFトークン検証
 if (!verifyCsrfToken($_GET['token'] ?? '')) {
   exit('不正なリクエストです');
+}
+
+// ログインチェック
+if (!isset($_SESSION['user'])) {
+  header('Location: ./login.php');
+  exit();
 }
 
 // ユーザーID取得
@@ -39,7 +39,7 @@ try {
   $_SESSION['msg'] = '削除に失敗しました';
 }
 
-// トークン破棄
+// CSRFトークンを破棄
 destroyCsrfToken();
 
 header('Location: ./admin.php');

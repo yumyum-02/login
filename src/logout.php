@@ -2,7 +2,7 @@
 require_once './bootstrap.php';
 
 if (isset($_POST['logout'])) {
-  // トークンの正当性チェック
+  // CSRFトークン検証
   if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
     exit('不正な投稿です');
   }

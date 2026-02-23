@@ -9,11 +9,11 @@ if (isset($_SESSION['msg'])) {
   unset($_SESSION['msg']); // 一度表示したら消す
 }
 
-// CSRFトークン生成
+// CSRFトークンを生成
 $csrf_token = generateCsrfToken();
 
 if (isset($_POST['login_btn'])) {
-  // 不正リクエストチェック
+  // CSRFトークン検証
   if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
     exit('不正なリクエストです');
   }
@@ -78,7 +78,7 @@ if (isset($_POST['login_btn'])) {
         'email' => $user_info[0]['email'],
       ); // セッションにユーザー情報を保存
 
-      // ログイン成功時はトークンを破棄
+      // ログイン成功時はCSRFトークンを破棄
       destroyCsrfToken();
 
       // ログイン成功後、メイン画面へリダイレクト

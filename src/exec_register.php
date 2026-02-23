@@ -1,7 +1,7 @@
 <?php
 require './bootstrap.php';
 
-// 不正リクエストチェック トークンの照合
+// CSRFトークン検証
 if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
   exit('不正なリクエストです');
 }
@@ -56,7 +56,7 @@ if (isEmpty($password)) {
 $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($errors['password']);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
-  // エラー時は新しいトークンを生成してテンプレートに渡す
+  // エラー時はCSRFトークンを再生成
   $csrf_token = regenerateCsrfToken();
   require './template/regist_template.php';
   exit();
@@ -95,7 +95,7 @@ try {
     $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
     $stmt->execute();
 
-    // 登録成功時はトークンを破棄
+    // 登録成功時はCSRFトークンを破棄
     destroyCsrfToken();
 
     $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
