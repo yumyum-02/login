@@ -54,7 +54,7 @@
             <h2 class="card-title text-center mb-4">会員登録</h2>
 
             <?php if (isset($_GET['msg'])): ?>
-              <div class="alert alert-success" role="alert"><?= htmlspecialchars($_GET['msg'], ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="alert alert-success" role="alert"><?= escape($_GET['msg']) ?></div>
             <?php endif; ?>
 
             <form action="./exec_register.php" method="post">
@@ -68,7 +68,7 @@
                          id="name"
                          name="name"
                          placeholder=""
-                         value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' ?>">
+                         value="<?= isset($name) ? escape($name) : '' ?>">
 
                   <!-- バリデーションツールチップ -->
                   <div class="validation-tooltip" id="name-tooltip">
@@ -80,7 +80,7 @@
                 <?php if (!empty($errors['name'])): ?>
                   <div class="invalid-feedback d-block">
                     <?php foreach ($errors['name'] as $error): ?>
-                      <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                      <div><?= escape($error) ?></div>
                     <?php endforeach; ?>
                   </div>
                 <?php endif; ?>
@@ -96,7 +96,7 @@
                          id="email"
                          name="email"
                          placeholder=""
-                         value="<?= isset($email) ? htmlspecialchars($email, ENT_QUOTES, 'UTF-8') : '' ?>">
+                         value="<?= isset($email) ? escape($email) : '' ?>">
 
                   <!-- バリデーションツールチップ -->
                   <div class="validation-tooltip" id="email-tooltip">
@@ -108,7 +108,7 @@
                 <?php if (!empty($errors['email'])): ?>
                   <div class="invalid-feedback d-block">
                     <?php foreach ($errors['email'] as $error): ?>
-                      <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                      <div><?= escape($error) ?></div>
                     <?php endforeach; ?>
                   </div>
                 <?php endif; ?>
@@ -135,7 +135,7 @@
                 <?php if (!empty($errors['password'])): ?>
                   <div class="invalid-feedback d-block">
                     <?php foreach ($errors['password'] as $error): ?>
-                      <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                      <div><?= escape($error) ?></div>
                     <?php endforeach; ?>
                   </div>
                 <?php endif; ?>
@@ -145,7 +145,7 @@
                 <button type="submit" class="btn btn-primary btn-lg" name="regist_btn">登録する</button>
               </div>
 
-              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="csrf_token" value="<?= escape($csrf_token) ?>">
             </form>
 
             <hr class="my-4">

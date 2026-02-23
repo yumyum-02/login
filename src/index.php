@@ -8,5 +8,8 @@ if (!isset($_SESSION['user'])) {
   exit();
 }
 
+// CSRFトークンを生成
+$csrf_token = generateCsrfToken();
+
 require_once './logout.php';
 require_once './template/index_template.php';

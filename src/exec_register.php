@@ -76,36 +76,28 @@ try {
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
-    // エラー時は新しいトークンを生成してテンプレートに渡す
+    // エラー時はCSRFトークンを再生成
     $csrf_token = regenerateCsrfToken();
     require './template/regist_template.php';
     exit();
-  } else {
-    // 登録されていないメールアドレスの場合は、usersテーブルに新規登録
-    // PDOでデータベースに接続
-    $pdo = connectDb();
-    // INSERT文を実行してユーザー情報を登録
-    $sql = ('
-    INSERT INTO users (name, email, password)
-    VALUES (:NAME, :EMAIL, :PASSWORD);
-    ');
-    $stmt = $pdo->prepare($sql); // SQL文をデータベースに送る準備
-    $stmt->bindValue(':NAME', $name, PDO::PARAM_STR); // NAMEにnameを入れる(PDO::PARAM_STR=文字列として扱う)
-    $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
-    $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
-    $stmt->execute();
+  }
 
-    // 登録成功時はCSRFトークンを破棄
-    destroyCsrfToken();
+  // 登録されていないメールアドレスの場合は、usersテーブルに新規登録
+  $user_id = registerUser($name, $email, $password_hash);
 
-    $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
-    header('Location: ./login.php');
+  if ($user_id === false) {
+    // 登録失敗
+    echo '登録に失敗しました。もう一度お試しください。';
     exit();
   }
+
+  // 登録成功時はCSRFトークンを破棄
+  destroyCsrfToken();
+
+  $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
+  header('Location: ./login.php');
+  exit();
 } catch (PDOException $e) {
   echo '接続失敗' . $e->getMessage();
   exit();
 }
-
-$pdo = null;
-$stmt = null;

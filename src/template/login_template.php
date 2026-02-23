@@ -17,13 +17,13 @@
             <h2 class="card-title text-center mb-4">ログイン</h2>
 
             <?php if (isset($success_logout_msg)): ?>
-              <div class="alert alert-success" role="alert"><?= htmlspecialchars($success_logout_msg, ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="alert alert-success" role="alert"><?= escape($success_logout_msg) ?></div>
             <?php endif; ?>
             <?php if (isset($err_msg)): ?>
-              <div class="alert alert-danger" role="alert"><?= htmlspecialchars($err_msg, ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="alert alert-danger" role="alert"><?= escape($err_msg) ?></div>
             <?php endif; ?>
             <?php if (isset($login_msg) && $login_msg !== ''): ?>
-              <div class="alert alert-info" role="alert"><?= htmlspecialchars($login_msg, ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="alert alert-info" role="alert"><?= escape($login_msg) ?></div>
             <?php endif; ?>
 
             <form action="" method="post">
@@ -34,12 +34,12 @@
                        id="email"
                        name="email"
                        placeholder=""
-                       value="<?= isset($email) ? htmlspecialchars($email, ENT_QUOTES, 'UTF-8') : '' ?>">
+                       value="<?= isset($email) ? escape($email) : '' ?>">
 
                 <?php if (!empty($errors['email'])): ?>
                   <div class="invalid-feedback d-block">
                     <?php foreach ($errors['email'] as $error): ?>
-                      <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                      <div><?= escape($error) ?></div>
                     <?php endforeach; ?>
                   </div>
                 <?php endif; ?>
@@ -55,7 +55,7 @@
                 <?php if (!empty($errors['password'])): ?>
                   <div class="invalid-feedback d-block">
                     <?php foreach ($errors['password'] as $error): ?>
-                      <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                      <div><?= escape($error) ?></div>
                     <?php endforeach; ?>
                   </div>
                 <?php endif; ?>
@@ -64,7 +64,7 @@
                 <button type="submit" class="btn btn-primary btn-lg" name="login_btn">ログイン</button>
               </div>
 
-              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="csrf_token" value="<?= escape($csrf_token) ?>">
             </form>
 
             <hr class="my-4">
