@@ -64,13 +64,7 @@
                 <button type="submit" class="btn btn-primary btn-lg" name="login_btn">ログイン</button>
               </div>
 
-              <?php
-              if (!isset($_SESSION['login_token'])) {
-                $token = bin2hex(random_bytes(32));
-                $_SESSION['login_token'] = $token;
-              }
-              ?>
-              <input type="hidden" name="login_token" value="<?= htmlspecialchars($_SESSION['login_token']) ?>">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
             </form>
 
             <hr class="my-4">

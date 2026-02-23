@@ -145,12 +145,7 @@
                 <button type="submit" class="btn btn-primary btn-lg" name="regist_btn">登録する</button>
               </div>
 
-              <?php
-              // 不正リクエストチェック用のトークン生成
-              $token = bin2hex(random_bytes(32));
-              $_SESSION['regist_token'] = $token;
-              echo '<input type="hidden" name="regist_token" value="' . $token . '" />';
-              ?>
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
             </form>
 
             <hr class="my-4">

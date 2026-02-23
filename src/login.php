@@ -9,13 +9,14 @@ if (isset($_SESSION['msg'])) {
   unset($_SESSION['msg']); // 一度表示したら消す
 }
 
+// CSRFトークン生成
+$csrf_token = generateCsrfToken();
+
 if (isset($_POST['login_btn'])) {
   // 不正リクエストチェック
-  // トークンがセッションに存在しない、または一致しない場合は処理を中止
-  if (empty($_SESSION['login_token']) || ($_SESSION['login_token'] !== $_POST['login_token'])) exit('不正なリクエストです');
-  // トークンの破棄（1回限り有効にするため）
-  if (isset($_SESSION['login_token'])) unset($_SESSION['login_token']);
-  if (isset($_POST['login_token'])) unset($_POST['login_token']);
+  if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+    exit('不正なリクエストです');
+  }
 
   $email = getTrimmedPostValue('email');
   $password = $_POST['password'] ?? '';
@@ -76,6 +77,10 @@ if (isset($_POST['login_btn'])) {
         'name'  => $user_info[0]['name'],
         'email' => $user_info[0]['email'],
       ); // セッションにユーザー情報を保存
+
+      // ログイン成功時はトークンを破棄
+      destroyCsrfToken();
+
       // ログイン成功後、メイン画面へリダイレクト
       header('Location: ./index.php');
       exit();

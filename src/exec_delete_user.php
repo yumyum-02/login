@@ -8,7 +8,7 @@ if(!isset($_SESSION['user'])){
 }
 
 // トークン検証
-if (empty($_GET['token']) || $_GET['token'] !== $_SESSION['delete_token']){
+if (!verifyCsrfToken($_GET['token'] ?? '')) {
   exit('不正なリクエストです');
 }
 
@@ -40,7 +40,7 @@ try {
 }
 
 // トークン破棄
-unset($_SESSION['delete_token']);
+destroyCsrfToken();
 
 header('Location: ./admin.php');
 exit();

@@ -2,12 +2,9 @@
 require './bootstrap.php';
 
 // 不正リクエストチェック トークンの照合
-if (empty($_SESSION['regist_token']) || ($_SESSION['regist_token'] !== $_POST['regist_token'])) {
+if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
   exit('不正なリクエストです');
 }
-// トークンの破棄（1回限り有効にするため）
-if (isset($_SESSION['regist_token'])) unset($_SESSION['regist_token']);
-if (isset($_POST['regist_token'])) unset($_POST['regist_token']);
 
 $name = getTrimmedPostValue('name');
 $email = getTrimmedPostValue('email');
@@ -59,6 +56,8 @@ if (isEmpty($password)) {
 $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($errors['password']);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
+  // エラー時は新しいトークンを生成してテンプレートに渡す
+  $csrf_token = regenerateCsrfToken();
   require './template/regist_template.php';
   exit();
 }
@@ -77,6 +76,8 @@ try {
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
+    // エラー時は新しいトークンを生成してテンプレートに渡す
+    $csrf_token = regenerateCsrfToken();
     require './template/regist_template.php';
     exit();
   } else {
@@ -93,6 +94,10 @@ try {
     $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
     $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
     $stmt->execute();
+
+    // 登録成功時はトークンを破棄
+    destroyCsrfToken();
+
     $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
     header('Location: ./login.php');
     exit();
