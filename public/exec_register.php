@@ -56,8 +56,8 @@ if (isEmpty($password)) {
 $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($errors['password']);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
-  // エラー時はCSRFトークンを再生成
-  $csrf_token = regenerateCsrfToken();
+  // エラー時はCSRFトークンを生成
+  $csrf_token = generateCsrfToken();
   require '../src/template/regist_template.php';
   exit();
 }
@@ -76,8 +76,8 @@ try {
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
-    // エラー時はCSRFトークンを再生成
-    $csrf_token = regenerateCsrfToken();
+    // エラー時はCSRFトークンを生成
+    $csrf_token = generateCsrfToken();
     require '../src/template/regist_template.php';
     exit();
   }

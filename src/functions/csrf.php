@@ -36,15 +36,3 @@ function destroyCsrfToken(): void
 {
   unset($_SESSION['csrf_token']);
 }
-
-/**
- * CSRFトークンを再生成
- * エラー時に新しいトークンを生成する
- *
- * @return string 新しく生成されたCSRFトークン
- */
-function regenerateCsrfToken(): string
-{
-  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-  return $_SESSION['csrf_token'];
-}
