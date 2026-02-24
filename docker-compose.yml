@@ -2,10 +2,11 @@ services:
   php:
     image: php:latest
     volumes:
-      - ./src:/var/www/html
+      - ./public:/var/www/html/public
+      - ./src:/var/www/html/src
     ports:
       - "8080:8080"
-    command: sh -c "docker-php-ext-install pdo_mysql && php -S 0.0.0.0:8080 -t /var/www/html"
+    command: sh -c "docker-php-ext-install pdo_mysql && php -S 0.0.0.0:8080 -t /var/www/html/public"
   mysql:
     image: mysql:8.0
     environment:
