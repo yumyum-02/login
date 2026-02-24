@@ -33,7 +33,7 @@
             </li>
             <li>
               <form action="#" method="post" class="p-2">
-                <input type="hidden" name="csrf_token" value="<?= escape($csrf_token) ?>">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
                 </button>
@@ -84,7 +84,7 @@
                   <td><?= escape($user['name']) ?></td>
                   <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
-                    <a href="exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= escape($csrf_token) ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
+                    <a href="exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
                 </tr>
               <?php endforeach; ?>

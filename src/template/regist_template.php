@@ -145,7 +145,7 @@
                 <button type="submit" class="btn btn-primary btn-lg" name="regist_btn">登録する</button>
               </div>
 
-              <input type="hidden" name="csrf_token" value="<?= escape($csrf_token) ?>">
+              <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
             </form>
 
             <hr class="my-4">
