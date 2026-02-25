@@ -16,7 +16,7 @@
           <div class="card-body p-4">
             <h2 class="card-title text-center mb-4">ログイン</h2>
 
-            <?php if (isset($success_logout_msg)): ?>
+            <?php if (isset($success_logout_msg) && $success_logout_msg !== ''): ?>
               <div class="alert alert-success" role="alert"><?= escape($success_logout_msg) ?></div>
             <?php endif; ?>
             <?php if (isset($err_msg) && $err_msg !== ''): ?>
@@ -26,7 +26,7 @@
               <div class="alert alert-info" role="alert"><?= escape($login_msg) ?></div>
             <?php endif; ?>
 
-            <form action="./handlers/login_handler.php" method="post">
+            <form action="/login" method="post">
               <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス</label>
                 <input type="email"
@@ -69,7 +69,7 @@
 
             <hr class="my-4">
             <p class="text-center mb-0">
-              <a href="./regist.php" class="text-decoration-none">会員登録はこちら →</a>
+              <a href="/register" class="text-decoration-none">会員登録はこちら →</a>
             </p>
           </div>
         </div>

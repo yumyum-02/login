@@ -57,7 +57,7 @@
               <div class="alert alert-success" role="alert"><?= escape($_GET['msg']) ?></div>
             <?php endif; ?>
 
-            <form action="./handlers/register_handler.php" method="post">
+            <form action="/register" method="post">
               <!-- ユーザー名 -->
               <div class="mb-3">
                 <label for="name" class="form-label">ユーザー名 <small class="text-danger">※入力必須</small></label>
@@ -150,7 +150,7 @@
 
             <hr class="my-4">
             <p class="text-center mb-0">
-              <a href="./login.php" class="text-decoration-none">← ログイン画面へ戻る</a>
+              <a href="/login" class="text-decoration-none">← ログイン画面へ戻る</a>
             </p>
           </div>
         </div>

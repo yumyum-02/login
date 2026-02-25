@@ -16,7 +16,7 @@
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./index.php">
+      <a class="navbar-brand" href="/">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -32,7 +32,7 @@
               <div class="small"><?= escape($_SESSION['user']['email']) ?></div>
             </li>
             <li>
-              <form action="#" method="post" class="p-2">
+              <form action="/logout" method="post" class="p-2">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
@@ -57,7 +57,7 @@
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>
         <p class="text-muted mb-0">登録されているユーザー一覧です</p>
       </div>
-      <a href="./index.php" class="btn btn-outline-secondary btn-sm">
+      <a href="/" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i>トップに戻る
       </a>
     </div>
@@ -84,7 +84,7 @@
                   <td><?= escape($user['name']) ?></td>
                   <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
-                    <a href="./handlers/delete_user_handler.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
+                    <a href="/admin/delete?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
                 </tr>
               <?php endforeach; ?>

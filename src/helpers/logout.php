@@ -19,6 +19,6 @@ function executeLogout(): void
   session_destroy();
 
   $msg = urlencode("ログアウトしました。");
-  header('Location: ./login.php?msg=' . $msg);
+  header('Location: /login?msg=' . $msg);
   exit();
 }

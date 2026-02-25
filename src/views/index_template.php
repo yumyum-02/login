@@ -16,7 +16,7 @@
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./index.php">
+      <a class="navbar-brand" href="/">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -32,7 +32,7 @@
               <div class="small"><?= escape($_SESSION['user']['email']) ?></div>
             </li>
             <li>
-              <form action="#" method="post" class="p-2">
+              <form action="/logout" method="post" class="p-2">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
