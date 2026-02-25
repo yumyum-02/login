@@ -78,27 +78,6 @@ function deleteUserById(int $id): int
   return $stmt->rowCount();
 }
 
-// クロスサイトスクリプティング(XSS)対策用エスケープ関数
-// 今回はユーザー情報を出しているページで使用
-function escape($value)
-{
-  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
-
-// ログアウト処理を実行
-function executeLogout(): void
-{
-  $_SESSION = [];
-  if (isset($_COOKIE["PHPSESSID"])) {
-    setcookie("PHPSESSID", '', time() - 1800, '/');
-  }
-  session_destroy();
-
-  $msg = urlencode("ログアウトしました。");
-  header('Location: ./login.php?msg=' . $msg);
-  exit();
-}
-
 // ユーザー登録（新規ユーザーをusersテーブルに挿入）
 function registerUser(string $name, string $email, string $password_hash): int|false
 {
