@@ -33,7 +33,7 @@
             </li>
             <li>
               <form action="#" method="post" class="p-2">
-                <input type="hidden" name="logout_token" value="<?= htmlspecialchars($_SESSION['logout_token']) ?>">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
                 </button>
@@ -48,7 +48,7 @@
   <main class="container py-4">
     <?php if (isset($_GET['msg'])): ?>
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= htmlspecialchars($_GET['msg'], ENT_QUOTES, 'UTF-8') ?>
+        <?= escape($_GET['msg']) ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
       </div>
     <?php endif; ?>
@@ -84,7 +84,7 @@
                   <td><?= escape($user['name']) ?></td>
                   <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
-                    <a href="delete_user.php?id=<?= $user['id'] ?>&token=<?=$_SESSION['delete_token'] ?>" class="btn btn-outline-danger btn-sm"onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
+                    <a href="exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
                 </tr>
               <?php endforeach; ?>

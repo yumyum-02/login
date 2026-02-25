@@ -78,23 +78,22 @@ function deleteUserById(int $id): int
   return $stmt->rowCount();
 }
 
-// クロスサイトスクリプティング(XSS)対策用エスケープ関数
-// 今回はユーザー情報を出しているページで使用
-function escape($value)
+// ユーザー登録（新規ユーザーをusersテーブルに挿入）
+function registerUser(string $name, string $email, string $password_hash): int|false
 {
-  return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
+  try {
+    $pdo = connectDb();
+    $sql = 'INSERT INTO users (name, email, password) VALUES (:NAME, :EMAIL, :PASSWORD)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':NAME', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
+    $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
+    $stmt->execute();
 
-// ログアウト処理を実行
-function executeLogout(): void
-{
-  $_SESSION = [];
-  if (isset($_COOKIE["PHPSESSID"])) {
-    setcookie("PHPSESSID", '', time() - 1800, '/');
+    // 新しく登録されたユーザーのIDを返す
+    return (int)$pdo->lastInsertId();
+  } catch (PDOException $e) {
+    // エラー時はfalseを返す
+    return false;
   }
-  session_destroy();
-
-  $msg = urlencode("ログアウトしました。");
-  header('Location: ./login.php?msg=' . $msg);
-  exit();
 }

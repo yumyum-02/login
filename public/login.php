@@ -1,5 +1,5 @@
 <?php
-require_once './bootstrap.php';
+require_once '../src/bootstrap.php';
 
 if (isset($_GET['msg'])) $success_logout_msg = $_GET['msg'];
 
@@ -9,24 +9,27 @@ if (isset($_SESSION['msg'])) {
   unset($_SESSION['msg']); // 一度表示したら消す
 }
 
-if (isset($_POST['login_btn'])) {
-  // 不正リクエストチェック
-  // トークンがセッションに存在しない、または一致しない場合は処理を中止
-  if (empty($_SESSION['login_token']) || ($_SESSION['login_token'] !== $_POST['login_token'])) exit('不正なリクエストです');
-  // トークンの破棄（1回限り有効にするため）
-  if (isset($_SESSION['login_token'])) unset($_SESSION['login_token']);
-  if (isset($_POST['login_token'])) unset($_POST['login_token']);
+// CSRFトークンを生成
+$csrf_token = generateCsrfToken();
 
-  $email = getTrimmedPostValue('email');
-  $password = $_POST['password'] ?? '';
+// ログインボタンを押したときの処理
+if (isset($_POST['login_btn'])) {
+
+  // CSRFトークン検証
+  if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+    exit('不正なリクエストです');
+  }
 
   // バリデーション
+  // emailの前後の空白を削除
+  $email = getTrimmedPostValue('email');
+  // パスワードか空白
+  $password = $_POST['password'] ?? '';
   // バリデーションのためのエラー配列を用意
   $errors = [
     'email' => [],
     'password' => []
   ];
-
   // メールアドレスのバリデーション
   if (isEmpty($email)) {
     $errors['email'][] = 'メールアドレスを入力してください。';
@@ -38,7 +41,6 @@ if (isset($_POST['login_btn'])) {
       $errors['email'][] = 'メールアドレスは320文字以内で入力してください。';
     }
   }
-
   // パスワードのバリデーション
   if (isEmpty($password)) {
     $errors['password'][] = 'パスワードを入力してください。';
@@ -50,25 +52,24 @@ if (isset($_POST['login_btn'])) {
       $errors['password'][] = 'パスワードは8文字以上100文字以内で入力してください。';
     }
   }
-
   // エラーチェック
   $hasErrors = !empty($errors['email']) || !empty($errors['password']);
   // エラーがあればログイン処理を中止してフォームに戻る
   if ($hasErrors) {
-    require './template/login_template.php';
+    require '../src/template/login_template.php';
     exit();
   }
 
   // パスワードのハッシュ化
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-
+  // DBのデータと照会
   try {
     // ユーザー情報の取得 db.phpの関数を使用
     $user_info = getUserLogin($email);
 
     // 取得した情報と入力されたパスワードを照合
-    //password_verify = ハッシュ化されたパスワードの照合
+    // password_verify = ハッシュ化されたパスワードの照合
     // $user_info に要素が1件以上あるかパスワードが一致している時
     if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
       $_SESSION['user'] = array(
@@ -76,6 +77,10 @@ if (isset($_POST['login_btn'])) {
         'name'  => $user_info[0]['name'],
         'email' => $user_info[0]['email'],
       ); // セッションにユーザー情報を保存
+
+      // ログイン成功時はCSRFトークンを破棄
+      destroyCsrfToken();
+
       // ログイン成功後、メイン画面へリダイレクト
       header('Location: ./index.php');
       exit();
@@ -90,4 +95,4 @@ if (isset($_POST['login_btn'])) {
   $stmt = null;
 }
 
-require_once './template/login_template.php';
+require_once '../src/template/login_template.php';
