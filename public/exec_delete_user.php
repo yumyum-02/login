@@ -1,15 +1,15 @@
 <?php
 require_once '../src/bootstrap.php';
 
-// CSRFトークン検証
-if (!verifyCsrfToken($_GET['token'] ?? '')) {
-  exit('不正なリクエストです');
-}
-
-// ログインチェック
+// ログインチェック（未ログインはリダイレクト）
 if (!isset($_SESSION['user'])) {
   header('Location: ./login.php');
   exit();
+}
+
+// CSRFトークン検証
+if (!verifyCsrfToken($_GET['token'] ?? '')) {
+  exit('不正なリクエストです');
 }
 
 // ユーザーID取得
