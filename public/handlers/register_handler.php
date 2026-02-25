@@ -1,5 +1,5 @@
 <?php
-require '../src/bootstrap.php';
+require_once __DIR__ . '/../../src/bootstrap.php';
 
 // CSRFトークン検証
 if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -58,7 +58,7 @@ $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($erro
 if ($hasErrors) {
   // エラー時はCSRFトークンを生成
   $csrf_token = generateCsrfToken();
-  require '../src/template/regist_template.php';
+  require __DIR__ . '/../../src/template/regist_template.php';
   exit();
 }
 
@@ -78,7 +78,7 @@ try {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
     // エラー時はCSRFトークンを生成
     $csrf_token = generateCsrfToken();
-    require '../src/template/regist_template.php';
+    require __DIR__ . '/../../src/template/regist_template.php';
     exit();
   }
 
@@ -95,7 +95,7 @@ try {
   destroyCsrfToken();
 
   $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
-  header('Location: ./login.php');
+  header('Location: ../login.php');
   exit();
 } catch (PDOException $e) {
   echo '接続失敗' . $e->getMessage();

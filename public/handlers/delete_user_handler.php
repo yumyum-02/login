@@ -1,9 +1,9 @@
 <?php
-require_once '../src/bootstrap.php';
+require_once __DIR__ . '/../../src/bootstrap.php';
 
 // ログインチェック（未ログインはリダイレクト）
 if (!isset($_SESSION['user'])) {
-  header('Location: ./login.php');
+  header('Location: ../login.php');
   exit();
 }
 
@@ -23,7 +23,7 @@ try {
   // ログイン中のユーザーは削除不可
   if (isset($_SESSION['user']['id']) && $user_id === (int)$_SESSION['user']['id']) {
     $_SESSION['msg'] = 'ログイン中のユーザー情報は削除できません';
-    header('Location: ./admin.php');
+    header('Location: ../admin.php');
     exit();
   }
 
@@ -42,5 +42,5 @@ try {
 // CSRFトークンを破棄
 destroyCsrfToken();
 
-header('Location: ./admin.php');
+header('Location: ../admin.php');
 exit();

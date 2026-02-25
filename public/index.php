@@ -9,7 +9,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 // ログアウト処理（ログイン済みユーザーのみ実行可能）
-require_once '../src/handlers/logout_handler.php';
+require_once __DIR__ . '/handlers/logout_handler.php';
 
 // ページ固有の処理
 // CSRFトークンを生成

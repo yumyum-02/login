@@ -57,7 +57,7 @@
               <div class="alert alert-success" role="alert"><?= escape($_GET['msg']) ?></div>
             <?php endif; ?>
 
-            <form action="./exec_register.php" method="post">
+            <form action="./handlers/register_handler.php" method="post">
               <!-- ユーザー名 -->
               <div class="mb-3">
                 <label for="name" class="form-label">ユーザー名 <small class="text-danger">※入力必須</small></label>

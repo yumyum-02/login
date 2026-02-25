@@ -19,14 +19,14 @@
             <?php if (isset($success_logout_msg)): ?>
               <div class="alert alert-success" role="alert"><?= escape($success_logout_msg) ?></div>
             <?php endif; ?>
-            <?php if (isset($err_msg)): ?>
+            <?php if (isset($err_msg) && $err_msg !== ''): ?>
               <div class="alert alert-danger" role="alert"><?= escape($err_msg) ?></div>
             <?php endif; ?>
             <?php if (isset($login_msg) && $login_msg !== ''): ?>
               <div class="alert alert-info" role="alert"><?= escape($login_msg) ?></div>
             <?php endif; ?>
 
-            <form action="" method="post">
+            <form action="./handlers/login_handler.php" method="post">
               <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス</label>
                 <input type="email"
