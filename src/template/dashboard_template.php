@@ -32,7 +32,7 @@
               <div class="small"><?= escape($_SESSION['user']['email']) ?></div>
             </li>
             <li>
-              <form action="./logout.php" method="post" class="p-2">
+              <form action="../logout.php" method="post" class="p-2">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
