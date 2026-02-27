@@ -16,7 +16,7 @@
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./index.php">
+      <a class="navbar-brand" href="./dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -57,7 +57,7 @@
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>
         <p class="text-muted mb-0">登録されているユーザー一覧です</p>
       </div>
-      <a href="./index.php" class="btn btn-outline-secondary btn-sm">
+      <a href="./dashboard.php" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i>トップに戻る
       </a>
     </div>

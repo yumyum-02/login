@@ -16,7 +16,7 @@
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./index.php">
+      <a class="navbar-brand" href="./dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">

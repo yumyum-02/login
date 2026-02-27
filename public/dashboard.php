@@ -13,4 +13,4 @@ if (!isset($_SESSION['user'])) {
 $csrf_token = generateCsrfToken();
 
 // テンプレート読み込み
-require_once '../src/template/index_template.php';
+require_once '../src/template/dashboard_template.php';
