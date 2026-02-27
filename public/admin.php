@@ -8,9 +8,6 @@ if (!isset($_SESSION['user'])) {
   exit();
 }
 
-// ログアウト処理（ログイン済みユーザーのみ実行可能）
-require_once '../src/handlers/logout_handler.php';
-
 $users_info = getUsersInfo();
 
 // ページ固有の処理
