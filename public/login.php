@@ -82,7 +82,7 @@ if (isset($_POST['login_btn'])) {
       destroyCsrfToken();
 
       // ログイン成功後、メイン画面へリダイレクト
-      header('Location: ./index.php');
+      header('Location: ./admin/dashboard.php');
       exit();
     } else {
       $err_msg = 'ログイン情報に誤りがあります。';

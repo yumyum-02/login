@@ -16,7 +16,7 @@
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./index.php">
+      <a class="navbar-brand" href="./dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -32,7 +32,7 @@
               <div class="small"><?= escape($_SESSION['user']['email']) ?></div>
             </li>
             <li>
-              <form action="./logout.php" method="post" class="p-2">
+              <form action="../logout.php" method="post" class="p-2">
                 <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
                   <i class="bi bi-box-arrow-right me-1"></i>ログアウト
@@ -57,8 +57,8 @@
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>
         <p class="text-muted mb-0">登録されているユーザー一覧です</p>
       </div>
-      <a href="./index.php" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>トップに戻る
+      <a href="./dashboard.php" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>ダッシュボードに移動
       </a>
     </div>
 

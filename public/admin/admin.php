@@ -1,5 +1,5 @@
 <?php
-require_once '../src/bootstrap.php';
+require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 // ログイン認証チェック（未ログインはリダイレクト）
 if (!isset($_SESSION['user'])) {
@@ -21,4 +21,4 @@ if (isset($_SESSION['msg'])) {
 $csrf_token = generateCsrfToken();
 
 // テンプレート読み込み
-require '../src/template/admin_template.php';
+require_once dirname(__DIR__, 2) . '/src/template/admin_template.php';
