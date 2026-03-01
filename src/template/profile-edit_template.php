@@ -78,11 +78,9 @@
               <h5 class="card-title mb-0">
                 <i class="bi bi-person-badge me-2"></i>プロフィール情報
               </h5>
-              <a href="../account-edit/profile-edit.php" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil me-1"></i>変更
-              </a>
             </div>
             <div class="card-body p-4">
+            <form action="../account-edit/exec_profile-edit.php" method="post">
               <!-- ユーザー名 -->
               <div class="row align-items-center">
                 <div class="col-sm-3">
@@ -92,63 +90,41 @@
                   </div>
                 </div>
                 <div class="col-sm-9">
-                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <input type="text"
+                         class="form-control <?= !empty($errors['name']) ? 'is-invalid' : '' ?>"
+                         name="name"
+                         value="<?= escape($old_input['name'] ?? $_SESSION['user']['name']) ?>">
 
-          <!-- アカウント管理カード -->
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom py-3">
-              <h5 class="card-title mb-0">
-                <i class="bi bi-shield-lock me-2"></i>アカウント管理
-              </h5>
-            </div>
-            <div class="card-body p-4">
-              <!-- メールアドレス -->
-              <div class="row align-items-center mb-3 pb-3 border-bottom">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-envelope-fill me-2"></i>
-                    <span class="fw-semibold">メールアドレス</span>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="./email-edit.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
+                  <?php if (!empty($errors['name'])): ?>
+                    <div class="invalid-feedback d-block">
+                      <?php foreach ($errors['name'] as $error): ?>
+                        <div><?= escape($error) ?></div>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php endif; ?>
                 </div>
               </div>
+            </div>
 
-              <!-- パスワード -->
-              <div class="row align-items-center">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    <span class="fw-semibold">パスワード</span>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <p class="mb-0 text-muted">••••••••</p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="./password-edit.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
-                </div>
+            <!-- カードフッター（ボタンエリア） -->
+            <div class="card-footer bg-white border-top py-3">
+              <div class="d-flex justify-content-end gap-2">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <a href="../admin/account.php" class="btn btn-outline-secondary">
+                  <i class="bi bi-x-lg me-2"></i>キャンセル
+                </a>
+                <button type="submit" class="btn btn-primary" name="profile_edit">
+                  <i class="bi bi-check-lg me-2"></i>変更を保存
+                </button>
               </div>
             </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
