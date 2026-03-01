@@ -7,45 +7,60 @@
   <title>ユーザー一覧</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <style>
-    .navbar-brand { font-weight: 600; letter-spacing: -0.5px; }
-    .content-card { border-left: 4px solid #0d6efd; }
-  </style>
+  <link href="../css/style.css" rel="stylesheet">
 </head>
 
 <body class="bg-light min-vh-100">
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <a class="navbar-brand" href="./dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
-        <div class="dropdown">
-          <button class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-4 me-2"></i>
-            <span><?= escape($_SESSION['user']['name']) ?></span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li class="px-3 py-2 border-bottom">
-              <div class="small text-muted">ログイン中</div>
-              <div class="fw-semibold"><?= escape($_SESSION['user']['name']) ?></div>
-              <div class="small"><?= escape($_SESSION['user']['email']) ?></div>
-            </li>
-            <li>
-              <form action="../logout.php" method="post" class="p-2">
-                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
-                  <i class="bi bi-box-arrow-right me-1"></i>ログアウト
-                </button>
-              </form>
-            </li>
-          </ul>
-        </div>
+        <span class="text-white me-3 d-none d-md-inline">
+          <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+        </span>
       </div>
     </div>
   </nav>
 
-  <main class="container py-4">
+  <div class="offcanvas offcanvas-start bg-white shadow-sm" tabindex="-1" id="sidebarMenu">
+    <div class="offcanvas-header border-bottom d-md-none">
+      <h5 class="offcanvas-title">
+        <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="./dashboard.php">
+            <i class="bi bi-house-door-fill"></i>
+            ダッシュボード
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./account.php">
+            <i class="bi bi-person-fill"></i>
+            アカウント情報
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <form action="../logout.php" method="post" class="p-2">
+            <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
+              <i class="bi bi-box-arrow-right me-1"></i>ログアウト
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <main class="p-4">
     <?php if (isset($_GET['msg'])): ?>
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <?= escape($_GET['msg']) ?>
