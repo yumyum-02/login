@@ -43,6 +43,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="admin.php">
+            <i class="bi bi-person-fill"></i>
+            ユーザー一覧
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="./account.php">
             <i class="bi bi-person-fill"></i>
             アカウント情報
