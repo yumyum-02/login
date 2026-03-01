@@ -61,28 +61,8 @@
   </div>
 
   <main class="p-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="card-title">アカウント情報</h2>
-      </div>
-      <form action="account-edit.php" method="post">
-        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-        <button type="submit" class="btn btn-outline-primary btn-sm w-100" name="account-edit">
-          <i class="bi bi-pencil-square me-1"></i>アカウント情報を編集
-        </button>
-      </form>
-      <dl class="row mb-0">
-        <dt class="col-sm-4 text-muted">ユーザー名</dt>
-        <dd class="col-sm-8"><?= escape($_SESSION['user']['name']) ?></dd>
-        <dt class="col-sm-4 text-muted">メールアドレス</dt>
-        <dd class="col-sm-8"><?= escape($_SESSION['user']['email']) ?></dd>
-        <dt class="col-sm-4 text-muted">パスワード</dt>
-        <dd class="col-sm-8">********</dd>
-      </dl>
-    </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
