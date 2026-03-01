@@ -72,9 +72,6 @@
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>
         <p class="text-muted mb-0">登録されているユーザー一覧です</p>
       </div>
-      <a href="./dashboard.php" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>ダッシュボードに移動
-      </a>
     </div>
 
     <div class="card shadow-sm content-card">
