@@ -78,12 +78,6 @@
               このアプリケーションのメイン画面です。<br>
               今後、機能が追加されていく予定です。
             </p>
-            <form action="./account.php" method="post" class="p-2">
-              <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-              <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
-                <i class="bi bi-box-arrow-right me-1"></i>アカウント設定
-              </button>
-            </form>
           </div>
         </div>
       </div>
