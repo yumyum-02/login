@@ -61,24 +61,107 @@
   </div>
 
   <main class="p-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="card-title">アカウント情報</h2>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <!-- ページヘッダー -->
+          <div class="mb-4">
+            <h1 class="h3 fw-bold mb-1">
+              <i class="bi bi-person-gear me-2 text-primary"></i>アカウント情報
+            </h1>
+            <p class="text-muted mb-0">プロフィール情報を確認・編集できます</p>
+          </div>
+
+          <!-- 成功・エラーメッセージ -->
+          <?php if (isset($success_message)): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i><?= escape($success_message) ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <?php endif; ?>
+
+          <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i><?= escape($error_message) ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <?php endif; ?>
+
+          <!-- プロフィール情報カード -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="card-title mb-0">
+                <i class="bi bi-person-badge me-2"></i>プロフィール情報
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              <!-- ユーザー名 -->
+              <div class="row align-items-center">
+                <div class="col-sm-3">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-person-fill me-2"></i>
+                    <span class="fw-semibold">ユーザー名</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="./profile-edit.php" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- アカウント管理カード -->
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="card-title mb-0">
+                <i class="bi bi-shield-lock me-2"></i>アカウント管理
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              <!-- メールアドレス -->
+              <div class="row align-items-center mb-3 pb-3 border-bottom">
+                <div class="col-sm-3">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-envelope-fill me-2"></i>
+                    <span class="fw-semibold">メールアドレス</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="./email-edit.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
+                </div>
+              </div>
+
+              <!-- パスワード -->
+              <div class="row align-items-center">
+                <div class="col-sm-3">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-lock-fill me-2"></i>
+                    <span class="fw-semibold">パスワード</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <p class="mb-0 text-muted">••••••••</p>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="./password-edit.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <form action="account-edit.php" method="post">
-        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-        <button type="submit" class="btn btn-outline-primary btn-sm w-100" name="account-edit">
-          <i class="bi bi-pencil-square me-1"></i>アカウント情報を編集
-        </button>
-      </form>
-      <dl class="row mb-0">
-        <dt class="col-sm-4 text-muted">ユーザー名</dt>
-        <dd class="col-sm-8"><?= escape($_SESSION['user']['name']) ?></dd>
-        <dt class="col-sm-4 text-muted">メールアドレス</dt>
-        <dd class="col-sm-8"><?= escape($_SESSION['user']['email']) ?></dd>
-        <dt class="col-sm-4 text-muted">パスワード</dt>
-        <dd class="col-sm-8">********</dd>
-      </dl>
     </div>
   </main>
 
