@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>アカウント情報</title>
+  <title>メールアドレス変更</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
@@ -37,13 +37,13 @@
     <div class="offcanvas-body p-0">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link" href="./dashboard.php">
+          <a class="nav-link" href="../admin/dashboard.php">
             <i class="bi bi-house-door-fill"></i>
             ダッシュボード
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="./account.php">
+          <a class="nav-link active" href="../admin/account.php">
             <i class="bi bi-person-fill"></i>
             アカウント情報
           </a>
@@ -76,79 +76,55 @@
           <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">
-                <i class="bi bi-person-badge me-2"></i>プロフィール情報
-              </h5>
-              <a href="../account-edit/profile-edit.php" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil me-1"></i>変更
-              </a>
-            </div>
-            <div class="card-body p-4">
-              <!-- ユーザー名 -->
-              <div class="row align-items-center">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-person-fill me-2"></i>
-                    <span class="fw-semibold">ユーザー名</span>
-                  </div>
-                </div>
-                <div class="col-sm-9">
-                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- アカウント管理カード -->
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom py-3">
-              <h5 class="card-title mb-0">
                 <i class="bi bi-shield-lock me-2"></i>アカウント管理
               </h5>
             </div>
             <div class="card-body p-4">
+            <form action="../account-edit/exec_email-edit.php" method="post">
               <!-- メールアドレス -->
-              <div class="row align-items-center mb-3 pb-3 border-bottom">
+              <div class="row align-items-center">
                 <div class="col-sm-3">
                   <div class="d-flex align-items-center text-muted">
                     <i class="bi bi-envelope-fill me-2"></i>
                     <span class="fw-semibold">メールアドレス</span>
                   </div>
                 </div>
-                <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="../account-edit/email-edit.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
-                </div>
-              </div>
+                <div class="col-sm-9">
+                  <input type="text"
+                         class="form-control <?= !empty($errors['email']) ? 'is-invalid' : '' ?>"
+                         name="email"
+                         value="<?= escape($old_input['email'] ?? $_SESSION['user']['email']) ?>">
 
-              <!-- パスワード -->
-              <div class="row align-items-center">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    <span class="fw-semibold">パスワード</span>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <p class="mb-0 text-muted">••••••••</p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="./password-edit.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
+                  <?php if (!empty($errors['email'])): ?>
+                    <div class="invalid-feedback d-block">
+                      <?php foreach ($errors['email'] as $error): ?>
+                        <div><?= escape($error) ?></div>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
+
+            <!-- カードフッター（ボタンエリア） -->
+            <div class="card-footer bg-white border-top py-3">
+              <div class="d-flex justify-content-end gap-2">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <a href="../admin/account.php" class="btn btn-outline-secondary">
+                  <i class="bi bi-x-lg me-2"></i>キャンセル
+                </a>
+                <button type="submit" class="btn btn-primary" name="profile_edit">
+                  <i class="bi bi-check-lg me-2"></i>変更を保存
+                </button>
+              </div>
+            </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
