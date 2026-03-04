@@ -9,8 +9,7 @@ $errors = $_SESSION['errors'] ?? [];
 $old_input = $_SESSION['old_input'] ?? [];
 
 // セッションをクリア（一度表示したらクリア）
-unset($_SESSION['errors']);
-unset($_SESSION['old_input']);
+unset($_SESSION['errors'] ,$_SESSION['old_input']);
 
 // テンプレート読み込み
 require_once dirname(__DIR__, 2) . '/src/template/profile-edit_template.php';

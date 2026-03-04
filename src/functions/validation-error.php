@@ -34,6 +34,22 @@ function getMailValidationErrors($email) {
 	return $errors;
 }
 
+// パスワード用（詳細）
+function getPasswordValidationErrors($password) {
+	if (isEmpty($password)) {
+			return ['パスワードを入力してください。'];
+	}
+
+	$errors = [];
+	if (!isPasswordFormat($password)) {
+			$errors[] = 'パスワードは半角英数字と記号で入力してください。';
+	}
+	if (!isWithinLength($password, 16, 64)) {
+    $errors[] = 'パスワードは16文字以上64文字以内で入力してください。';
+  }
+	return $errors;
+}
+
 /**
  * エラーがあれば登録処理を中止し、入力した内容をキープしたままフォームに戻る
  * エラーをセッションに保存してリダイレクト

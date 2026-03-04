@@ -10,7 +10,7 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 //　空白を削除
 $name = getTrimmedPostValue('name');
 // ユーザー名のバリデーション
-$errors = getUserNameValidationErrorse($name);
+$errors = getUserNameValidationErrors($name);
 // エラーがあれば登録処理を中止してフォームに戻る
 if (!empty($errors)) {
   redirectWithErrors($errors,['name' => $name],'./profile-edit.php'
