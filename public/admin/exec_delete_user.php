@@ -1,5 +1,5 @@
 <?php
-require_once '../src/bootstrap.php';
+require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 // CSRFトークン検証
 if (!verifyCsrfToken($_GET['token'] ?? '')) {
@@ -8,8 +8,7 @@ if (!verifyCsrfToken($_GET['token'] ?? '')) {
 
 // ログインチェック
 if (!isset($_SESSION['user'])) {
-  header('Location: ./login.php');
-  exit();
+  redirect('./login.php');
 }
 
 // ユーザーID取得
@@ -23,8 +22,7 @@ try {
   // ログイン中のユーザーは削除不可
   if (isset($_SESSION['user']['id']) && $user_id === (int)$_SESSION['user']['id']) {
     $_SESSION['msg'] = 'ログイン中のユーザー情報は削除できません';
-    header('Location: ./admin.php');
-    exit();
+    redirect('./admin.php');
   }
 
   // 削除実行
@@ -42,5 +40,4 @@ try {
 // CSRFトークンを破棄
 destroyCsrfToken();
 
-header('Location: ./admin.php');
-exit();
+redirect('./admin.php');

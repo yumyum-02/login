@@ -102,7 +102,7 @@
                   <td><?= escape($user['name']) ?></td>
                   <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
-                    <a href="exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
+                    <a href="./exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
