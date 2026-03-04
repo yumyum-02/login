@@ -11,17 +11,8 @@ $email = getTrimmedPostValue('email');
 // バリデーションのためのエラー配列を用意
 $errors = [];
 // メールアドレスのバリデーション
-if (isEmpty($email)) {
-  $errors[] = 'メールアドレスを入力してください。';
-} else {
-  if (!isEmailFormat($email)) {
-    $errors[] = 'メールアドレスの形式が正しくありません。';
-  }
-  // メールアドレスはローカルパートが最大64文字 + ドメインが255文字 + ＠で 合計320文字 MAX
-  if (!isWithinLength($email, null, 320)) {
-    $errors[] = 'メールアドレスは320文字以内で入力してください。';
-  }
-}
+$errors = validateMail($email);
+
 // エラーチェック
 $hasErrors = !empty($errors);
 // エラーがあれば登録処理を中止してフォームに戻る
