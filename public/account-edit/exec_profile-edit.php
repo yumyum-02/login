@@ -9,22 +9,20 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 // バリデーション
 $name = getTrimmedPostValue('name');
 // バリデーションのためのエラー配列を用意
-$errors = [
-  'name' => [],
-];
+$errors = [];
 // ユーザー名のバリデーション
 if (isEmpty($name)) {
-  $errors['name'][] = 'ユーザー名を入力してください。';
+  $errors[] = 'ユーザー名を入力してください。';
 } else {
   if (!isUserNameFormat($name)) {
-    $errors['name'][] = '使用できない文字が含まれています。';
+    $errors[] = '使用できない文字が含まれています。';
   }
   if (!isWithinLength($name, 3, 16)) {
-    $errors['name'][] = 'ユーザー名は3文字以上16文字以内で入力してください。';
+    $errors[] = 'ユーザー名は3文字以上16文字以内で入力してください。';
   }
 }
 // エラーチェック（いずれかのフィールドにエラーがあるか）
-$hasErrors = !empty($errors['name']);
+$hasErrors = !empty($errors);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
   $_SESSION['errors'] = $errors;  // エラー配列を保存

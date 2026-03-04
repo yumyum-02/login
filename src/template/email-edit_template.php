@@ -91,13 +91,13 @@
                 </div>
                 <div class="col-sm-9">
                   <input type="text"
-                         class="form-control <?= !empty($errors['email']) ? 'is-invalid' : '' ?>"
+                         class="form-control <?= !empty($errors) ? 'is-invalid' : '' ?>"
                          name="email"
                          value="<?= escape($old_input['email'] ?? $_SESSION['user']['email']) ?>">
 
-                  <?php if (!empty($errors['email'])): ?>
+                  <?php if (!empty($errors)): ?>
                     <div class="invalid-feedback d-block">
-                      <?php foreach ($errors['email'] as $error): ?>
+                      <?php foreach ($errors as $error): ?>
                         <div><?= escape($error) ?></div>
                       <?php endforeach; ?>
                     </div>

@@ -9,23 +9,21 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 // バリデーション
 $email = getTrimmedPostValue('email');
 // バリデーションのためのエラー配列を用意
-$errors = [
-  'email' => [],
-];
+$errors = [];
 // メールアドレスのバリデーション
 if (isEmpty($email)) {
-  $errors['email'][] = 'メールアドレスを入力してください。';
+  $errors[] = 'メールアドレスを入力してください。';
 } else {
   if (!isEmailFormat($email)) {
-    $errors['email'][] = 'メールアドレスの形式が正しくありません。';
+    $errors[] = 'メールアドレスの形式が正しくありません。';
   }
   // メールアドレスはローカルパートが最大64文字 + ドメインが255文字 + ＠で 合計320文字 MAX
   if (!isWithinLength($email, null, 320)) {
-    $errors['email'][] = 'メールアドレスは320文字以内で入力してください。';
+    $errors[] = 'メールアドレスは320文字以内で入力してください。';
   }
 }
 // エラーチェック
-$hasErrors = !empty($errors['email']);
+$hasErrors = !empty($errors);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
   $_SESSION['errors'] = $errors;  // エラー配列を保存
@@ -38,7 +36,7 @@ try {
   $user_info = getUserRegister($email);
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
-    $errors['email'][] = 'そのメールアドレスはすでに使用されています。';
+    $errors[] = 'そのメールアドレスはすでに使用されています。';
     $_SESSION['errors'] = $errors;
     $_SESSION['old_input'] = ['email' => $email];
     header('Location: ./email-edit.php');
