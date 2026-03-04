@@ -16,7 +16,7 @@
       <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="./dashboard.php">
+      <a class="navbar-brand" href="../admin/dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">

@@ -16,7 +16,7 @@
       <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="./dashboard.php">
+      <a class="navbar-brand" href="../admin/dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -37,13 +37,13 @@
     <div class="offcanvas-body p-0">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link" href="./dashboard.php">
+          <a class="nav-link" href="../admin/dashboard.php">
             <i class="bi bi-house-door-fill"></i>
             ダッシュボード
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="./account.php">
+          <a class="nav-link active" href="../admin/account.php">
             <i class="bi bi-person-fill"></i>
             アカウント情報
           </a>
