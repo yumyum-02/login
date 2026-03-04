@@ -7,20 +7,17 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 }
 
 // バリデーション
+//　空白を削除
 $email = getTrimmedPostValue('email');
-// バリデーションのためのエラー配列を用意
-$errors = [];
 // メールアドレスのバリデーション
 $errors = validateMail($email);
-
-// エラーチェック
-$hasErrors = !empty($errors);
 // エラーがあれば登録処理を中止してフォームに戻る
-if ($hasErrors) {
-  $_SESSION['errors'] = $errors;  // エラー配列を保存
-  $_SESSION['old_input'] = ['email' => $email];  // 入力値を保存（再表示用）
-  header('Location: ./email-edit.php');
-  exit;
+if (!empty($errors)) {
+    redirectWithErrors(
+        $errors,
+        ['email' => $email],
+        './email-edit.php'
+    );
 }
 
 try {

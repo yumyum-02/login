@@ -7,28 +7,17 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 }
 
 // バリデーション
+//　空白を削除
 $name = getTrimmedPostValue('name');
-// バリデーションのためのエラー配列を用意
-$errors = [];
 // ユーザー名のバリデーション
-if (isEmpty($name)) {
-  $errors[] = 'ユーザー名を入力してください。';
-} else {
-  if (!isUserNameFormat($name)) {
-    $errors[] = '使用できない文字が含まれています。';
-  }
-  if (!isWithinLength($name, 3, 16)) {
-    $errors[] = 'ユーザー名は3文字以上16文字以内で入力してください。';
-  }
-}
-// エラーチェック（いずれかのフィールドにエラーがあるか）
-$hasErrors = !empty($errors);
+$errors = validateUserName($name);
 // エラーがあれば登録処理を中止してフォームに戻る
-if ($hasErrors) {
-  $_SESSION['errors'] = $errors;  // エラー配列を保存
-  $_SESSION['old_input'] = ['name' => $name];  // 入力値を保存（再表示用）
-  header('Location: ./profile-edit.php');
-  exit;
+if (!empty($errors)) {
+  redirectWithErrors(
+      $errors,
+      ['name' => $name],
+      './profile-edit.php'
+  );
 }
 
 try {
