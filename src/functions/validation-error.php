@@ -2,7 +2,7 @@
 require_once __DIR__ . '/validation.php'; // バリデーションの呼び出し
 
 // ユーザー名用（詳細）
-function validateUserName($name){
+function getUserNameValidationErrors($name){
 	if (isEmpty($name)){
 		return ['ユーザー名を入力してください。'];
 	}
@@ -18,7 +18,7 @@ function validateUserName($name){
 }
 
 // メールアドレス用（詳細）
-function validateMail($email) {
+function getMailValidationErrors($email) {
 	if (isEmpty($email)) {
 			return ['メールアドレスを入力してください。'];
 	}
@@ -41,10 +41,6 @@ function validateMail($email) {
  * @param array $oldInput 入力値（再表示用）
  * @param string $redirectUrl リダイレクト先URL
  */
-function redirect($redirectUrl) {
-	header("Location: $redirectUrl");
-	exit;
-}
 function redirectWithErrors($errors, $oldInput, $redirectUrl) {
   $_SESSION['errors'] = $errors;
   $_SESSION['old_input'] = $oldInput;

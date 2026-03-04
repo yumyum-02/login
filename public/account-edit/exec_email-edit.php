@@ -10,14 +10,10 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 //　空白を削除
 $email = getTrimmedPostValue('email');
 // メールアドレスのバリデーション
-$errors = validateMail($email);
+$errors = getMailValidationErrors($email);
 // エラーがあれば登録処理を中止してフォームに戻る
 if (!empty($errors)) {
-    redirectWithErrors(
-        $errors,
-        ['email' => $email],
-        './email-edit.php'
-    );
+    redirectWithErrors($errors,['email' => $email],'./email-edit.php');
 }
 
 try {
@@ -25,10 +21,8 @@ try {
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
-    $_SESSION['errors'] = $errors;
-    $_SESSION['old_input'] = ['email' => $email];
-    header('Location: ./email-edit.php');
-    exit();
+    redirectWithErrors($errors, ['email' => $email],'./email-edit.php');
+    redirect('./email-edit.php');
   }
 
   $pdo = connectDb();
@@ -42,8 +36,7 @@ try {
   // 実行結果をチェック
   if ($result === false) {
     $_SESSION['error_message'] ='更新に失敗しました。もう一度お試しください。';
-    header('Location: ./email-edit.php');
-    exit;
+    redirect('./email-edit.php');
   }
 
   // 登録成功時はCSRFトークンを破棄
@@ -53,10 +46,8 @@ try {
   $_SESSION['user']['email'] = $email;
   $_SESSION['success_message'] = 'メールアドレスを更新しました';
 
-  header('Location: ../admin/account.php');
-  exit;
+  redirect('../admin/account.php');
 } catch (PDOException $e) {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  header('Location: ./email-edit.php');
-  exit;
+  redirect('./email-edit.php');
 }
