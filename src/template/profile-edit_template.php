@@ -80,7 +80,7 @@
               </h5>
             </div>
             <div class="card-body p-4">
-            <form action="../account-edit/exec_profile-edit.php" method="post">
+            <form action="../account-edit/exec_edit-profile.php" method="post">
               <!-- ユーザー名 -->
               <div class="row align-items-center">
                 <div class="col-sm-3">
