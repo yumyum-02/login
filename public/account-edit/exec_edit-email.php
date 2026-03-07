@@ -5,6 +5,8 @@ require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
   exit('不正なリクエストです');
 }
+// CSRFトークンを破棄
+destroyCsrfToken();
 
 // バリデーション
 //　空白を削除
@@ -38,9 +40,6 @@ try {
     $_SESSION['error_message'] ='更新に失敗しました。もう一度お試しください。';
     redirect('./edit-email.php');
   }
-
-  // 登録成功時はCSRFトークンを破棄
-  destroyCsrfToken();
 
   // セッション更新
   $_SESSION['user']['email'] = $email;
