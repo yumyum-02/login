@@ -13,7 +13,7 @@ $name = getTrimmedPostValue('name');
 $errors = getUserNameValidationErrors($name);
 // エラーがあれば登録処理を中止してフォームに戻る
 if (!empty($errors)) {
-  redirectWithErrors($errors,['name' => $name],'./profile-edit.php'
+  redirectWithErrors($errors,['name' => $name],'./edit-profile.php'
   );
 }
 
@@ -33,5 +33,5 @@ try {
   redirect('../admin/account.php');
 } catch (PDOException $e) {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./profile-edit.php');
+  redirect('./edit-profile.php');
 }

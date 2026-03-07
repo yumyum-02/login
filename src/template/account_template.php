@@ -78,7 +78,7 @@
               <h5 class="card-title mb-0">
                 <i class="bi bi-person-badge me-2"></i>プロフィール情報
               </h5>
-              <a href="../account-edit/profile-edit.php" class="btn btn-outline-primary btn-sm">
+              <a href="../account-edit/edit-profile.php" class="btn btn-outline-primary btn-sm">
                 <i class="bi bi-pencil me-1"></i>変更
               </a>
             </div>
@@ -118,7 +118,7 @@
                   <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
                 </div>
                 <div class="col-sm-3 text-end">
-                  <a href="../account-edit/email-edit.php" class="btn btn-outline-secondary btn-sm">
+                  <a href="../account-edit/edit-email.php" class="btn btn-outline-secondary btn-sm">
                     <i class="bi bi-pencil me-1"></i>変更
                   </a>
                 </div>

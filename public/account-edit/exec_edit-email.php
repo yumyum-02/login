@@ -13,7 +13,7 @@ $email = getTrimmedPostValue('email');
 $errors = getMailValidationErrors($email);
 // エラーがあれば登録処理を中止してフォームに戻る
 if (!empty($errors)) {
-    redirectWithErrors($errors,['email' => $email],'./email-edit.php');
+    redirectWithErrors($errors,['email' => $email],'./edit-email.php');
 }
 
 try {
@@ -21,8 +21,8 @@ try {
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
-    redirectWithErrors($errors, ['email' => $email],'./email-edit.php');
-    redirect('./email-edit.php');
+    redirectWithErrors($errors, ['email' => $email],'./edit-email.php');
+    redirect('./edit-email.php');
   }
 
   $pdo = connectDb();
@@ -36,7 +36,7 @@ try {
   // 実行結果をチェック
   if ($result === false) {
     $_SESSION['error_message'] ='更新に失敗しました。もう一度お試しください。';
-    redirect('./email-edit.php');
+    redirect('./edit-email.php');
   }
 
   // 登録成功時はCSRFトークンを破棄
@@ -49,5 +49,5 @@ try {
   redirect('../admin/account.php');
 } catch (PDOException $e) {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./email-edit.php');
+  redirect('./edit-email.php');
 }
