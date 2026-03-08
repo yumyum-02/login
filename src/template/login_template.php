@@ -26,7 +26,7 @@
               <div class="alert alert-info" role="alert"><?= escape($login_msg) ?></div>
             <?php endif; ?>
 
-            <form action="" method="post">
+            <form action="./exec_login.php" method="post">
               <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス</label>
                 <input type="email"

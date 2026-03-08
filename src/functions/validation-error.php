@@ -34,6 +34,21 @@ function getMailValidationErrors($email) {
 	return $errors;
 }
 
+// メールアドレス用（簡易）
+function getSimpleEmailErrors($email) {
+	if (isEmpty($email)) {
+		return ['メールアドレスを入力してください。'];
+	}
+	$errors = [];
+	if (!isEmailFormat($email)) {
+		$errors[] = 'メールアドレスの形式が正しくありません。';
+	}
+	if (!isWithinLength($email, null, 320)) {
+		$errors[] = 'メールアドレスは320文字以内で入力してください。';
+	}
+	return $errors;
+}
+
 // パスワード用（詳細）
 function getPasswordValidationErrors($password) {
 	if (isEmpty($password)) {
@@ -48,6 +63,34 @@ function getPasswordValidationErrors($password) {
     $errors[] = 'パスワードは16文字以上64文字以内で入力してください。';
   }
 	return $errors;
+}
+
+// パスワード用（簡易）
+function getSimplePasswordErrors($password) {
+	if (isEmpty($password)) {
+		return ['パスワードを入力してください。'];
+	}
+
+	$errors = [];
+	if (!isPasswordFormat($password)) {
+		$errors[] = 'パスワードの形式が正しくありません。';
+	}
+	if (!isWithinLength($password, 16, 64)) {
+		$errors[] = 'パスワードは16文字以上64文字以内で入力してください。';
+	}
+	return $errors;
+}
+
+// パスワード2重チェック
+function getPasswordCheck($password, $password_check){
+	if (isEmpty($password_check)) {
+		return ['パスワード（確認用）を入力してください。'];
+	}
+
+	if ( $password !== $password_check) {
+		return ['パスワードが一致していません'];
+	}
+	return [];
 }
 
 /**
