@@ -93,6 +93,27 @@ function getPasswordCheck($password, $password_check){
 	return [];
 }
 
+// 現在のパスワード検証（パスワード変更用）
+/**
+ * 現在のパスワードのバリデーションエラーを取得
+ *
+ * @param string $current_password 入力された現在のパスワード
+ * @param int $user_id ユーザーID
+ * @return array エラーメッセージの配列
+ */
+function getCurrentPasswordErrors($current_password, $user_id)
+{
+	if (isEmpty($current_password)) {
+		return ['現在のパスワードを入力してください。'];
+	}
+
+	if (!isCurrentPasswordCorrect($current_password, $user_id)) {
+		return ['現在のパスワードが正しくありません。'];
+	}
+
+	return [];
+}
+
 /**
  * エラーがあれば登録処理を中止し、入力した内容をキープしたままフォームに戻る
  * エラーをセッションに保存してリダイレクト

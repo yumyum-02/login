@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>アカウント情報</title>
+  <title>パスワード変更</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
@@ -16,7 +16,7 @@
       <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="./dashboard.php">
+      <a class="navbar-brand" href="../admin/dashboard.php">
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
@@ -37,13 +37,13 @@
     <div class="offcanvas-body p-0">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link" href="./dashboard.php">
+          <a class="nav-link" href="../admin/dashboard.php">
             <i class="bi bi-house-door-fill"></i>
             ダッシュボード
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="./account.php">
+          <a class="nav-link active" href="../admin/account.php">
             <i class="bi bi-person-fill"></i>
             アカウント情報
           </a>
@@ -78,77 +78,92 @@
               <h5 class="card-title mb-0">
                 <i class="bi bi-person-badge me-2"></i>プロフィール情報
               </h5>
-              <a href="../account-edit/edit-profile.php" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil me-1"></i>変更
-              </a>
             </div>
             <div class="card-body p-4">
-              <!-- ユーザー名 -->
-              <div class="row align-items-center">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-person-fill me-2"></i>
-                    <span class="fw-semibold">ユーザー名</span>
-                  </div>
-                </div>
-                <div class="col-sm-9">
-                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- アカウント管理カード -->
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom py-3">
-              <h5 class="card-title mb-0">
-                <i class="bi bi-shield-lock me-2"></i>アカウント管理
-              </h5>
-            </div>
-            <div class="card-body p-4">
-              <!-- メールアドレス -->
-              <div class="row align-items-center mb-3 pb-3 border-bottom">
-                <div class="col-sm-3">
-                  <div class="d-flex align-items-center text-muted">
-                    <i class="bi bi-envelope-fill me-2"></i>
-                    <span class="fw-semibold">メールアドレス</span>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="../account-edit/edit-email.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
-                </div>
-              </div>
-
-              <!-- パスワード -->
-              <div class="row align-items-center">
-                <div class="col-sm-3">
+            <form action="../account-edit/exec_edit-password.php" method="post">
+              <!-- 現在のパスワード -->
+              <div class="mb-3">
+                <label class="form-label">
                   <div class="d-flex align-items-center text-muted">
                     <i class="bi bi-lock-fill me-2"></i>
-                    <span class="fw-semibold">パスワード</span>
+                    <span class="fw-semibold">現在のパスワード</span>
                   </div>
-                </div>
-                <div class="col-sm-6">
-                  <p class="mb-0 text-muted">••••••••</p>
-                </div>
-                <div class="col-sm-3 text-end">
-                  <a href="../account-edit/edit-password.php" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-pencil me-1"></i>変更
-                  </a>
-                </div>
+                </label>
+                <input type="password"
+                       class="form-control <?= !empty($errors['current_password']) ? 'is-invalid' : '' ?>"
+                       name="current_password">
+                <?php if (!empty($errors['current_password'])): ?>
+                  <div class="invalid-feedback d-block">
+                    <?php foreach ($errors['current_password'] as $error): ?>
+                      <div><?= escape($error) ?></div>
+                    <?php endforeach; ?>
+                  </div>
+                <?php endif; ?>
+              </div>
+
+              <!-- 区切り線 -->
+              <hr class="my-4">
+
+              <!-- 新しいパスワード -->
+              <div class="mb-3">
+                <label class="form-label">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-lock-fill me-2"></i>
+                    <span class="fw-semibold">新しいパスワード</span>
+                  </div>
+                </label>
+                <input type="password"
+                       class="form-control <?= !empty($errors['new_password']) ? 'is-invalid' : '' ?>"
+                       name="new_password">
+                <?php if (!empty($errors['new_password'])): ?>
+                  <div class="invalid-feedback d-block">
+                    <?php foreach ($errors['new_password'] as $error): ?>
+                      <div><?= escape($error) ?></div>
+                    <?php endforeach; ?>
+                  </div>
+                <?php endif; ?>
+              </div>
+
+              <!-- 確認用パスワード -->
+              <div class="mb-3">
+                <label class="form-label">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-lock-fill me-2"></i>
+                    <span class="fw-semibold">確認用パスワード</span>
+                  </div>
+                </label>
+                <input type="password"
+                       class="form-control <?= !empty($errors['new_password_confirm']) ? 'is-invalid' : '' ?>"
+                       name="new_password_confirm">
+                <?php if (!empty($errors['new_password_confirm'])): ?>
+                  <div class="invalid-feedback d-block">
+                    <?php foreach ($errors['new_password_confirm'] as $error): ?>
+                      <div><?= escape($error) ?></div>
+                    <?php endforeach; ?>
+                  </div>
+                <?php endif; ?>
               </div>
             </div>
+
+            <!-- カードフッター（ボタンエリア） -->
+            <div class="card-footer bg-white border-top py-3">
+              <div class="d-flex justify-content-end gap-2">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <a href="../admin/account.php" class="btn btn-outline-secondary">
+                  <i class="bi bi-x-lg me-2"></i>キャンセル
+                </a>
+                <button type="submit" class="btn btn-primary" name="profile_edit">
+                  <i class="bi bi-check-lg me-2"></i>変更を保存
+                </button>
+              </div>
+            </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
