@@ -15,14 +15,12 @@ $name = getTrimmedPostValue('name');
 $errors = getUserNameValidationErrors($name);
 // エラーがあれば登録処理を中止してフォームに戻る
 if (!empty($errors)) {
-  redirectWithErrors($errors,['name' => $name],'./edit-profile.php'
-  );
+  redirectWithErrors($errors,['name' => $name],'./edit-profile.php');
 }
 
 try {
   $pdo = connectDb();
-  $stmt = $pdo->prepare('UPDATE users SET name = :name WHERE id =
-:id');
+  $stmt = $pdo->prepare('UPDATE users SET name = :name WHERE id = :id');
   $stmt->execute([
       ':name' => $name,
       ':id' => $_SESSION['user']['id']

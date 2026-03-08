@@ -28,8 +28,7 @@ try {
   }
 
   $pdo = connectDb();
-  $stmt = $pdo->prepare('UPDATE users SET email = :email WHERE id =
-:id');
+  $stmt = $pdo->prepare('UPDATE users SET email = :email WHERE id = :id');
   $result = $stmt->execute([
       ':email' => $email,
       ':id' => $_SESSION['user']['id']
