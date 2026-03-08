@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
+// ログイン認証チェック（未ログインはリダイレクト）
+if (!isset($_SESSION['user'])) {
+  $_SESSION['msg'] = "ログインしてください。";
+  redirect('../login.php');
+}
+
 // CSRFトークン検証
 if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
   exit('不正なリクエストです');
