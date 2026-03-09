@@ -33,21 +33,13 @@ if ($hasErrors){
 // パスワードのハッシュ化
 $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
 
-try{
-  $pdo = connectDb();
-  $stmt = $pdo->prepare('UPDATE users SET password = :password WHERE id = :id');
-  $stmt->execute([
-    ':password' => $password_hash,
-    ':id' => $_SESSION['user']['id']
-  ]);
-
-  // セッションIDを再生成（セキュリティ対策）
-  session_regenerate_id(true);
-  // セッション更新
-  $_SESSION['success_message'] = 'パスワードを更新しました';
-
-  redirect('../admin/account.php');
-} catch (PDOException $e) {
-  $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./edit-password.php');
-}
+if (updateUserPassword($_SESSION['user']['id'], $password_hash)) {
+    // セッションIDを再生成（セキュリティ対策）
+    session_regenerate_id(true);
+    // セッション更新
+    $_SESSION['success_message'] = 'パスワードを更新しました';
+    redirect('../admin/account.php');
+  } else {
+    $_SESSION['error_message'] = 'データベースエラーが発生しました';
+    redirect('./edit-password.php');
+  }

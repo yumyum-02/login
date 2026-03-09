@@ -27,28 +27,18 @@ try {
   if (count($user_info)) {
     $errors[] = 'そのメールアドレスはすでに使用されています。';
     redirectWithErrors($errors, ['email' => $email],'./edit-email.php');
-    redirect('./edit-email.php');
   }
+} catch (PDOException $e) {
+  $_SESSION['error_message'] = 'データベースエラーが発生しました';
+  redirect('./edit-email.php');
+}
 
-  $pdo = connectDb();
-  $stmt = $pdo->prepare('UPDATE users SET email = :email WHERE id = :id');
-  $result = $stmt->execute([
-      ':email' => $email,
-      ':id' => $_SESSION['user']['id']
-  ]);
-
-  // 実行結果をチェック
-  if ($result === false) {
-    $_SESSION['error_message'] ='更新に失敗しました。もう一度お試しください。';
-    redirect('./edit-email.php');
-  }
-
+if (updateUserEmail($_SESSION['user']['id'], $email)) {
   // セッション更新
   $_SESSION['user']['email'] = $email;
   $_SESSION['success_message'] = 'メールアドレスを更新しました';
-
   redirect('../admin/account.php');
-} catch (PDOException $e) {
+} else {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
   redirect('./edit-email.php');
 }
