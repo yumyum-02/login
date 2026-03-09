@@ -7,9 +7,7 @@ if (!verifyCsrfToken($_GET['token'] ?? '')) {
 }
 
 // ログインチェック
-if (!isset($_SESSION['user'])) {
-  redirect('./login.php');
-}
+requireLogin('./login.php');
 
 // ユーザーID取得
 $user_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);

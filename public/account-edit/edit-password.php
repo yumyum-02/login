@@ -2,10 +2,7 @@
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 // ログイン認証チェック（未ログインはリダイレクト）
-if (!isset($_SESSION['user'])) {
-  $_SESSION['msg'] = "ログインしてください。";
-  redirect('../login.php');
-}
+requireLogin('../login.php');
 
 // CSRFトークンを生成してaccount_template.phpのinputに埋め込む
 $csrf_token = generateCsrfToken();

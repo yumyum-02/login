@@ -2,11 +2,7 @@
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 // ログイン認証チェック（未ログインはリダイレクト）
-if (!isset($_SESSION['user'])) {
-  $_SESSION['msg'] = "ログインしてください。";
-  header('Location: ./login.php');
-  exit();
-}
+requireLogin('./login.php');
 
 $users_info = getUsersInfo();
 
