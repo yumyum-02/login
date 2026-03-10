@@ -7,6 +7,9 @@ if (isset($_POST['logout'])) {
     exit('不正な投稿です');
   }
 
-  // ログアウト実行（この中でリダイレクト+exitされる）
+  // ログアウト実行
   executeLogout();
+
+  // ログインページにリダイレクト
+  redirect('./login.php');
 }

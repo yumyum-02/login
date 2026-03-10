@@ -1,5 +1,5 @@
 <?php
-// ログアウト処理
+// ログアウト処理（リダイレクトは行わない）
 function executeLogout(): void
 {
   // ログイン情報のみ削除（他のセッションデータは保持）
@@ -10,8 +10,4 @@ function executeLogout(): void
 
   // ログアウトメッセージを設定
   $_SESSION['msg'] = 'ログアウトしました。';
-
-  // クリーンなURLでリダイレクト
-  header('Location: ./login.php');
-  exit();
 }
