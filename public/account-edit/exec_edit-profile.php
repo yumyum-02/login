@@ -22,13 +22,18 @@ if (!empty($errors)) {
 }
 
 try {
-  updateUserName($_SESSION['user']['id'], $name);
+  updateUser($_SESSION['user']['id'], 'name', $name);
 
   // セッション更新
   $_SESSION['user']['name'] = $name;
   $_SESSION['success_message'] = 'ユーザー名を更新しました';
   redirect('../admin/account.php');
+} catch (InvalidArgumentException $e) {
+  // 不正なフィールド名エラー（通常は発生しない）
+  $_SESSION['error_message'] = 'システムエラーが発生しました';
+  redirect('./edit-profile.php');
 } catch (PDOException $e) {
+  // データベースエラー
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
   redirect('./edit-profile.php');
 }
