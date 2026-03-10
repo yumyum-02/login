@@ -47,12 +47,6 @@ try {
   // 登録されていないメールアドレスの場合は、usersテーブルに新規登録
   $user_id = registerUser($name, $email, $password_hash);
 
-  if ($user_id === false) {
-    // 登録失敗
-    echo '登録に失敗しました。もう一度お試しください。';
-    exit();
-  }
-
   // 登録成功時はCSRFトークンを破棄
   destroyCsrfToken();
 

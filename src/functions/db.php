@@ -79,23 +79,18 @@ function deleteUserById(int $id): int
 }
 
 // ユーザー登録（新規ユーザーをusersテーブルに挿入）
-function registerUser(string $name, string $email, string $password_hash): int|false
+function registerUser(string $name, string $email, string $password_hash): int
 {
-  try {
-    $pdo = connectDb();
-    $sql = 'INSERT INTO users (name, email, password) VALUES (:NAME, :EMAIL, :PASSWORD)';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':NAME', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
-    $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
-    $stmt->execute();
+  $pdo = connectDb();
+  $sql = 'INSERT INTO users (name, email, password) VALUES (:NAME, :EMAIL, :PASSWORD)';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':NAME', $name, PDO::PARAM_STR);
+  $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
+  $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
+  $stmt->execute();
 
-    // 新しく登録されたユーザーのIDを返す
-    return (int)$pdo->lastInsertId();
-  } catch (PDOException $e) {
-    // エラー時はfalseを返す
-    return false;
-  }
+  // 新しく登録されたユーザーのIDを返す
+  return (int)$pdo->lastInsertId();
 }
 
 // パスワード更新
