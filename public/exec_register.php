@@ -13,53 +13,18 @@ $password = $_POST['password'] ?? '';
 // バリデーション
 // バリデーションのためのエラー配列を用意
 $errors = [
-  'name' => [],
-  'email' => [],
-  'password' => []
+  'name' => getUserNameValidationErrors($name),
+  'email' => getMailValidationErrors($email),
+  'password' => getPasswordValidationErrors($password)
 ];
 
-// ユーザー名のバリデーション
-if (isEmpty($name)) {
-  $errors['name'][] = 'ユーザー名を入力してください。';
-} else {
-  if (!isUserNameFormat($name)) {
-    $errors['name'][] = '使用できない文字が含まれています。';
-  }
-  if (!isWithinLength($name, 3, 16)) {
-    $errors['name'][] = 'ユーザー名は3文字以上16文字以内で入力してください。';
-  }
-}
-// メールアドレスのバリデーション（形式と長さを分けてエラーを特定しやすくする）
-if (isEmpty($email)) {
-  $errors['email'][] = 'メールアドレスを入力してください。';
-} else {
-  if (!isEmailFormat($email)) {
-    $errors['email'][] = 'メールアドレスの形式が正しくありません。';
-  }
-  // メールアドレスはローカルパートが最大64文字 + ドメインが255文字 + ＠で 合計320文字 MAX
-  if (!isWithinLength($email, null, 320)) {
-    $errors['email'][] = 'メールアドレスは320文字以内で入力してください。';
-  }
-}
-// パスワードのバリデーション
-if (isEmpty($password)) {
-  $errors['password'][] = 'パスワードを入力してください。';
-} else {
-  if (!isPasswordFormat($password)) {
-    $errors['password'][] = 'パスワードは半角英数字と記号で入力してください。';
-  }
-  if (!isWithinLength($password, 16, 64)) {
-    $errors['password'][] = 'パスワードは16文字以上64文字以内で入力してください。';
-  }
-}
 // エラーチェック（いずれかのフィールドにエラーがあるか）
 $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($errors['password']);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
   // エラー時はCSRFトークンを生成
   $csrf_token = generateCsrfToken();
-  require '../src/template/regist_template.php';
-  exit();
+  redirectWithErrors($errors, ['name' => $name, 'email' => $email],'./regist.php');
 }
 
 //メールアドレスを小文字に変換
@@ -75,28 +40,18 @@ try {
 
   // すでに登録されているメールアドレスの場合はエラーに追加
   if (count($user_info)) {
-    $errors[] = 'そのメールアドレスはすでに使用されています。';
-    // エラー時はCSRFトークンを生成
-    $csrf_token = generateCsrfToken();
-    require '../src/template/regist_template.php';
-    exit();
+    $errors['email'][] = 'そのメールアドレスはすでに使用されています。';
+    redirectWithErrors($errors, ['name' => $name, 'email' => $email],'./regist.php');
   }
 
   // 登録されていないメールアドレスの場合は、usersテーブルに新規登録
   $user_id = registerUser($name, $email, $password_hash);
 
-  if ($user_id === false) {
-    // 登録失敗
-    echo '登録に失敗しました。もう一度お試しください。';
-    exit();
-  }
-
   // 登録成功時はCSRFトークンを破棄
   destroyCsrfToken();
 
   $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
-  header('Location: ./login.php');
-  exit();
+  redirect('./login.php');
 } catch (PDOException $e) {
   echo '接続失敗' . $e->getMessage();
   exit();

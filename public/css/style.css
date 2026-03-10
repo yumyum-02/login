@@ -1,0 +1,68 @@
+/* ナビゲーションバーのスタイル */
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* カードのアクセントボーダー */
+.welcome-card,
+.content-card {
+  border-left: 4px solid #0d6efd;
+}
+
+/* サイドバーメニューのスタイル */
+#sidebarMenu .nav-link {
+  color: #333;
+  padding: 0.75rem 1.5rem;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+#sidebarMenu .nav-link:hover {
+  color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.08);
+}
+
+#sidebarMenu .nav-link.active {
+  color: #0d6efd;
+  font-weight: 600;
+  background-color: rgba(13, 110, 253, 0.1);
+  border-left-color: #0d6efd;
+}
+
+#sidebarMenu .nav-link i {
+  width: 20px;
+  margin-right: 0.75rem;
+}
+
+/* サイドバーの幅 */
+#sidebarMenu {
+  width: 250px;
+}
+
+/* デスクトップのみ: サイドバーを固定表示 */
+@media (min-width: 768px) {
+  #sidebarMenu {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    z-index: 1000;
+    visibility: visible;
+    transform: none;
+  }
+
+  /* オフキャンバスのバックドロップを非表示 */
+  #sidebarMenu.offcanvas {
+    border: none;
+  }
+
+  /* メインコンテンツをサイドバー分右にずらす */
+  main {
+    margin-left: 250px;
+  }
+}

@@ -1,5 +1,5 @@
 <?php
-function connectDb()
+function connectDb(): PDO
 {
   $db_host = 'mysql:dbname=login_db;host=mysql;charset=utf8';
   $db_user = 'root';
@@ -37,7 +37,7 @@ function getUserLogin(string $login): array
 }
 
 //　会員登録時のユーザー情報取得
-function getUserRegister($email): array
+function getUserRegister(string $email): array
 {
   $pdo = connectDb();
   // usersテーブルからemailに一致するレコードを取得 一意のIDしか許可しないのでチェックしている
@@ -79,21 +79,38 @@ function deleteUserById(int $id): int
 }
 
 // ユーザー登録（新規ユーザーをusersテーブルに挿入）
-function registerUser(string $name, string $email, string $password_hash): int|false
+function registerUser(string $name, string $email, string $password_hash): int
 {
-  try {
-    $pdo = connectDb();
-    $sql = 'INSERT INTO users (name, email, password) VALUES (:NAME, :EMAIL, :PASSWORD)';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':NAME', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
-    $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
-    $stmt->execute();
+  $pdo = connectDb();
+  $sql = 'INSERT INTO users (name, email, password) VALUES (:NAME, :EMAIL, :PASSWORD)';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':NAME', $name, PDO::PARAM_STR);
+  $stmt->bindValue(':EMAIL', $email, PDO::PARAM_STR);
+  $stmt->bindValue(':PASSWORD', $password_hash, PDO::PARAM_STR);
+  $stmt->execute();
 
-    // 新しく登録されたユーザーのIDを返す
-    return (int)$pdo->lastInsertId();
-  } catch (PDOException $e) {
-    // エラー時はfalseを返す
-    return false;
+  // 新しく登録されたユーザーのIDを返す
+  return (int)$pdo->lastInsertId();
+}
+
+// ユーザー情報変更（汎用）
+function updateUser(int $user_id, string $field, string $value): bool
+{
+  // 許可されたフィールドのホワイトリスト（SQLインジェクション（悪意のあるSQL文注入）対策）
+  $allowed_fields = ['name', 'email', 'password'];
+
+   // ホワイトリストにないフィールドは拒否
+  if (!in_array($field, $allowed_fields, true)) { // $field が $allowed_fields 配列の中に存在するかチェック true: $field が配列の中にある false: $field が配列の中にない
+    throw new InvalidArgumentException("不正なフィールド名: $field");
+    // throw : 例外を投げる（エラーを発生させる） プログラムの実行を即座に停止しエラーをtry-catchに伝える
+    // InvalidArgumentException : 無効な因数のPHPの例外クラス 「引数が不正です」という意味
   }
+
+  $pdo = connectDb();
+  $sql = "UPDATE users SET $field = :value WHERE id = :id";
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+  $stmt->execute();
+  return true;
 }

@@ -43,6 +43,29 @@ function isPasswordFormat(string $password): bool
   return preg_match('/^[a-zA-Z0-9!@#$%^&*()\-_+=]+$/', $password) === 1;
 }
 
+/**
+ * 現在のパスワードが正しいかチェック
+ *
+ * @param string $current_password 入力された現在のパスワード
+ * @param int $user_id ユーザーID
+ * @return bool パスワードが一致すればtrue、一致しなければfalse
+ */
+function isCurrentPasswordCorrect(string $current_password, int $user_id): bool
+{
+	// DBからユーザーのパスワードハッシュを取得
+	$pdo = connectDb();
+	$stmt = $pdo->prepare('SELECT password FROM users WHERE id = :id');
+	$stmt->execute([':id' => $user_id]);
+	$user = $stmt->fetch();
+
+	// ユーザーが存在しない、またはパスワードが一致しない
+	if (!$user || !password_verify($current_password, $user['password'])) {
+		return false;
+	}
+
+	return true;
+}
+
 // 空欄チェック
 function isEmpty(string $value): bool
 {
