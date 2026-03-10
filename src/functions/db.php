@@ -101,47 +101,35 @@ function registerUser(string $name, string $email, string $password_hash): int|f
 // パスワード更新
 function updateUserPassword(int $user_id, string $password_hash): bool
 {
-  try {
-    $pdo = connectDb();
-    $sql = 'UPDATE users SET password = :password WHERE id = :id';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':password', $password_hash, PDO::PARAM_STR);
-    $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    return true;
-  } catch (PDOException $e) {
-    return false;
-  }
+  $pdo = connectDb();
+  $sql = 'UPDATE users SET password = :password WHERE id = :id';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':password', $password_hash, PDO::PARAM_STR);
+  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+  $stmt->execute();
+  return true;
 }
 
 // メールアドレス更新
 function updateUserEmail(int $user_id, string $email): bool
 {
-  try {
-    $pdo = connectDb();
-    $sql = 'UPDATE users SET email = :email WHERE id = :id';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-    $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    return true;
-  } catch (PDOException $e) {
-    return false;
-  }
+  $pdo = connectDb();
+  $sql = 'UPDATE users SET email = :email WHERE id = :id';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+  $stmt->execute();
+  return true;
 }
 
 // ユーザー名更新
 function updateUserName(int $user_id, string $name): bool
 {
-  try {
-    $pdo = connectDb();
-    $sql = 'UPDATE users SET name = :name WHERE id = :id';
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    return true;
-  } catch (PDOException $e) {
-    return false;
-  }
+  $pdo = connectDb();
+  $sql = 'UPDATE users SET name = :name WHERE id = :id';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+  $stmt->execute();
+  return true;
 }

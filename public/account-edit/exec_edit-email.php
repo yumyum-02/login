@@ -33,12 +33,14 @@ try {
   redirect('./edit-email.php');
 }
 
-if (updateUserEmail($_SESSION['user']['id'], $email)) {
+try {
+  updateUserEmail($_SESSION['user']['id'], $email);
+
   // セッション更新
   $_SESSION['user']['email'] = $email;
   $_SESSION['success_message'] = 'メールアドレスを更新しました';
   redirect('../admin/account.php');
-} else {
+} catch (PDOException $e) {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
   redirect('./edit-email.php');
 }

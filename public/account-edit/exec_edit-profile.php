@@ -21,12 +21,14 @@ if (!empty($errors)) {
   redirectWithErrors($errors,['name' => $name],'./edit-profile.php');
 }
 
-if (updateUserName($_SESSION['user']['id'], $name)) {
+try {
+  updateUserName($_SESSION['user']['id'], $name);
+
   // セッション更新
   $_SESSION['user']['name'] = $name;
   $_SESSION['success_message'] = 'ユーザー名を更新しました';
   redirect('../admin/account.php');
-} else {
+} catch (PDOException $e) {
   $_SESSION['error_message'] = 'データベースエラーが発生しました';
   redirect('./edit-profile.php');
 }
