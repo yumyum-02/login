@@ -102,7 +102,13 @@
                   <td><?= escape($user['name']) ?></td>
                   <td><?= escape($user['id']) ?></td>
                   <td class="text-end">
-                    <a href="./exec_delete_user.php?id=<?= $user['id'] ?>&token=<?= $csrf_token ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('<?= escape($user['name']) ?>を削除しますか？')"><i class="bi bi-trash"></i> 削除</a>
+                    <form action="./exec_delete_user.php" method="post" style="display:inline;" onsubmit="return confirm('<?= escape($user['name']) ?>を削除しますか？')">
+                      <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                      <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                      <button type="submit" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> 削除
+                      </button>
+                    </form>
                   </td>
                 </tr>
               <?php endforeach; ?>

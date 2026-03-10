@@ -1,19 +1,13 @@
 <?php
-// ログアウト処理
+// ログアウト処理（リダイレクトは行わない）
 function executeLogout(): void
 {
-  // 古いセッションを破棄
-  $_SESSION = [];
-  if (isset($_COOKIE["PHPSESSID"])) {
-    setcookie("PHPSESSID", '', time() - 1800, '/');
-  }
-  session_destroy();
+  // ログイン情報のみ削除（他のセッションデータは保持）
+  unset($_SESSION['user']);
 
-  // 新しいセッションを開始してメッセージを保存
-  session_start();
+  // セッションIDを再生成（セキュリティ対策）
+  session_regenerate_id(true);
+
+  // ログアウトメッセージを設定
   $_SESSION['msg'] = 'ログアウトしました。';
-
-  // クリーンなURLでリダイレクト
-  header('Location: ./login.php');
-  exit();
 }

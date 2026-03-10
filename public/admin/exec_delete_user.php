@@ -1,16 +1,19 @@
 <?php
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-// CSRFトークン検証
-if (!verifyCsrfToken($_GET['token'] ?? '')) {
-  exit('不正なリクエストです');
-}
-
 // ログインチェック
 requireLogin('./login.php');
 
+// CSRFトークン検証
+if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+  exit('不正なリクエストです');
+}
+
+// CSRFトークンを破棄
+destroyCsrfToken();
+
 // ユーザーID取得
-$user_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$user_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 if (!$user_id){
   exit('無効なIDです');
 }
@@ -24,18 +27,15 @@ try {
   }
 
   // 削除実行
-  $pdo = connectDb();
-  $sql = 'DELETE FROM users WHERE id = :id';
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-  $stmt->execute();
+  $deleted_count = deleteUserById($user_id);
 
-  $_SESSION['msg'] = 'ユーザーを削除しました';
+  if ($deleted_count > 0) {
+    $_SESSION['msg'] = 'ユーザーを削除しました';
+  } else {
+    $_SESSION['msg'] = 'ユーザーが見つかりませんでした';
+  }
 } catch (PDOException $e){
   $_SESSION['msg'] = '削除に失敗しました';
 }
-
-// CSRFトークンを破棄
-destroyCsrfToken();
 
 redirect('./admin.php');
