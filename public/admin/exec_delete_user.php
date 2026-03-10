@@ -1,16 +1,19 @@
 <?php
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-// CSRFトークン検証
-if (!verifyCsrfToken($_GET['token'] ?? '')) {
-  exit('不正なリクエストです');
-}
-
 // ログインチェック
 requireLogin('./login.php');
 
+// CSRFトークン検証
+if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+  exit('不正なリクエストです');
+}
+
+// CSRFトークンを破棄
+destroyCsrfToken();
+
 // ユーザーID取得
-$user_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$user_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 if (!$user_id){
   exit('無効なIDです');
 }
@@ -34,8 +37,5 @@ try {
 } catch (PDOException $e){
   $_SESSION['msg'] = '削除に失敗しました';
 }
-
-// CSRFトークンを破棄
-destroyCsrfToken();
 
 redirect('./admin.php');
