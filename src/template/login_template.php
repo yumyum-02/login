@@ -16,14 +16,11 @@
           <div class="card-body p-4">
             <h2 class="card-title text-center mb-4">ログイン</h2>
 
-            <?php if (isset($success_logout_msg)): ?>
-              <div class="alert alert-success" role="alert"><?= escape($success_logout_msg) ?></div>
+            <?php if ($msg): ?>
+              <div class="alert alert-success" role="alert"><?= escape($msg) ?></div>
             <?php endif; ?>
             <?php if (isset($err_msg)): ?>
               <div class="alert alert-danger" role="alert"><?= escape($err_msg) ?></div>
-            <?php endif; ?>
-            <?php if (isset($login_msg) && $login_msg !== ''): ?>
-              <div class="alert alert-info" role="alert"><?= escape($login_msg) ?></div>
             <?php endif; ?>
 
             <form action="./exec_login.php" method="post">
