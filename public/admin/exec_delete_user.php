@@ -27,13 +27,13 @@ try {
   }
 
   // 削除実行
-  $pdo = connectDb();
-  $sql = 'DELETE FROM users WHERE id = :id';
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
-  $stmt->execute();
+  $deleted_count = deleteUserById($user_id);
 
-  $_SESSION['msg'] = 'ユーザーを削除しました';
+  if ($deleted_count > 0) {
+    $_SESSION['msg'] = 'ユーザーを削除しました';
+  } else {
+    $_SESSION['msg'] = 'ユーザーが見つかりませんでした';
+  }
 } catch (PDOException $e){
   $_SESSION['msg'] = '削除に失敗しました';
 }
