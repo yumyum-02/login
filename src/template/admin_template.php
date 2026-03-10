@@ -67,9 +67,9 @@
   </div>
 
   <main class="p-4">
-    <?php if (isset($_GET['msg'])): ?>
+    <?php if ($msg): ?>
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= escape($_GET['msg']) ?>
+        <?= escape($msg) ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
       </div>
     <?php endif; ?>

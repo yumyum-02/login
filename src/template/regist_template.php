@@ -53,8 +53,8 @@
           <div class="card-body p-4">
             <h2 class="card-title text-center mb-4">会員登録</h2>
 
-            <?php if (isset($_GET['msg'])): ?>
-              <div class="alert alert-success" role="alert"><?= escape($_GET['msg']) ?></div>
+            <?php if ($msg): ?>
+              <div class="alert alert-success" role="alert"><?= escape($msg) ?></div>
             <?php endif; ?>
 
             <form action="./exec_register.php" method="post">

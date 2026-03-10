@@ -6,12 +6,8 @@ requireLogin('./login.php');
 
 $users_info = getUsersInfo();
 
-// ページ固有の処理
-// セッションメッセージがあればGETパラメータに移す
-if (isset($_SESSION['msg'])) {
-  $_GET['msg'] = $_SESSION['msg'];
-  unset($_SESSION['msg']);
-}
+// メッセージ取得
+$msg = getMessage();
 
 // CSRFトークンを生成
 $csrf_token = generateCsrfToken();

@@ -6,6 +6,9 @@ $errors = $_SESSION['errors'] ?? ['name' => [], 'email' => [],'password' => []];
 $old_input = $_SESSION['old_input'] ?? [];
 unset($_SESSION['errors'], $_SESSION['old_input']);
 
+// メッセージ取得
+$msg = getMessage();
+
 // CSRFトークンを生成
 $csrf_token = generateCsrfToken();
 

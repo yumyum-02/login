@@ -11,3 +11,4 @@ require_once __DIR__ . '/functions/redirect.php'; //　リダイレクト
 
 require_once __DIR__ . '/functions/sanitize.php'; // XSS対策のエスケープ関数
 require_once __DIR__ . '/functions/logout.php'; // ログアウト関数
+require_once __DIR__ . '/functions/session-message.php'; // セッションメッセージ取得
