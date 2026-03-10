@@ -50,7 +50,7 @@ function isPasswordFormat(string $password): bool
  * @param int $user_id ユーザーID
  * @return bool パスワードが一致すればtrue、一致しなければfalse
  */
-function isCurrentPasswordCorrect($current_password, $user_id): bool
+function isCurrentPasswordCorrect(string $current_password, int $user_id): bool
 {
 	// DBからユーザーのパスワードハッシュを取得
 	$pdo = connectDb();

@@ -1,5 +1,5 @@
 <?php
-function connectDb()
+function connectDb(): PDO
 {
   $db_host = 'mysql:dbname=login_db;host=mysql;charset=utf8';
   $db_user = 'root';
@@ -37,7 +37,7 @@ function getUserLogin(string $login): array
 }
 
 //　会員登録時のユーザー情報取得
-function getUserRegister($email): array
+function getUserRegister(string $email): array
 {
   $pdo = connectDb();
   // usersテーブルからemailに一致するレコードを取得 一意のIDしか許可しないのでチェックしている

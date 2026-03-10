@@ -2,7 +2,8 @@
 require_once __DIR__ . '/validation.php'; // バリデーションの呼び出し
 
 // ユーザー名用（詳細）
-function getUserNameValidationErrors($name){
+function getUserNameValidationErrors(string $name): array
+{
 	if (isEmpty($name)){
 		return ['ユーザー名を入力してください。'];
 	}
@@ -18,7 +19,8 @@ function getUserNameValidationErrors($name){
 }
 
 // メールアドレス用（詳細）
-function getMailValidationErrors($email) {
+function getMailValidationErrors(string $email): array
+{
 	if (isEmpty($email)) {
 			return ['メールアドレスを入力してください。'];
 	}
@@ -35,7 +37,8 @@ function getMailValidationErrors($email) {
 }
 
 // メールアドレス用（簡易）
-function getSimpleEmailErrors($email) {
+function getSimpleEmailErrors(string $email): array
+{
 	if (isEmpty($email)) {
 		return ['メールアドレスを入力してください。'];
 	}
@@ -50,7 +53,8 @@ function getSimpleEmailErrors($email) {
 }
 
 // パスワード用（詳細）
-function getPasswordValidationErrors($password) {
+function getPasswordValidationErrors(string $password): array
+{
 	if (isEmpty($password)) {
 			return ['パスワードを入力してください。'];
 	}
@@ -66,7 +70,8 @@ function getPasswordValidationErrors($password) {
 }
 
 // パスワード用（簡易）
-function getSimplePasswordErrors($password) {
+function getSimplePasswordErrors(string $password): array
+{
 	if (isEmpty($password)) {
 		return ['パスワードを入力してください。'];
 	}
@@ -82,7 +87,8 @@ function getSimplePasswordErrors($password) {
 }
 
 // パスワード2重チェック
-function getPasswordCheck($password, $password_check){
+function getPasswordCheck(string $password, string $password_check): array
+{
 	if (isEmpty($password_check)) {
 		return ['パスワード（確認用）を入力してください。'];
 	}
@@ -101,7 +107,7 @@ function getPasswordCheck($password, $password_check){
  * @param int $user_id ユーザーID
  * @return array エラーメッセージの配列
  */
-function getCurrentPasswordErrors($current_password, $user_id)
+function getCurrentPasswordErrors(string $current_password, int $user_id): array
 {
 	if (isEmpty($current_password)) {
 		return ['現在のパスワードを入力してください。'];
