@@ -1,9 +1,9 @@
 <?php
 
-function redirect(string $redirectUrl): never
+function redirect(string $redirectUrl): void
 {
 	header("Location: $redirectUrl");
-	exit;
+	return;
 }
 
 /**
@@ -18,6 +18,7 @@ function requireLogin(string $loginPath = './login.php'): void
 	if (!isset($_SESSION['user'])) {
 		$_SESSION['msg'] = "ログインしてください。";
 		redirect($loginPath);
+		return;  // redirect後は処理を終了
 	}
 }
 
@@ -28,9 +29,10 @@ function requireLogin(string $loginPath = './login.php'): void
  * @param array $oldInput 入力値（再表示用）
  * @param string $redirectUrl リダイレクト先URL
  */
-function redirectWithErrors(array $errors, array $oldInput, string $redirectUrl): never
+function redirectWithErrors(array $errors, array $oldInput, string $redirectUrl): void
 {
 	$_SESSION['errors'] = $errors;
 	$_SESSION['old_input'] = $oldInput;
 	redirect($redirectUrl);
+	return;  // redirect後は処理を終了
 }
