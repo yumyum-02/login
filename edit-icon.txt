@@ -163,6 +163,19 @@ DBにiconカラムを追加
 →unset($_SESSION['errors'], $_SESSION['old_input']);
 ・テンプレート読み込み
 
+【account.php（アカウント情報画面）にアイコン項目とボタンを追加】
+▼src/template/account_template.php を編集
+・プロフィール情報カードの構造を変更
+→カードヘッダーから「変更」ボタンを削除
+→各項目に個別の変更ボタンを配置（アカウント管理カードと同じレイアウト）
+
+・ユーザー名の項目
+→個別の「変更」ボタンを追加（edit-profile.phpへのリンク）
+
+・アイコンの項目（新規追加）
+→アイコン画像を表示（displayIcon()関数を使用）
+→個別の「変更」ボタンを追加（edit-icon.phpへのリンク）
+
 【アイコン変更画面】
 ▼src/template/edit-icon_template.php
 ・エラーメッセージ表示領域
