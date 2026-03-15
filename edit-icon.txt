@@ -1,0 +1,62 @@
+【用意することと、仕様改修版】
+▼追加ファイル
+・画像の保存ディレクトリ作成 public/image/account-icon
+・デフォルトで表示する画像を用意 default-account-icon.png
+・function/にアイコン表示用のロジックを書くファイルを用意 display_account-icon.php
+・exec_edit-account-icon.php、edit-account-icon_template.phpを用意
+・account-icon_upload.php、exec_account-icon_upload.phpを用意
+
+▼DB
+・データベースにiconカラムを追加 （ALTER TABLE users ADD COLUMN icon VARCHAR(255) NULL）
+
+▼バリデーションの用意
+・画像のバリデーションをvalidation.phpに記述
+（容量1MB以下、サイズ400px×400px以下、MIMEタイプのチェック、新しい画像をアップロードしているかチェック）
+・バリデーションエラーをvalidation.phpに記述
+（「容量は1MB以上の画像です」「400px×400px以上の画像です」「png,jpeg以外の画像です」「画像がアップロードされていません」）
+
+▼フロント用の処理（画像表示ロジック display_account-icon.php）
+・画像の表示関数を作成
+→DBのiconカラムをチェック
+→値がある→ユーザーがアップロードした画像を表示
+→NLLまたは空→default-account-icon.pngを表示
+
+▼フロント（アカウント情報画面 account-edit.php）
+・プロフィール情報のユーザー名の下に「アイコン」項目を追加し、現在のアイコンを画像表示ロジックで表示
+・ユーザー名とアイコンの右にそれぞれ変更ボタンを移動・追加
+・変更ボタンを押した時に現在の画像名をセッションに保存
+
+▼フロント（アイコン編集画面 edit-account-icon_template.php）
+・アイコン表示領域、デフォルトの画像に戻すボタン、キャンセルボタン、バリデーションエラー表示領域を追加
+・現在使用中の画像をアイコン表示領域に表示しておく
+・アイコンをホバーすると鉛筆マークが表示される
+・アイコンをクリックすると画像アップロード用のポップアップが出る
+
+▼フロント（画像アップロード画面 account-icon_upload.php）
+・ポップアップには「画像をアップロード（ドラックアンドドロップで画像をアップロード）」という領域と、参照ボタン、キャンセルボタン、バリデーションエラー表示領域を用意（エラーがなければポップアップが閉じて）
+・ポップアップにアップロードできる容量、サイズ、形式について書いておく
+
+▼バックエンド（アイコン画像のアップロード処理 exec_account-icon_upload.php）
+・ログイン認証とCSRFトークン検証
+・$_FILES['icon']からユーザーがアップロードした画像データを取得
+・バリデーションの実行
+・エラーがあれば表示
+・エラーがなければ新しい画像を保存
+→public/image/account-iconに{user_id}のファイルが存在しているかチェック
+→なければ作成
+・一意のファイル名を生成（{user_id}-icon.拡張子）
+public/image/account-icon/{user_id}に保存
+DBで対象ユーザーのiconカラムに5-cのファイル名を更新
+成功したらedit-account-icon_template.phpにリダイレクト
+
+▼バックエンド（exec_account-icon_cancel.php）
+キャンセルボタンを押した場合
+→DBのiconカラムがNULLの場合、そのままでaccount-edit.phpにリダイレクト
+→DBのiconカラムがNULL以外の場合、セッションに保存された変更前の画像名をDBに保存し、セッションをunsetしaccount-edit.phpにリダイレクト
+
+▼バックエンド（exec_account-icon_default.php）
+デフォルト画像に戻すボタンを押した場合DBのiconカラムをNULLに更新し、セッションをunsetしてaccount-edit.phpにリダイレクト
+
+▼バックエンド（exec_account-icon_update.php）
+変更ボタンを押した場合、セッションをunsetしてaccount-edit.phpにリダイレクト
+
