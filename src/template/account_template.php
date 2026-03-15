@@ -78,21 +78,44 @@
               <h5 class="card-title mb-0">
                 <i class="bi bi-person-badge me-2"></i>プロフィール情報
               </h5>
-              <a href="../account-edit/edit-profile.php" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil me-1"></i>変更
-              </a>
             </div>
             <div class="card-body p-4">
               <!-- ユーザー名 -->
-              <div class="row align-items-center">
+              <div class="row align-items-center mb-3 pb-3 border-bottom">
                 <div class="col-sm-3">
                   <div class="d-flex align-items-center text-muted">
                     <i class="bi bi-person-fill me-2"></i>
                     <span class="fw-semibold">ユーザー名</span>
                   </div>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-sm-6">
                   <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="../account-edit/edit-profile.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
+                </div>
+              </div>
+
+              <!-- アイコン -->
+              <div class="row align-items-center">
+                <div class="col-sm-3">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-image-fill me-2"></i>
+                    <span class="fw-semibold">アイコン</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <?php
+                  require_once dirname(__DIR__) . '/functions/display_icon.php';
+                  echo displayIcon($_SESSION['user']['id'], 80, 'rounded-circle', 'ユーザーアイコン');
+                  ?>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="../account-edit/edit-icon.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
                 </div>
               </div>
             </div>
