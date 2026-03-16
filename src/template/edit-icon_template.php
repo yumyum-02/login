@@ -8,53 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
-  <style>
-    .icon-preview-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-      cursor: pointer;
-    }
-
-    .icon-preview {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #dee2e6;
-    }
-
-    .icon-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .icon-preview-container:hover .icon-overlay {
-      opacity: 1;
-    }
-
-    .icon-overlay-text {
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .btn-save:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  </style>
 </head>
 
 <body class="bg-light min-vh-100">
@@ -119,20 +72,6 @@
             <p class="text-muted mb-0">プロフィールアイコンを変更できます</p>
           </div>
 
-          <!-- エラーメッセージ -->
-          <?php if (!empty($errors)): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <i class="bi bi-exclamation-triangle-fill me-2"></i>
-              <strong>エラーが発生しました</strong>
-              <ul class="mb-0 mt-2">
-                <?php foreach ($errors as $error): ?>
-                  <li><?= escape($error) ?></li>
-                <?php endforeach; ?>
-              </ul>
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-          <?php endif; ?>
-
           <!-- アイコン変更カード -->
           <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white border-bottom py-3">
@@ -160,6 +99,15 @@
                   </div>
                 </div>
               </div>
+
+              <!-- エラーメッセージ -->
+              <?php if(!empty($errors)): ?>
+                <div class="invalid-feedback d-block text-center">
+                  <?php foreach ($errors as $error): ?>
+                    <p><?= escape($error) ?></p>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
 
               <!-- 注意書き -->
               <div class="mt-4 text-center">
