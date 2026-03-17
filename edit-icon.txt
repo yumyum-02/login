@@ -217,28 +217,8 @@ DBにiconカラムを追加
 ・getIconPath()で画像パスを取得して表示（一時ファイルは表示しない）
 ・「アイコンを変更」リンクを追加（edit-icon.phpへ）
 
-【セキュリティ対策】
+【セキュリティ対策memo】
 ▼public/image/icon/.htaccess を作成【重要度：最高 🔴 必須】
 ・php_flag engine off でPHP実行を無効化（RCE攻撃対策）
 ・Options -Indexes でディレクトリリスティングを無効化
 ・画像ファイル（jpg, jpeg, png）のみアクセス許可
-
-▼src/functions/validation.php に追加【重要度：高 🟡】
-・isValidImageMimeTypeStrict($file, $allowedMimeTypes)
-→ finfo_file() と getimagesize() の二重チェックでMIMEタイプを厳密に検証
-→ ファイルタイプ偽装を防ぐ
-
-▼src/functions/icon.php の saveTempIcon() と confirmIcon() に追加【重要度：高 🟡】
-・ファイル保存後に chmod($path, 0644) でパーミッション設定
-→ ファイルが実行可能にならないようにする
-
-▼src/functions/icon.php に追加【重要度：中 🟢 推奨】
-・reencodeImage($sourcePath, $destPath, $mimeType)
-→ GDライブラリで画像を読み込んで再保存
-→ EXIFデータや埋め込まれた不正コードを除去
-→ saveTempIcon() と confirmIcon() で使用
-
-▼src/functions/validation-error.php の getIconValidationErrors() を修正【重要度：高 🟡】
-・isValidImageMimeType() の代わりに isValidImageMimeTypeStrict() を使用
-→ より厳密なMIMEタイプ検証
-

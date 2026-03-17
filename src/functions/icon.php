@@ -93,8 +93,11 @@ function deleteTempIconFile(int $userId): void
 
   foreach ($extensions as $ext) {
     $tempPath = $iconDir . "{$userId}_temp.{$ext}";
+
+    // file_exists 指定したファイルやディレクトリが存在するかチェック
     if (file_exists($tempPath)) {
-      unlink($tempPath);
+      unlink($tempPath); //ファイルが存在する時に削除
+      // unlinkはディレクトリは削除できない　ディレクトリ削除はrmdir()
     }
   }
 }
