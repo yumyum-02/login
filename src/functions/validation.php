@@ -78,6 +78,19 @@ function isImageUploaded($file): bool
   return isset($file) && $file['error'] !== UPLOAD_ERR_NO_FILE;
 }
 
+// アップロードされたファイルが本当に画像かチェック
+function isValidImageFormat($file): bool
+{
+  $imageType = @exif_imagetype($file['tmp_name']);
+
+  if ($imageType === false){
+    return false;
+  }
+
+  $allowedType = [IMAGETYPE_JPEG, IMAGETYPE_PNG];
+  return in_array($imageType, $allowedType, true);
+}
+
 // ファイルサイズが指定されたバイト数以下かチェック
 function isValidImageFileSize($file, int $maxSizeInBytes): bool
 {
@@ -89,6 +102,7 @@ function isValidImageDimensions($file, int $maxWidth, int $maxHeight): bool
 {
   $imageInfo = getimagesize($file['tmp_name']);
 
+  // もし $file['tmp_name'] が画像じゃない場合、$imageInfo は false になる
   if ($imageInfo === false) {
     return false;
   }

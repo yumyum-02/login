@@ -134,16 +134,16 @@ function getIconValidationErrors($file): array
 		return ['画像がアップロードされていません'];
 	}
 
+	// アップロードされたものが画像ファイルかチェック
+	if (!isValidImageFormat($file)) {
+		return ['PNG または JPEG 形式の画像をアップロードしてください'];
+	}
+
 	$errors = [];
 
 	// アップロードエラーチェック
 	if ($file['error'] !== UPLOAD_ERR_OK) {
 		$errors[] = '画像のアップロードに失敗しました';
-	}
-
-	// ファイルが画像かチェック
-	if (getimagesize($file['tmp_name']) === false) {
-		$errors[] = '有効な画像ファイルではありません';
 	}
 
 	// ファイルサイズチェック（1MB以下）
