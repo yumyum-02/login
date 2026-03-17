@@ -11,11 +11,18 @@
 8-C. デフォルトに戻すボタン → exec_icon_reset.php → 本番ファイル削除 → DB NULL → account.phpへ
 
 【追加ファイル】
+▼ディレクトリ・画像
 ・public/image/icon/ ディレクトリを作成
 ・public/image/icon/default.png デフォルト画像を用意
+▼データアクセス
+・src/functions/icon-file.php ファイル操作専用
+・src/functions/icon-db.php DB操作専用
+▼ロジック
 ・src/functions/icon.php アイコン管理用の関数ファイル
 ・src/functions/display_icon.php アイコン表示用の関数ファイル
+▼テンプレート
 ・src/template/edit-icon_template.php 編集画面のテンプレート
+▼コントローラー
 ・public/account-edit/edit-icon.php 編集画面
 ・public/account-edit/exec_icon_upload.php アップロード処理（一時保存）
 ・public/account-edit/exec_edit-icon.php 変更確定処理
@@ -65,10 +72,10 @@ DBにiconカラムを追加
 【アイコンの表示（汎用）】
 ▼src/functions/display_icon.php に追加する関数（表示用）
 ・getIconPath($userId)
-→DBからiconカラムを取得
-→iconがNULLまたは空ならデフォルト画像のパスを返す
-→ファイルが存在しなければデフォルト画像のパスを返す
-→それ以外はユーザーの画像パスを返す
+→DBからアイコンファイル名を取得（getUserIconFromDb）
+→iconがNULLまたは空ならデフォルト画像のパスを返す（getDefaultIconPath）
+→ファイルが存在しなければデフォルト画像のパスを返す（iconFileExists）
+→それ以外はユーザーの画像パスを返す（getUserIconWebPath）
 
 ・displayIcon($userId, $size = 100, $class = '', $alt = 'アイコン')
 →getIconPath()でアイコンのパスを取得
@@ -77,32 +84,62 @@ DBにiconカラムを追加
 →いろんなページで簡単にアイコンを表示できる
 
 【アイコンの保存・削除・DB更新を管理】
-▼src/functions/icon.php に追加する関数
-・saveTempIcon($userId, $file)
-→MIMEタイプから拡張子を決定（png または jpg）
-→一時ファイル名を生成: {user_id}_temp.{拡張子}（例: 123_temp.jpg）
-→保存先ディレクトリが存在しなければ作成
-→既存の一時ファイルがあれば削除（拡張子が異なる可能性があるため）
-→move_uploaded_file()で一時ファイルとして保存
-→保存した一時ファイル名を返す
 
-・confirmIcon($userId)
-→セッションから一時ファイル名を取得
-→一時ファイルが存在しなければエラー
-→既存の本番ファイルを削除（{user_id}.jpg, {user_id}.pngなど）
-→一時ファイルを本番ファイルにリネーム（{user_id}_temp.jpg → {user_id}.jpg）
+▼レイヤー構成（テスト可能で保守性の高い設計）
+コントローラー層（exec_*.php）
+  ↓
+ビジネスロジック層（icon.php）← 複数の小さな処理を組み合わせ
+  ↓
+データアクセス層 ← 小さな単一責務の関数
+  ├── ファイル操作（icon-file.php）
+  └── DB操作（icon-db.php）
+
+▼src/functions/icon-file.php（ファイル操作専用）
+・getIconDirectory() - ディレクトリパス取得
+・getIconFilePath($userId, $extension, $isTemp) - ファイルパス生成
+・getImageExtensionFromMime($mimeType) - MIME→拡張子変換
+・getImageMimeType($filePath) - MIMEタイプ取得
+・ensureIconDirectoryExists($dir) - ディレクトリ作成
+・moveUploadedIconFile($tmpPath, $destPath) - ファイル移動
+・renameIconFile($oldPath, $newPath) - ファイルリネーム
+・deleteIconFileIfExists($path) - ファイル削除
+・setIconFilePermission($path) - パーミッション設定
+・deleteAllIconFiles($userId, $isTemp) - 全拡張子削除
+・iconFileExists($filename) - ファイル存在チェック
+・getDefaultIconPath() - デフォルトパス取得
+・getUserIconWebPath($filename) - Webパス取得
+
+▼src/functions/icon-db.php（DB操作専用）
+・updateUserIconInDb($userId, $filename) - アイコン更新
+・getUserIconFromDb($userId) - アイコン取得
+
+▼src/functions/icon.php（ビジネスロジック層）
+・saveTempIcon($userId, $file)
+→MIMEタイプから拡張子を決定（getImageMimeType, getImageExtensionFromMime）
+→ファイルパスを生成（getIconFilePath）
+→ディレクトリ確認（ensureIconDirectoryExists）
+→既存の一時ファイルを削除（deleteTempIconFile）
+→ファイルを移動（moveUploadedIconFile）
+→パーミッション設定（setIconFilePermission）
+→ファイル名を返す
+
+・confirmIcon($userId, $tempFilename)
+→一時ファイルの存在確認
+→拡張子を取得
+→既存の本番ファイルを削除（deleteIconFile）
+→本番ファイルパスを生成（getIconFilePath）
+→リネーム（renameIconFile）
+→パーミッション設定（setIconFilePermission）
 →本番ファイル名を返す
 
 ・deleteTempIconFile($userId)
-→jpg, jpeg, png の拡張子で一時ファイル（{user_id}_temp.*）が存在するかチェック
-→存在すればunlink()で削除
+→deleteAllIconFiles($userId, true)を呼び出し
 
 ・deleteIconFile($userId)
-→jpg, jpeg, png の拡張子で本番ファイル（{user_id}.*）が存在するかチェック
-→存在すればunlink()で削除
+→deleteAllIconFiles($userId, false)を呼び出し
 
 ・updateUserIcon($userId, $filename)
-→UPDATE users SET icon = :icon WHERE id = :id を実行
+→updateUserIconInDb()を呼び出し
 
 ・resetIcon($userId)
 →deleteIconFile()で本番ファイルを削除
