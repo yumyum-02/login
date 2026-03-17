@@ -1,43 +1,42 @@
 <?php
 
+// 依存ファイルを読み込み
+require_once __DIR__ . '/icon-file.php';
+require_once __DIR__ . '/icon-db.php';
+
 /**
  * ユーザーのアイコンパスを取得
  *
- * @param int $userId ユーザーID
- * @return string アイコンのパス
+ * @param int $userId
+ * @return string アイコンのWebパス
  */
 function getIconPath(int $userId): string
 {
-  $pdo = connectDb();
-  $stmt = $pdo->prepare('SELECT icon FROM users WHERE id = :id');
-  $stmt->execute([':id' => $userId]);
-  $user = $stmt->fetch();
+  // DBからアイコンファイル名を取得
+  $filename = getUserIconFromDb($userId);
 
   // iconがNULLまたは空ならデフォルト画像
-  if (empty($user['icon'])) {
-    return '/image/icon/default.png';
+  if (empty($filename)) {
+    return getDefaultIconPath();
   }
 
-  $iconPath = dirname(__DIR__, 2) . '/public/image/icon/' . $user['icon'];
-
   // ファイルが存在しなければデフォルト画像
-  if (!file_exists($iconPath)) {
-    return '/image/icon/default.png';
+  if (!iconFileExists($filename)) {
+    return getDefaultIconPath();
   }
 
   // ユーザーの画像パスを返す
-  return '/image/icon/' . $user['icon'];
+  return getUserIconWebPath($filename);
 }
 
 /**
  * アイコンをimgタグで表示
  *
- * @param int $userId ユーザーID
- * @param int $size サイズ（デフォルト: 100px）
- * @param string $class CSSクラス名
- * @param string $alt alt属性（デフォルト: 'アイコン'）
+ * @param int $userId
+ * @param int $size
+ * @param string $class
+ * @param string $alt
  * @return string imgタグのHTML
- * <?php echo displayIcon($_SESSION['user']['id']); ?> で呼び出し
  */
 function displayIcon(int $userId, int $size = 100, string $class = '', string $alt = 'アイコン'): string
 {
