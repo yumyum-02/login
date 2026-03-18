@@ -20,8 +20,9 @@
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
-        <span class="text-white me-3 d-none d-md-inline">
-          <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+        <span class="text-white me-3 d-none d-md-inline d-flex align-items-center">
+          <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+          <?= escape($_SESSION['user']['name']) ?>
         </span>
       </div>
     </div>
@@ -29,8 +30,9 @@
 
   <div class="offcanvas offcanvas-start bg-white shadow-sm" tabindex="-1" id="sidebarMenu">
     <div class="offcanvas-header border-bottom d-md-none">
-      <h5 class="offcanvas-title">
-        <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+      <h5 class="offcanvas-title d-flex align-items-center">
+        <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+        <?= escape($_SESSION['user']['name']) ?>
       </h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
