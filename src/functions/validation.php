@@ -81,14 +81,15 @@ function isImageUploaded($file): bool
 // アップロードされたファイルが本当に画像かチェック
 function isValidImageFormat($file): bool
 {
-  $imageType = @exif_imagetype($file['tmp_name']);
+  $imageInfo = @getimagesize($file['tmp_name']);
 
-  if ($imageType === false){
+  if ($imageInfo === false){
     return false;
   }
 
+  // 許可された画像タイプ（JPEG, PNG）
   $allowedType = [IMAGETYPE_JPEG, IMAGETYPE_PNG];
-  return in_array($imageType, $allowedType, true);
+  return in_array($imageInfo[2], $allowedType, true);
 }
 
 // ファイルサイズが指定されたバイト数以下かチェック
