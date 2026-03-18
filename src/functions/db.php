@@ -114,3 +114,25 @@ function updateUser(int $user_id, string $field, string $value): bool
   $stmt->execute();
   return true;
 }
+
+// ユーザーのアイコンファイル名をDBに更新
+function updateUserIconInDb(int $userId, ?string $filename): void
+{
+  $pdo = connectDb();
+  $stmt = $pdo->prepare('UPDATE users SET icon = :icon WHERE id = :id');
+  $stmt->execute([
+    ':icon' => $filename,
+    ':id' => $userId
+  ]);
+}
+
+// ユーザーのアイコンファイル名をDBから取得
+function getUserIconFromDb(int $userId): ?string
+{
+  $pdo = connectDb();
+  $stmt = $pdo->prepare('SELECT icon FROM users WHERE id = :id');
+  $stmt->execute([':id' => $userId]);
+
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $result['icon'] ?? null;
+}

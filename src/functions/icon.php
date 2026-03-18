@@ -2,7 +2,7 @@
 
 // 依存ファイルを読み込み
 require_once __DIR__ . '/icon-file.php';
-require_once __DIR__ . '/icon-db.php';
+require_once __DIR__ . '/db.php';
 
 /**
  * 一時アイコンファイルを保存
