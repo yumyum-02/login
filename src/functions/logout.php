@@ -2,8 +2,8 @@
 // ログアウト処理（リダイレクトは行わない）
 function executeLogout(): void
 {
-  // ログイン情報のみ削除（他のセッションデータは保持）
-  unset($_SESSION['user']);
+  // AuthUser クラスを使用してログアウト処理
+  AuthUser::logout();
 
   // セッションIDを再生成（セキュリティ対策）
   session_regenerate_id(true);

@@ -40,11 +40,12 @@ try {
   // password_verify = ハッシュ化されたパスワードの照合
   // $user_info に要素が1件以上あるかパスワードが一致している時
   if (count($user_info) && password_verify($password, $user_info[0]['password'])) {
-    $_SESSION['user'] = array(
+    // AuthUser クラスを使用してログイン処理
+    AuthUser::login([
       'id'    => $user_info[0]['id'],
       'name'  => $user_info[0]['name'],
       'email' => $user_info[0]['email'],
-    ); // セッションにユーザー情報を保存
+    ]);
 
     // ログイン成功後、メイン画面へリダイレクト
     header('Location: ./admin/dashboard.php');

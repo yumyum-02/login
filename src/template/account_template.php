@@ -21,8 +21,8 @@
       </a>
       <div class="d-flex align-items-center">
         <span class="text-white me-3 d-none d-md-inline d-flex align-items-center">
-          <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
-          <?= escape($_SESSION['user']['name']) ?>
+          <?= displayIcon(AuthUser::getUserId(), 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+          <?= escape(AuthUser::getName()) ?>
         </span>
       </div>
     </div>
@@ -91,7 +91,7 @@
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
+                  <p class="mb-0"><?= escape(AuthUser::getName()) ?></p>
                 </div>
                 <div class="col-sm-3 text-end">
                   <a href="../account-edit/edit-profile.php" class="btn btn-outline-secondary btn-sm">
@@ -111,7 +111,7 @@
                 <div class="col-sm-6">
                   <?php
                   require_once dirname(__DIR__) . '/functions/display_icon.php';
-                  echo displayIcon($_SESSION['user']['id'], 80, 'rounded-circle', 'ユーザーアイコン');
+                  echo displayIcon(AuthUser::getUserId(), 80, 'rounded-circle', 'ユーザーアイコン');
                   ?>
                 </div>
                 <div class="col-sm-3 text-end">
@@ -140,7 +140,7 @@
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
+                  <p class="mb-0"><?= escape(AuthUser::getEmail()) ?></p>
                 </div>
                 <div class="col-sm-3 text-end">
                   <a href="../account-edit/edit-email.php" class="btn btn-outline-secondary btn-sm">
