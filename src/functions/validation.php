@@ -81,7 +81,7 @@ function isImageUploaded($file): bool
 // アップロードされたファイルが本当に画像かチェック
 function isValidImageFormat($file): bool
 {
-  $imageInfo = @getimagesize($file['tmp_name']);
+  $imageInfo = getimagesize($file['tmp_name']);
 
   if ($imageInfo === false){
     return false;
@@ -90,12 +90,24 @@ function isValidImageFormat($file): bool
   // 許可された画像タイプ（JPEG, PNG）
   $allowedType = [IMAGETYPE_JPEG, IMAGETYPE_PNG];
   return in_array($imageInfo[2], $allowedType, true);
+
+  /*
+  getimagesize()の戻り値：
+  $imageInfo = [
+    0 => 800,              // 画像の幅（ピクセル）
+    1 => 600,              // 画像の高さ（ピクセル）
+    2 => IMAGETYPE_JPEG,   // 画像タイプ（定数） これをみたいので[2]
+    3 => 'width="800" height="600"',
+    'mime' => 'image/jpeg'
+  ];
+  */
 }
 
 // ファイルサイズが指定されたバイト数以下かチェック
 function isValidImageFileSize($file, int $maxSizeInBytes): bool
 {
   return $file['size'] <= $maxSizeInBytes;
+  // maxsizeはvalidation-error.phpの方で値を入れている
 }
 
 // 画像の幅と高さが指定サイズ以下かチェック

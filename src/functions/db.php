@@ -116,6 +116,7 @@ function updateUser(int $user_id, string $field, string $value): bool
 }
 
 // ユーザーのアイコンファイル名をDBに更新
+//　アイコンリセット時に$filenameにnullを渡すため?でnullを許容
 function updateUserIcon(int $userId, ?string $filename): void
 {
   $pdo = connectDb();
