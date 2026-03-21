@@ -16,7 +16,7 @@
 ・public/image/icon/default.png デフォルト画像を用意
 ▼データアクセス
 ・src/functions/icon-file.php ファイル操作専用
-・src/functions/icon-db.php DB操作専用
+・src/functions/db.php DB操作専用
 ▼ロジック
 ・src/functions/icon.php アイコン管理用の関数ファイル
 ・src/functions/display_icon.php アイコン表示用の関数ファイル
@@ -30,7 +30,7 @@
 ・public/account-edit/exec_icon_reset.php デフォルトに戻す処理
 
 【DB】
-DBにiconカラムを追加
+db_data.sqlにiconカラムを追加
 ・ALTER TABLE users ADD COLUMN icon VARCHAR(255) NULL;
 
 【バリデーション】
