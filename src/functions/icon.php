@@ -19,9 +19,6 @@ function saveTempIcon(int $userId, array $file): string
   // ファイルパスを生成
   $tempPath = getIconFilePath($userId, $extension, true);
 
-  // ディレクトリ確認
-  ensureIconDirectoryExists(getIconDirectory());
-
   // 既存の一時ファイルを削除
   deleteTempIconFile($userId);
 

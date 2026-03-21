@@ -53,19 +53,6 @@ function getImageMimeType(string $filePath): ?string
 }
 
 /**
- * アイコンディレクトリが存在することを保証
- *
- * @param string $dir
- * @return void
- */
-function ensureIconDirectoryExists(string $dir): void
-{
-  if (!is_dir($dir)) {
-    mkdir($dir, 0755, true);
-  }
-}
-
-/**
  * アップロードファイルを指定パスに移動
  *
  * @param string $tmpPath
