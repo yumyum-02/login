@@ -12,7 +12,7 @@ require_once __DIR__ . '/db.php';
 function getIconPath(int $userId): string
 {
   // DBからアイコンファイル名を取得
-  $filename = getUserIconFromDb($userId);
+  $filename = getUserIcon($userId);
 
   // iconがNULLまたは空ならデフォルト画像
   if (empty($filename)) {

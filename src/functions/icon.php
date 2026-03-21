@@ -96,18 +96,6 @@ function deleteIconFile(int $userId): void
 }
 
 /**
- * ユーザーのアイコンをDBに更新
- *
- * @param int $userId
- * @param string|null $filename
- * @return void
- */
-function updateUserIcon(int $userId, ?string $filename): void
-{
-  updateUserIconInDb($userId, $filename);
-}
-
-/**
  * アイコンをデフォルトに戻す
  *
  * @param int $userId
