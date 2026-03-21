@@ -100,13 +100,7 @@ function getPasswordCheck(string $password, string $password_check): array
 }
 
 // 現在のパスワード検証（パスワード変更用）
-/**
- * 現在のパスワードのバリデーションエラーを取得
- *
- * @param string $current_password 入力された現在のパスワード
- * @param int $user_id ユーザーID
- * @return array エラーメッセージの配列
- */
+// 現在のパスワードのバリデーションエラーを取得
 function getCurrentPasswordErrors(string $current_password, int $user_id): array
 {
 	if (isEmpty($current_password)) {
@@ -121,13 +115,7 @@ function getCurrentPasswordErrors(string $current_password, int $user_id): array
 }
 
 // アイコンのバリデーションエラーを取得
-/**
- * アイコンのバリデーションエラーを取得
- *
- * @param array|null $file アップロードされたファイル（$_FILES['icon']）
- * @return array エラーメッセージの配列
- */
-function getIconValidationErrors($file): array
+function getIconValidationErrors(?array $file): array
 {
 	// 画像がアップロードされていない場合
 	if (!isImageUploaded($file)) {

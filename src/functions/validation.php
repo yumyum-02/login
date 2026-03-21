@@ -43,13 +43,7 @@ function isPasswordFormat(string $password): bool
   return preg_match('/^[a-zA-Z0-9!@#$%^&*()\-_+=]+$/', $password) === 1;
 }
 
-/**
- * 現在のパスワードが正しいかチェック
- *
- * @param string $current_password 入力された現在のパスワード
- * @param int $user_id ユーザーID
- * @return bool パスワードが一致すればtrue、一致しなければfalse
- */
+// 現在のパスワードが正しいかチェック
 function isCurrentPasswordCorrect(string $current_password, int $user_id): bool
 {
 	// DBからユーザーのパスワードハッシュを取得
@@ -73,13 +67,13 @@ function isEmpty(string $value): bool
 }
 
 // 画像がアップロードされているかチェック
-function isImageUploaded($file): bool
+function isImageUploaded(?array $file): bool
 {
   return isset($file) && $file['error'] !== UPLOAD_ERR_NO_FILE;
 }
 
 // アップロードされたファイルが本当に画像かチェック
-function isValidImageFormat($file): bool
+function isValidImageFormat(array $file): bool
 {
   $imageInfo = getimagesize($file['tmp_name']);
 
@@ -104,14 +98,14 @@ function isValidImageFormat($file): bool
 }
 
 // ファイルサイズが指定されたバイト数以下かチェック
-function isValidImageFileSize($file, int $maxSizeInBytes): bool
+function isValidImageFileSize(array $file, int $maxSizeInBytes): bool
 {
   return $file['size'] <= $maxSizeInBytes;
   // maxsizeはvalidation-error.phpの方で値を入れている
 }
 
 // 画像の幅と高さが指定サイズ以下かチェック
-function isValidImageDimensions($file, int $maxWidth, int $maxHeight): bool
+function isValidImageDimensions(array $file, int $maxWidth, int $maxHeight): bool
 {
   $imageInfo = getimagesize($file['tmp_name']);
 
@@ -127,7 +121,7 @@ function isValidImageDimensions($file, int $maxWidth, int $maxHeight): bool
 }
 
 // MIMEタイプが許可されたタイプかチェック
-function isValidImageMimeType($file, array $allowedMimeTypes): bool
+function isValidImageMimeType(array $file, array $allowedMimeTypes): bool
 {
   $imageInfo = getimagesize($file['tmp_name']);
 
