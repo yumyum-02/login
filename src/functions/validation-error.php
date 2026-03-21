@@ -119,3 +119,47 @@ function getCurrentPasswordErrors(string $current_password, int $user_id): array
 
 	return [];
 }
+
+// アイコンのバリデーションエラーを取得
+/**
+ * アイコンのバリデーションエラーを取得
+ *
+ * @param array|null $file アップロードされたファイル（$_FILES['icon']）
+ * @return array エラーメッセージの配列
+ */
+function getIconValidationErrors($file): array
+{
+	// 画像がアップロードされていない場合
+	if (!isImageUploaded($file)) {
+		return ['画像がアップロードされていません'];
+	}
+
+	// アップロードされたものが画像ファイルかチェック
+	if (!isValidImageFormat($file)) {
+		return ['PNG または JPEG 形式の画像をアップロードしてください'];
+	}
+
+	$errors = [];
+
+	// アップロードエラーチェック
+	if ($file['error'] !== UPLOAD_ERR_OK) {
+		$errors[] = '画像のアップロードに失敗しました';
+	}
+
+	// ファイルサイズチェック（1MB以下）
+	if (!isValidImageFileSize($file, 1024 * 1024)) {
+		$errors[] = '容量は1MB以下の画像をアップロードしてください';
+	}
+
+	// MIMEタイプチェック（PNG または JPEG）
+	if (!isValidImageMimeType($file, ['image/jpeg', 'image/png'])) {
+		$errors[] = 'PNG または JPEG 形式の画像をアップロードしてください';
+	}
+
+	// 画像サイズチェック（400px × 400px以下）
+	if (!isValidImageDimensions($file, 400, 400)) {
+		$errors[] = '画像サイズは400px × 400px以下にしてください';
+	}
+
+	return $errors;
+}

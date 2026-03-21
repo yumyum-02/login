@@ -1,0 +1,261 @@
+▼処理フロー
+1. account.php → 「アイコンを変更」リンク
+2. edit-icon.php（編集画面）→ 丸い形のアイコンプレビュー表示
+3. アイコンをホバー → 半透明オーバーレイと鉛筆アイコン表示
+4. アイコンをクリック → ファイル選択ダイアログ
+5. ファイル選択後 → 自動的にフォーム送信 → exec_icon_upload.php
+6. バリデーション → 一時保存（{user_id}_temp.拡張子）→ edit-icon.phpにリダイレクト
+7. edit-icon.php → 丸い形で一時保存画像をプレビュー表示
+8-A. 変更を保存ボタン → exec_edit-icon.php → 一時ファイル→本番ファイル → DB更新 → account.phpへ
+8-B. キャンセルボタン → exec_icon_cancel.php → 一時ファイル削除 → account.phpへ
+8-C. デフォルトに戻すボタン → exec_icon_reset.php → 本番ファイル削除 → DB NULL → account.phpへ
+
+【追加ファイル】
+▼ディレクトリ・画像
+・public/image/icon/ ディレクトリを作成
+・public/image/icon/default.png デフォルト画像を用意
+▼データアクセス
+・src/functions/icon-file.php ファイル操作専用
+・src/functions/db.php DB操作専用
+▼ロジック
+・src/functions/icon.php アイコン管理用の関数ファイル
+・src/functions/display_icon.php アイコン表示用の関数ファイル
+▼テンプレート
+・src/template/edit-icon_template.php 編集画面のテンプレート
+▼コントローラー
+・public/account-edit/edit-icon.php 編集画面
+・public/account-edit/exec_icon_upload.php アップロード処理（一時保存）
+・public/account-edit/exec_edit-icon.php 変更確定処理
+・public/account-edit/exec_icon_cancel.php キャンセル処理
+・public/account-edit/exec_icon_reset.php デフォルトに戻す処理
+
+【DB】
+db_data.sqlにiconカラムを追加
+・ALTER TABLE users ADD COLUMN icon VARCHAR(255) NULL;
+
+【バリデーション】
+▼src/functions/validation.php に追加する汎用的な画像バリデーション関数
+・isImageUploaded($file)
+→ファイルがアップロードされているかチェック
+→!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE をチェック
+→true/false を返す
+
+・isValidImageFileSize($file, $maxSizeInBytes)
+→ファイルサイズが指定されたバイト数以下かチェック
+→$file['size'] <= $maxSizeInBytes を判定
+→true/false を返す
+
+・isValidImageDimensions($file, $maxWidth, $maxHeight)
+→getimagesize()で画像の幅と高さを取得
+→幅が$maxWidth以下、高さが$maxHeight以下かチェック
+→true/false を返す
+
+・isValidImageMimeType($file, $allowedMimeTypes)
+→getimagesize()でMIMEタイプを取得
+→$allowedMimeTypes配列に含まれているかチェック
+→true/false を返す
+
+【アイコンのバリデーションをまとめた関数】
+▼src/functions/validation-error.php に追加する関数
+・アイコンの変更画面で「変更を保存」を押した時に発動する
+・getIconValidationErrors($file)
+→アイコンのバリデーションを実行してエラー配列を返す
+→!isImageUploaded($file) なら ['画像がアップロードされていません'] を返して終了（画像を選択せずに保存ボタンを押した時）
+→$errors = [] を初期化
+→$file['error'] !== UPLOAD_ERR_OK ならエラー追加: 「画像のアップロードに失敗しました」
+→getimagesize($file['tmp_name']) でファイルが画像か確認、falseならエラー追加: 「有効な画像ファイルではありません」
+→!isValidImageFileSize($file, 1024 * 1024) ならエラー追加: 「容量は1MB以下の画像をアップロードしてください」
+→!isValidImageMimeType($file, ['image/jpeg', 'image/png']) ならエラー追加: 「PNG または JPEG 形式の画像をアップロードしてください」
+→!isValidImageDimensions($file, 400, 400) ならエラー追加: 「画像サイズは400px × 400px以下にしてください」
+→$errors を返す
+
+【アイコンの表示（汎用）】
+▼src/functions/display_icon.php に追加する関数（表示用）
+・getIconPath($userId)
+→DBからアイコンファイル名を取得（getUserIconFromDb）
+→iconがNULLまたは空ならデフォルト画像のパスを返す（getDefaultIconPath）
+→ファイルが存在しなければデフォルト画像のパスを返す（iconFileExists）
+→それ以外はユーザーの画像パスを返す（getUserIconWebPath）
+
+・displayIcon($userId, $size = 100, $class = '', $alt = 'アイコン')
+→getIconPath()でアイコンのパスを取得
+→imgタグを生成して返す
+→例: <img src="/image/icon/123.jpg" width="100" height="100" class="" alt="アイコン">
+→いろんなページで簡単にアイコンを表示できる
+
+【アイコンの保存・削除・DB更新を管理】
+
+▼レイヤー構成（テスト可能で保守性の高い設計）
+コントローラー層（exec_*.php）
+  ↓
+ビジネスロジック層（icon.php）← 複数の小さな処理を組み合わせ
+  ↓
+データアクセス層 ← 小さな単一責務の関数
+  ├── ファイル操作（icon-file.php）
+  └── DB操作（icon-db.php）
+
+▼src/functions/icon-file.php（ファイル操作専用）
+・getIconDirectory() - ディレクトリパス取得
+・getIconFilePath($userId, $extension, $isTemp) - ファイルパス生成
+・getImageExtensionFromMime($mimeType) - MIME→拡張子変換
+・getImageMimeType($filePath) - MIMEタイプ取得
+・ensureIconDirectoryExists($dir) - ディレクトリ作成
+・moveUploadedIconFile($tmpPath, $destPath) - ファイル移動
+・renameIconFile($oldPath, $newPath) - ファイルリネーム
+・deleteIconFileIfExists($path) - ファイル削除
+・setIconFilePermission($path) - パーミッション設定
+・deleteAllIconFiles($userId, $isTemp) - 全拡張子削除
+・iconFileExists($filename) - ファイル存在チェック
+・getDefaultIconPath() - デフォルトパス取得
+・getUserIconWebPath($filename) - Webパス取得
+
+▼src/functions/icon-db.php（DB操作専用）
+・updateUserIconInDb($userId, $filename) - アイコン更新
+・getUserIconFromDb($userId) - アイコン取得
+
+▼src/functions/icon.php（ビジネスロジック層）
+・saveTempIcon($userId, $file)
+→MIMEタイプから拡張子を決定（getImageMimeType, getImageExtensionFromMime）
+→ファイルパスを生成（getIconFilePath）
+→ディレクトリ確認（ensureIconDirectoryExists）
+→既存の一時ファイルを削除（deleteTempIconFile）
+→ファイルを移動（moveUploadedIconFile）
+→パーミッション設定（setIconFilePermission）
+→ファイル名を返す
+
+・confirmIcon($userId, $tempFilename)
+→一時ファイルの存在確認
+→拡張子を取得
+→既存の本番ファイルを削除（deleteIconFile）
+→本番ファイルパスを生成（getIconFilePath）
+→リネーム（renameIconFile）
+→パーミッション設定（setIconFilePermission）
+→本番ファイル名を返す
+
+・deleteTempIconFile($userId)
+→deleteAllIconFiles($userId, true)を呼び出し
+
+・deleteIconFile($userId)
+→deleteAllIconFiles($userId, false)を呼び出し
+
+・updateUserIcon($userId, $filename)
+→updateUserIconInDb()を呼び出し
+
+・resetIcon($userId)
+→deleteIconFile()で本番ファイルを削除
+→updateUserIcon()でDBをNULLに更新
+
+【アイコンのアップロード処理（一時保存）】
+▼public/account-edit/exec_icon_upload.php
+・ログイン認証チェック
+・CSRFトークン検証
+・$_FILES['icon']を取得
+・getIconValidationErrors()でバリデーション
+・エラーがあればredirectWithErrors()でedit-icon.phpに戻る
+・エラーがなければ:
+→saveTempIcon()で一時ファイルとして保存
+→セッションに一時ファイル名を保存（$_SESSION['temp_icon']）
+→edit-icon.phpにリダイレクト（プレビュー表示）
+
+【アイコンの変更確定】
+▼public/account-edit/exec_edit-icon.php
+・ログイン認証チェック
+・CSRFトークン検証
+・セッションに一時ファイル名があるかチェック
+・なければエラーメッセージを表示してedit-icon.phpに戻る
+・あれば:
+→confirmIcon()で一時ファイルを本番ファイルに変換
+→updateUserIcon()でDBを更新
+→セッションのユーザー情報を更新（$_SESSION['user']['icon']）
+→セッションの一時ファイル名を削除（unset($_SESSION['temp_icon'])）
+→成功メッセージをセッションに保存「アイコンを更新しました」
+→account.phpにリダイレクト
+
+【アイコンの変更キャンセル】
+▼public/account-edit/exec_icon_cancel.php
+・ログイン認証チェック
+・CSRFトークン検証
+・セッションに一時ファイル名があれば:
+→deleteTempIconFile()で一時ファイルを削除
+→セッションの一時ファイル名を削除（unset($_SESSION['temp_icon'])）
+・account.phpにリダイレクト
+
+【アイコンをデフォルトに戻す】
+▼public/account-edit/exec_icon_reset.php
+・ログイン認証チェック
+・CSRFトークン検証
+・resetIcon()でアイコンをリセット（本番ファイル削除、DB NULL）
+・セッションのユーザー情報を更新（$_SESSION['user']['icon'] = null）
+・成功メッセージをセッションに保存「アイコンをデフォルトに戻しました」
+・account.phpにリダイレクト
+
+【アイコン変更ボタンを押した時】
+▼public/account-edit/edit-icon.php
+・ログイン認証チェック
+・CSRFトークン生成
+・セッションからエラーと入力値を取得
+→$errors = $_SESSION['errors'] ?? [];
+→$old_input = $_SESSION['old_input'] ?? [];
+・セッションをクリア（一度表示したらクリア）
+→unset($_SESSION['errors'], $_SESSION['old_input']);
+・テンプレート読み込み
+
+【account.php（アカウント情報画面）にアイコン項目とボタンを追加】
+▼src/template/account_template.php を編集
+・プロフィール情報カードの構造を変更
+→カードヘッダーから「変更」ボタンを削除
+→各項目に個別の変更ボタンを配置（アカウント管理カードと同じレイアウト）
+
+・ユーザー名の項目
+→個別の「変更」ボタンを追加（edit-profile.phpへのリンク）
+
+・アイコンの項目（新規追加）
+→アイコン画像を表示（displayIcon()関数を使用）
+→個別の「変更」ボタンを追加（edit-icon.phpへのリンク）
+
+【アイコン変更画面】
+▼src/template/edit-icon_template.php
+・エラーメッセージ表示領域
+・成功メッセージ表示領域
+
+・丸い形のアイコンプレビュー領域
+→CSSで丸くクリップ: border-radius: 50%; width: 200px; height: 200px; object-fit: cover;
+→セッションに一時ファイル名があればそれを表示（プレビュー）
+→なければgetIconPath()で現在の画像を表示
+→ホバー時に半透明のオーバーレイを表示
+→オーバーレイに鉛筆アイコンまたは「画像を変更」テキストを表示
+→クリックでファイル選択ダイアログを開く（JavaScriptで<input type="file">をトリガー）
+
+・非表示のアップロードフォーム（exec_icon_upload.phpに送信）
+→enctype="multipart/form-data"
+→<input type="file" id="icon" name="icon" accept="image/png,image/jpeg" style="display:none;">
+→CSRFトークン
+→JavaScriptでファイル選択後に自動的にフォーム送信
+
+・変更を保存ボタン（exec_edit-icon.phpに送信）
+→常に表示
+→セッションに一時ファイル名がない場合はdisabled属性を追加（クリック不可）
+→CSSでdisabled状態の時は薄い色で表示（opacity: 0.5; cursor: not-allowed;）
+
+・キャンセルボタン（exec_icon_cancel.phpに送信）
+→常に表示
+→一時ファイルがあれば削除してからaccount.phpにリダイレクト
+
+・デフォルトに戻すボタン（exec_icon_reset.phpに送信）
+・戻るリンク（account.phpへ）
+・注意書き「1MB以下、400px×400px以下、PNG/JPEG形式」
+
+・JavaScriptの処理
+→丸いアイコンをクリック時にファイル選択ダイアログを開く
+→ファイル選択後に自動的にフォーム送信（サーバーに一時保存）
+
+▼account.php（既存ファイルに追加）
+・アイコン表示領域を追加
+・getIconPath()で画像パスを取得して表示（一時ファイルは表示しない）
+・「アイコンを変更」リンクを追加（edit-icon.phpへ）
+
+【セキュリティ対策memo】
+▼public/image/icon/.htaccess を作成【重要度：最高 🔴 必須】
+・php_flag engine off でPHP実行を無効化（RCE攻撃対策）
+・Options -Indexes でディレクトリリスティングを無効化
+・画像ファイル（jpg, jpeg, png）のみアクセス許可

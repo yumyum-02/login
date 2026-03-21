@@ -20,8 +20,9 @@
         <i class="bi bi-house-door-fill me-2"></i>Dashboard
       </a>
       <div class="d-flex align-items-center">
-        <span class="text-white me-3 d-none d-md-inline">
-          <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+        <span class="text-white me-3 d-none d-md-inline d-flex align-items-center">
+          <?= displayIcon(AuthUser::getUserId(), 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+          <?= escape(AuthUser::getName()) ?>
         </span>
       </div>
     </div>
@@ -29,8 +30,9 @@
 
   <div class="offcanvas offcanvas-start bg-white shadow-sm" tabindex="-1" id="sidebarMenu">
     <div class="offcanvas-header border-bottom d-md-none">
-      <h5 class="offcanvas-title">
-        <i class="bi bi-person-circle me-2"></i><?= escape($_SESSION['user']['name']) ?>
+      <h5 class="offcanvas-title d-flex align-items-center">
+        <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+        <?= escape($_SESSION['user']['name']) ?>
       </h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
@@ -78,21 +80,44 @@
               <h5 class="card-title mb-0">
                 <i class="bi bi-person-badge me-2"></i>プロフィール情報
               </h5>
-              <a href="../account-edit/edit-profile.php" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil me-1"></i>変更
-              </a>
             </div>
             <div class="card-body p-4">
               <!-- ユーザー名 -->
-              <div class="row align-items-center">
+              <div class="row align-items-center mb-3 pb-3 border-bottom">
                 <div class="col-sm-3">
                   <div class="d-flex align-items-center text-muted">
                     <i class="bi bi-person-fill me-2"></i>
                     <span class="fw-semibold">ユーザー名</span>
                   </div>
                 </div>
-                <div class="col-sm-9">
-                  <p class="mb-0"><?= escape($_SESSION['user']['name']) ?></p>
+                <div class="col-sm-6">
+                  <p class="mb-0"><?= escape(AuthUser::getName()) ?></p>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="../account-edit/edit-profile.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
+                </div>
+              </div>
+
+              <!-- アイコン -->
+              <div class="row align-items-center">
+                <div class="col-sm-3">
+                  <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-image-fill me-2"></i>
+                    <span class="fw-semibold">アイコン</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <?php
+                  require_once dirname(__DIR__) . '/functions/display_icon.php';
+                  echo displayIcon(AuthUser::getUserId(), 80, 'rounded-circle', 'ユーザーアイコン');
+                  ?>
+                </div>
+                <div class="col-sm-3 text-end">
+                  <a href="../account-edit/edit-icon.php" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-pencil me-1"></i>変更
+                  </a>
                 </div>
               </div>
             </div>
@@ -115,7 +140,7 @@
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <p class="mb-0"><?= escape($_SESSION['user']['email']) ?></p>
+                  <p class="mb-0"><?= escape(AuthUser::getEmail()) ?></p>
                 </div>
                 <div class="col-sm-3 text-end">
                   <a href="../account-edit/edit-email.php" class="btn btn-outline-secondary btn-sm">

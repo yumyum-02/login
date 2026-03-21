@@ -71,3 +71,59 @@ function isEmpty(string $value): bool
 {
   return $value === '';
 }
+
+// 画像がアップロードされているかチェック
+function isImageUploaded($file): bool
+{
+  return isset($file) && $file['error'] !== UPLOAD_ERR_NO_FILE;
+}
+
+// アップロードされたファイルが本当に画像かチェック
+function isValidImageFormat($file): bool
+{
+  $imageInfo = @getimagesize($file['tmp_name']);
+
+  if ($imageInfo === false){
+    return false;
+  }
+
+  // 許可された画像タイプ（JPEG, PNG）
+  $allowedType = [IMAGETYPE_JPEG, IMAGETYPE_PNG];
+  return in_array($imageInfo[2], $allowedType, true);
+}
+
+// ファイルサイズが指定されたバイト数以下かチェック
+function isValidImageFileSize($file, int $maxSizeInBytes): bool
+{
+  return $file['size'] <= $maxSizeInBytes;
+}
+
+// 画像の幅と高さが指定サイズ以下かチェック
+function isValidImageDimensions($file, int $maxWidth, int $maxHeight): bool
+{
+  $imageInfo = getimagesize($file['tmp_name']);
+
+  // もし $file['tmp_name'] が画像じゃない場合、$imageInfo は false になる
+  if ($imageInfo === false) {
+    return false;
+  }
+
+  $width = $imageInfo[0];
+  $height = $imageInfo[1];
+
+  return $width <= $maxWidth && $height <= $maxHeight;
+}
+
+// MIMEタイプが許可されたタイプかチェック
+function isValidImageMimeType($file, array $allowedMimeTypes): bool
+{
+  $imageInfo = getimagesize($file['tmp_name']);
+
+  if ($imageInfo === false) {
+    return false;
+  }
+
+  $mimeType = $imageInfo['mime'];
+
+  return in_array($mimeType, $allowedMimeTypes, true);
+}

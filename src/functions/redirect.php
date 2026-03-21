@@ -12,13 +12,11 @@ function redirect(string $redirectUrl): never
  *
  * @param string $loginPath ログインページへのパス
  * @return void
+ * @deprecated AuthUser::requireLogin() を使用してください
  */
 function requireLogin(string $loginPath = './login.php'): void
 {
-	if (!isset($_SESSION['user'])) {
-		$_SESSION['msg'] = "ログインしてください。";
-		redirect($loginPath);
-	}
+	AuthUser::requireLogin($loginPath);
 }
 
 /**

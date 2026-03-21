@@ -1,1 +1,7 @@
 src/OLD/
+
+# ユーザーがアップロードしたアイコン画像を除外
+public/image/icon/*
+# デフォルトアイコンとディレクトリは追跡する
+!public/image/icon/default.png
+!public/image/icon/.gitkeep
