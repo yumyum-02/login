@@ -93,14 +93,17 @@ function registerUser(string $name, string $email, string $password_hash): int
   return (int)$pdo->lastInsertId();
 }
 
-// ユーザー情報変更（汎用）
+/**
+ * ユーザー情報変更（汎用）
+ * @throws InvalidArgumentException 不正なフィールド名の場合
+ */
 function updateUser(int $user_id, string $field, string $value): bool
 {
-  // 許可されたフィールドのホワイトリスト（SQLインジェクション（悪意のあるSQL文注入）対策）
+  // 許可されたフィールドのホワイトリスト（SQLインジェクション対策）
   $allowed_fields = ['name', 'email', 'password'];
 
-   // ホワイトリストにないフィールドは拒否
-  if (!in_array($field, $allowed_fields, true)) { // $field が $allowed_fields 配列の中に存在するかチェック true: $field が配列の中にある false: $field が配列の中にない
+  // ホワイトリストにないフィールドは拒否
+  if (!in_array($field, $allowed_fields, true)) {
     throw new InvalidArgumentException("不正なフィールド名: $field");
     // throw : 例外を投げる（エラーを発生させる） プログラムの実行を即座に停止しエラーをtry-catchに伝える
     // InvalidArgumentException : 無効な因数のPHPの例外クラス 「引数が不正です」という意味
@@ -116,6 +119,7 @@ function updateUser(int $user_id, string $field, string $value): bool
 }
 
 // ユーザーのアイコンファイル名をDBに更新
+//　アイコンリセット時に$filenameにnullを渡すため?でnullを許容
 function updateUserIcon(int $userId, ?string $filename): void
 {
   $pdo = connectDb();

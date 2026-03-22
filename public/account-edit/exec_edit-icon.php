@@ -16,8 +16,7 @@ destroyCsrfToken();
 
 // セッションに一時ファイル名があるかチェック
 if (empty($_SESSION['temp_icon'])) {
-  $_SESSION['error_message'] = '画像がアップロードされていません';
-  redirect('./edit-icon.php');
+  redirectWithErrors(['画像がアップロードされていません'], [], './edit-icon.php');
 }
 
 try {
@@ -33,13 +32,9 @@ try {
   // セッションの一時ファイル名を削除
   unset($_SESSION['temp_icon']);
 
-  // 成功メッセージをセッションに保存
-  $_SESSION['success_message'] = 'アイコンを更新しました';
-
   // account.phpにリダイレクト
   redirect('../admin/account.php');
 } catch (RuntimeException $e) {
-  // エラー処理
-  $_SESSION['error_message'] = 'アイコンの更新に失敗しました';
-  redirect('./edit-icon.php');
+  // エラー時はアイコン編集画面にリダイレクト
+  redirectWithErrors(['アイコンの更新に失敗しました'], [], './edit-icon.php');
 }

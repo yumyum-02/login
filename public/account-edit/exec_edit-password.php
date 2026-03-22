@@ -38,15 +38,12 @@ try {
 
   // セッションIDを再生成（セキュリティ対策）
   session_regenerate_id(true);
-  // セッション更新
-  $_SESSION['success_message'] = 'パスワードを更新しました';
+
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
   // 不正なフィールド名エラー（通常は発生しない）
-  $_SESSION['error_message'] = 'システムエラーが発生しました';
-  redirect('./edit-password.php');
+  redirectWithErrors(['システムエラーが発生しました'], [], './edit-password.php');
 } catch (PDOException $e) {
   // データベースエラー
-  $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./edit-password.php');
+  redirectWithErrors(['データベースエラーが発生しました'], [], './edit-password.php');
 }

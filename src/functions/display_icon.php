@@ -3,12 +3,7 @@
 // 依存ファイルを読み込み
 require_once __DIR__ . '/db.php';
 
-/**
- * ユーザーのアイコンパスを取得
- *
- * @param int $userId
- * @return string アイコンのWebパス
- */
+// ユーザーのアイコンパスを取得
 function getIconPath(int $userId): string
 {
   // DBからアイコンファイル名を取得
@@ -28,15 +23,7 @@ function getIconPath(int $userId): string
   return getUserIconWebPath($filename);
 }
 
-/**
- * アイコンをimgタグで表示
- *
- * @param int $userId
- * @param int $size
- * @param string $class
- * @param string $alt
- * @return string imgタグのHTML
- */
+// アイコンをimgタグで表示
 function displayIcon(int $userId, int $size = 100, string $class = '', string $alt = 'アイコン'): string
 {
   $iconPath = getIconPath($userId);

@@ -21,12 +21,9 @@ try {
   // セッションのユーザー情報を更新
   $_SESSION['user']['icon'] = null;
 
-  // 成功メッセージをセッションに保存
-  $_SESSION['success_message'] = 'アイコンをデフォルトに戻しました';
+  // 成功時は account.php にリダイレクト
+  redirect('../admin/account.php');
 } catch (Exception $e) {
-  // エラーメッセージをセッションに保存
-  $_SESSION['errors'] = ['アイコンのリセットに失敗しました'];
+  // エラー時はアイコン編集画面にリダイレクト
+  redirectWithErrors(['アイコンのリセットに失敗しました'], [], '../account-edit/edit-icon.php');
 }
-
-// account.phpにリダイレクト
-redirect('../admin/account.php');

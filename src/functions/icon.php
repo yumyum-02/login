@@ -5,18 +5,18 @@ require_once __DIR__ . '/db.php';
 
 /**
  * 一時アイコンファイルを保存
- *
- * @param int $userId
- * @param array $file
- * @return string 保存した一時ファイル名
+ * @throws RuntimeException ファイルの保存に失敗した場合
  */
 function saveTempIcon(int $userId, array $file): string
 {
   // MIMEタイプから拡張子を決定
+  // ステップ1:アップロードされたファイルのMIMEタイプを取得 → "image/jpeg" とか "image/png" が返る
+  // ステップ2: MIMEタイプから拡張子を決定 → "jpg" とか "png" が返る
   $mimeType = getImageMimeType($file['tmp_name']);
   $extension = getImageExtensionFromMime($mimeType);
 
   // ファイルパスを生成
+  // true:一時ファイル、false:本番ファイル
   $tempPath = getIconFilePath($userId, $extension, true);
 
   // 既存の一時ファイルを削除
@@ -36,10 +36,7 @@ function saveTempIcon(int $userId, array $file): string
 
 /**
  * 一時ファイルを本番ファイルに確定
- *
- * @param int $userId
- * @param string $tempFilename
- * @return string 本番ファイル名
+ * @throws RuntimeException 一時ファイルが見つからない、または確定に失敗した場合
  */
 function confirmIcon(int $userId, string $tempFilename): string
 {
@@ -51,6 +48,7 @@ function confirmIcon(int $userId, string $tempFilename): string
   }
 
   // 拡張子を取得
+  // PATHINFO_EXTENSION:拡張子
   $extension = pathinfo($tempFilename, PATHINFO_EXTENSION);
 
   // 既存の本番ファイルを削除
@@ -70,34 +68,19 @@ function confirmIcon(int $userId, string $tempFilename): string
   return basename($finalPath);
 }
 
-/**
- * 一時アイコンファイルを削除
- *
- * @param int $userId
- * @return void
- */
+// 一時アイコンファイルを削除
 function deleteTempIconFile(int $userId): void
 {
   deleteAllIconFiles($userId, true);
 }
 
-/**
- * 本番アイコンファイルを削除
- *
- * @param int $userId
- * @return void
- */
+// 本番アイコンファイルを削除
 function deleteIconFile(int $userId): void
 {
   deleteAllIconFiles($userId, false);
 }
 
-/**
- * アイコンをデフォルトに戻す
- *
- * @param int $userId
- * @return void
- */
+// アイコンをデフォルトに戻す
 function resetIcon(int $userId): void
 {
   deleteIconFile($userId);

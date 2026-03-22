@@ -26,14 +26,11 @@ try {
 
   // セッション更新
   $_SESSION['user']['name'] = $name;
-  $_SESSION['success_message'] = 'ユーザー名を更新しました';
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
   // 不正なフィールド名エラー（通常は発生しない）
-  $_SESSION['error_message'] = 'システムエラーが発生しました';
-  redirect('./edit-profile.php');
+  redirectWithErrors(['システムエラーが発生しました'], ['name' => $name], './edit-profile.php');
 } catch (PDOException $e) {
   // データベースエラー
-  $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./edit-profile.php');
+  redirectWithErrors(['データベースエラーが発生しました'], ['name' => $name], './edit-profile.php');
 }
