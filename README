@@ -1,4 +1,18 @@
+# セットアップ手順
+
+## 初回起動
+```bash
 make build
 make up
+```
 
-db_dataにあるテーブルを作成
+初回起動時、`src/db_data.sql` が自動的に実行され、テーブルが作成されます。
+
+## データベースをクリアして再起動
+テーブル構造を変更した場合など、データベースを初期状態に戻したい時：
+
+```bash
+make down
+docker volume rm login_db_data
+make up
+```
