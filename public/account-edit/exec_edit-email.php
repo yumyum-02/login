@@ -29,8 +29,7 @@ try {
     redirectWithErrors($errors, ['email' => $email],'./edit-email.php');
   }
 } catch (PDOException $e) {
-  $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./edit-email.php');
+  redirectWithErrors(['データベースエラーが発生しました'], ['email' => $email], './edit-email.php');
 }
 
 try {
@@ -38,14 +37,11 @@ try {
 
   // セッション更新
   $_SESSION['user']['email'] = $email;
-  $_SESSION['success_message'] = 'メールアドレスを更新しました';
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
   // 不正なフィールド名エラー（通常は発生しない）
-  $_SESSION['error_message'] = 'システムエラーが発生しました';
-  redirect('./edit-email.php');
+  redirectWithErrors(['システムエラーが発生しました'], ['email' => $email], './edit-email.php');
 } catch (PDOException $e) {
   // データベースエラー
-  $_SESSION['error_message'] = 'データベースエラーが発生しました';
-  redirect('./edit-email.php');
+  redirectWithErrors(['データベースエラーが発生しました'], ['email' => $email], './edit-email.php');
 }
