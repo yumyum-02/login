@@ -10,10 +10,13 @@ require_once __DIR__ . '/db.php';
 function saveTempIcon(int $userId, array $file): string
 {
   // MIMEタイプから拡張子を決定
+  // ステップ1:アップロードされたファイルのMIMEタイプを取得 → "image/jpeg" とか "image/png" が返る
+  // ステップ2: MIMEタイプから拡張子を決定 → "jpg" とか "png" が返る
   $mimeType = getImageMimeType($file['tmp_name']);
   $extension = getImageExtensionFromMime($mimeType);
 
   // ファイルパスを生成
+  // true:一時ファイル、false:本番ファイル
   $tempPath = getIconFilePath($userId, $extension, true);
 
   // 既存の一時ファイルを削除
@@ -45,6 +48,7 @@ function confirmIcon(int $userId, string $tempFilename): string
   }
 
   // 拡張子を取得
+  // PATHINFO_EXTENSION:拡張子
   $extension = pathinfo($tempFilename, PATHINFO_EXTENSION);
 
   // 既存の本番ファイルを削除

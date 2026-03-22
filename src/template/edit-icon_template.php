@@ -159,12 +159,6 @@
             </div>
           </div>
 
-          <!-- 戻るリンク -->
-          <div class="text-center">
-            <a href="../admin/account.php" class="text-decoration-none">
-              <i class="bi bi-arrow-left me-2"></i>アカウント情報に戻る
-            </a>
-          </div>
         </div>
       </div>
     </div>
