@@ -21,13 +21,13 @@ if (empty($_SESSION['temp_icon'])) {
 
 try {
   // 一時ファイルを本番ファイルに変換
-  $filename = confirmIcon($_SESSION['user']['id'], $_SESSION['temp_icon']);
+  $filename = confirmIcon(AuthUser::getUserId(), $_SESSION['temp_icon']);
 
   // DBを更新
-  updateUserIcon($_SESSION['user']['id'], $filename);
+  updateUserIcon(AuthUser::getUserId(), $filename);
 
   // セッションのユーザー情報を更新
-  $_SESSION['user']['icon'] = $filename;
+  AuthUser::setIcon($filename);
 
   // セッションの一時ファイル名を削除
   unset($_SESSION['temp_icon']);

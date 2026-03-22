@@ -16,10 +16,10 @@ destroyCsrfToken();
 
 try {
   // アイコンをリセット（本番ファイル削除、DB NULL）
-  resetIcon($_SESSION['user']['id']);
+  resetIcon(AuthUser::getUserId());
 
   // セッションのユーザー情報を更新
-  $_SESSION['user']['icon'] = null;
+  AuthUser::setIcon(null);
 
   // 成功時は account.php にリダイレクト
   redirect('../admin/account.php');

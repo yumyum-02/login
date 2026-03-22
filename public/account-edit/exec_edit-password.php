@@ -17,7 +17,7 @@ $new_password = $_POST['new_password'] ?? '';
 $new_password_confirm = $_POST['new_password_confirm'] ?? '';
 // パスワードのバリデーション
 $errors = [
-  'current_password' => getCurrentPasswordErrors($current_password, $_SESSION['user']['id']),
+  'current_password' => getCurrentPasswordErrors($current_password, AuthUser::getUserId()),
   'new_password' => getPasswordValidationErrors($new_password),
   'new_password_confirm' => getPasswordCheck($new_password, $new_password_confirm)
 ];
@@ -34,7 +34,7 @@ if ($hasErrors){
 $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
 
 try {
-  updateUser($_SESSION['user']['id'], 'password', $password_hash);
+  updateUser(AuthUser::getUserId(), 'password', $password_hash);
 
   // セッションIDを再生成（セキュリティ対策）
   session_regenerate_id(true);

@@ -22,10 +22,10 @@ if (!empty($errors)) {
 }
 
 try {
-  updateUser($_SESSION['user']['id'], 'name', $name);
+  updateUser(AuthUser::getUserId(), 'name', $name);
 
   // セッション更新
-  $_SESSION['user']['name'] = $name;
+  AuthUser::setName($name);
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
   // 不正なフィールド名エラー（通常は発生しない）

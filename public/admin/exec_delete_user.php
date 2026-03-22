@@ -21,7 +21,7 @@ if (!$user_id){
 //　削除処理
 try {
   // ログイン中のユーザーは削除不可
-  if (isset($_SESSION['user']['id']) && $user_id === (int)$_SESSION['user']['id']) {
+  if (AuthUser::isLogin() && $user_id === AuthUser::getUserId()) {
     $_SESSION['msg'] = 'ログイン中のユーザー情報は削除できません';
     redirect('./admin.php');
   }

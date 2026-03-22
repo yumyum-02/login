@@ -31,8 +31,8 @@
   <div class="offcanvas offcanvas-start bg-white shadow-sm" tabindex="-1" id="sidebarMenu">
     <div class="offcanvas-header border-bottom d-md-none">
       <h5 class="offcanvas-title d-flex align-items-center">
-        <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
-        <?= escape($_SESSION['user']['name']) ?>
+        <?= displayIcon(AuthUser::getUserId(), 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
+        <?= escape(AuthUser::getName()) ?>
       </h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>

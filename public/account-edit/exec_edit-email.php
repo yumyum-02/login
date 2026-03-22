@@ -33,10 +33,10 @@ try {
 }
 
 try {
-  updateUser($_SESSION['user']['id'], 'email', $email);
+  updateUser(AuthUser::getUserId(), 'email', $email);
 
   // セッション更新
-  $_SESSION['user']['email'] = $email;
+  AuthUser::setEmail($email);
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
   // 不正なフィールド名エラー（通常は発生しない）

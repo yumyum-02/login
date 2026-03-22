@@ -17,7 +17,7 @@ destroyCsrfToken();
 // セッションに一時ファイル名があれば削除
 if (!empty($_SESSION['temp_icon'])) {
   // 一時ファイルを削除
-  deleteTempIconFile($_SESSION['user']['id']);
+  deleteTempIconFile(AuthUser::getUserId());
 
   // セッションの一時ファイル名を削除
   unset($_SESSION['temp_icon']);

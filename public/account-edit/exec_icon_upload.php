@@ -27,7 +27,7 @@ if (!empty($errors)) {
 
 try {
   // 一時ファイルとして保存
-  $tempFilename = saveTempIcon($_SESSION['user']['id'], $file);
+  $tempFilename = saveTempIcon(AuthUser::getUserId(), $file);
 
   // セッションに一時ファイル名を保存
   $_SESSION['temp_icon'] = $tempFilename;

@@ -64,4 +64,28 @@ class AuthUser
         $user = self::getUser();
         return isset($user['is_admin']) && $user['is_admin'] == 1;
     }
+
+    // セッションのユーザー名を更新
+    public static function setName(string $name): void
+    {
+        if (self::isLogin()) {
+            $_SESSION['user']['name'] = $name;
+        }
+    }
+
+    // セッションのメールアドレスを更新
+    public static function setEmail(string $email): void
+    {
+        if (self::isLogin()) {
+            $_SESSION['user']['email'] = $email;
+        }
+    }
+
+    // セッションのアイコンを更新
+    public static function setIcon(?string $icon): void
+    {
+        if (self::isLogin()) {
+            $_SESSION['user']['icon'] = $icon;
+        }
+    }
 }
