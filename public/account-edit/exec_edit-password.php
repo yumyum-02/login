@@ -37,6 +37,7 @@ try {
   updateUser($_SESSION['user']['id'], 'password', $password_hash);
 
   // セッションIDを再生成（セキュリティ対策）
+  // 認証情報が変わったタイミングなので、「それまでのセッション ID は切る」というセキュリティ上の区切り
   session_regenerate_id(true);
 
   redirect('../admin/account.php');

@@ -28,7 +28,9 @@ try {
   $_SESSION['user']['name'] = $name;
   redirect('../admin/account.php');
 } catch (InvalidArgumentException $e) {
+  // 関数に渡された引数が間違っている(PHPに用意されている例外クラス)
   // 不正なフィールド名エラー（通常は発生しない）
+  // なんらかのバグで値が途中で書き変わったりした時用
   redirectWithErrors(['システムエラーが発生しました'], ['name' => $name], './edit-profile.php');
 } catch (PDOException $e) {
   // データベースエラー

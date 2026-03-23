@@ -76,6 +76,7 @@ function isCurrentPasswordCorrect(string $current_password, int $user_id): bool
 	$user = $stmt->fetch();
 
 	// ユーザーが存在しない、またはパスワードが一致しない
+  // password_verifyはPHP標準関数 ハッシュ化されたパスワードと平文パスワードが一致するか検証
 	if (!$user || !password_verify($current_password, $user['password'])) {
 		return false;
 	}

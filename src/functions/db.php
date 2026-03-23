@@ -105,8 +105,9 @@ function updateUser(int $user_id, string $field, string $value): bool
   // ホワイトリストにないフィールドは拒否
   if (!in_array($field, $allowed_fields, true)) {
     throw new InvalidArgumentException("不正なフィールド名: $field");
-    // throw : 例外を投げる（エラーを発生させる） プログラムの実行を即座に停止しエラーをtry-catchに伝える
-    // InvalidArgumentException : 無効な因数のPHPの例外クラス 「引数が不正です」という意味
+    // throw : 例外を投げる（現在の関数の実行を中断し、呼び出し元に例外を伝える）
+    // try-catch があればキャッチされ処理は続く、なければプログラムが停止する
+    // InvalidArgumentException : 引数が不正な場合に使う例外クラス
   }
 
   $pdo = connectDb();
