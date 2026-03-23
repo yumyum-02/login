@@ -2,7 +2,7 @@
 require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 // ログインチェック
-requireLogin('./login.php');
+requireLogin('../login.php');
 
 // CSRFトークン検証
 if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
