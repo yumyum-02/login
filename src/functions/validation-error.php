@@ -36,20 +36,15 @@ function getMailValidationErrors(string $email): array
 	return $errors;
 }
 
-// メールアドレス用（簡易）
+// メールアドレス用（簡易）- ログイン用
+// セキュリティ: 詳細なエラーではなく統一メッセージを返す（ユーザー列挙攻撃対策）
 function getSimpleEmailErrors(string $email): array
 {
-	if (isEmpty($email)) {
-		return ['メールアドレスを入力してください。'];
+	// 何かエラーがあれば統一メッセージ
+	if (isEmpty($email) || !isEmailFormat($email) || !isWithinLength($email, null, 320)) {
+		return ['ログイン情報が正しくありません。'];
 	}
-	$errors = [];
-	if (!isEmailFormat($email)) {
-		$errors[] = 'メールアドレスの形式が正しくありません。';
-	}
-	if (!isWithinLength($email, null, 320)) {
-		$errors[] = 'メールアドレスは320文字以内で入力してください。';
-	}
-	return $errors;
+	return [];
 }
 
 // パスワード用（詳細）
@@ -69,21 +64,15 @@ function getPasswordValidationErrors(string $password): array
 	return $errors;
 }
 
-// パスワード用（簡易）
+// パスワード用（簡易）- ログイン用
+// セキュリティ: 詳細なエラーではなく統一メッセージを返す（ユーザー列挙攻撃対策）
 function getSimplePasswordErrors(string $password): array
 {
-	if (isEmpty($password)) {
-		return ['パスワードを入力してください。'];
+	// 何かエラーがあれば統一メッセージ
+	if (isEmpty($password) || !isPasswordFormat($password) || !isWithinLength($password, 16, 64)) {
+		return ['ログイン情報が正しくありません。'];
 	}
-
-	$errors = [];
-	if (!isPasswordFormat($password)) {
-		$errors[] = 'パスワードの形式が正しくありません。';
-	}
-	if (!isWithinLength($password, 16, 64)) {
-		$errors[] = 'パスワードは16文字以上64文字以内で入力してください。';
-	}
-	return $errors;
+	return [];
 }
 
 // パスワード2重チェック

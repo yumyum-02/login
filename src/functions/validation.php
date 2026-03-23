@@ -8,16 +8,38 @@ function getTrimmedPostValue(string $key): string
   return trim($_POST[$key] ?? '');
 }
 
+// 空欄チェック
+function isEmpty(string $value): bool
+{
+  return $value === '';
+}
+
 // ユーザー名
 function isUserNameFormat(string $value): bool
 {
   return  preg_match('/^[a-zA-Z0-9 \x{3041}-\x{3096}\x{30A1}-\x{30FC}\x{4E00}-\x{9FFF}\x{3400}-\x{4DBF}]+$/u', $value) === 1;
+  /*
+  半角英字: a-z, A-Z
+  半角数字: 0-9
+  半角スペース:
+  ひらがな: あ-ん
+  カタカナ: ア-ン、長音記号 ー
+  漢字:
+  */
 }
 
 // メールアドレスの形式が正しいか（filter_var でチェック）
 function isEmailFormat(string $email): bool
 {
   return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+  /*
+  RFC 5321準拠
+  @ が1つだけあるか
+  @の前後が正しいか
+  ドットの位置が適切か
+  ドットが連続していないか など世界共通のルールに基づく
+  実在するメールアドレスかはチェックしていない
+  */
 }
 
 // 長さのバリデーション
@@ -41,6 +63,7 @@ function isWithinLength(string $value, ?int $minLength, ?int $maxLength): bool
 function isPasswordFormat(string $password): bool
 {
   return preg_match('/^[a-zA-Z0-9!@#$%^&*()\-_+=]+$/', $password) === 1;
+  //英数字とよくある記号群
 }
 
 // 現在のパスワードが正しいかチェック
@@ -58,12 +81,6 @@ function isCurrentPasswordCorrect(string $current_password, int $user_id): bool
 	}
 
 	return true;
-}
-
-// 空欄チェック
-function isEmpty(string $value): bool
-{
-  return $value === '';
 }
 
 // 画像がアップロードされているかチェック

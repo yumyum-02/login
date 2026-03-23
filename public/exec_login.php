@@ -13,17 +13,15 @@ destroyCsrfToken();
 $email = getTrimmedPostValue('email');
 $password = $_POST['password'] ?? '';
 
-// バリデーションチェック
-$errors = [
-  'email' => getSimpleEmailErrors($email),
-  'password' => getSimplePasswordErrors($password)
-];
-
-$hasErrors = !empty($errors['email']) || !empty($errors['password']);
+// バリデーションチェック（統一メッセージを返す）
+$email_errors = getSimpleEmailErrors($email);
+$password_errors = getSimplePasswordErrors($password);
 
 // エラーがあればログイン処理を中止してフォームに戻る
-if ($hasErrors) {
-  $_SESSION['errors'] = $errors;
+// セキュリティ: バリデーション関数が統一メッセージを返す（ユーザー列挙攻撃対策）
+if (!empty($email_errors) || !empty($password_errors)) {
+  // どちらかにエラーがあれば、最初のエラーメッセージを表示
+  $_SESSION['error_message'] = $email_errors[0] ?? $password_errors[0];
   redirect('./login.php');
 }
 
@@ -51,7 +49,8 @@ try {
     header('Location: ./admin/dashboard.php');
     exit();
   } else {
-    $_SESSION['error_message'] = 'メールアドレスまたはパスワードが正しくありません。';
+    // 認証失敗時も同じメッセージ（セキュリティ対策）
+    $_SESSION['error_message'] = 'ログイン情報が正しくありません。';
     redirect('./login.php');
   }
 } catch (PDOException $e) {
