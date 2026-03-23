@@ -14,12 +14,14 @@ $email = getTrimmedPostValue('email');
 $password = $_POST['password'] ?? '';
 
 // バリデーションチェック（統一メッセージを返す）
-$email_errors = getSimpleEmailErrors($email);
-$password_errors = getSimplePasswordErrors($password);
+$errors = [
+  'email' => getSimpleEmailErrors($email),
+  'password' => getSimplePasswordErrors($password)
+];
 
 // エラーがあればログイン処理を中止してフォームに戻る
 // セキュリティ: すべて同じエラーメッセージを表示（ユーザー列挙攻撃対策）
-if (!empty($email_errors) || !empty($password_errors)) {
+if (!empty($errors['email']) || !empty($errors['password'])) {
   $_SESSION['error_message'] = 'ログイン情報が正しくありません。';
   redirect('./login.php');
 }
