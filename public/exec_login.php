@@ -18,10 +18,9 @@ $email_errors = getSimpleEmailErrors($email);
 $password_errors = getSimplePasswordErrors($password);
 
 // エラーがあればログイン処理を中止してフォームに戻る
-// セキュリティ: バリデーション関数が統一メッセージを返す（ユーザー列挙攻撃対策）
+// セキュリティ: すべて同じエラーメッセージを表示（ユーザー列挙攻撃対策）
 if (!empty($email_errors) || !empty($password_errors)) {
-  // どちらかにエラーがあれば、最初のエラーメッセージを表示
-  $_SESSION['error_message'] = $email_errors[0] ?? $password_errors[0];
+  $_SESSION['error_message'] = 'ログイン情報が正しくありません。';
   redirect('./login.php');
 }
 
