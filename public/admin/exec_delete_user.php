@@ -9,8 +9,15 @@ requireValidCsrfToken();
 
 // ユーザーID取得
 $user_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+// filter_input PHPの組み込み関数 外部からの入力データを安全に取得・検証
+// filter_input(タイプ, 変数名, フィルタ, オプション)
+// POSTデータから id パラメータを取得
+// FILTER_VALIDATE_INT で整数としてバリデーション（悪意のあるSQL文を注入するのを防ぐため整数だけ受け付ける）
+// 有効な整数なら その値、無効なら false を返す
+
 if (!$user_id){
-  exit('無効なIDです');
+  $_SESSION['msg'] = '無効なIDです';
+  redirect('./admin.php');
 }
 
 //　削除処理
@@ -29,8 +36,9 @@ try {
   } else {
     $_SESSION['msg'] = 'ユーザーが見つかりませんでした';
   }
-} catch (PDOException $e){
-  $_SESSION['msg'] = '削除に失敗しました';
-}
 
-redirect('./admin.php');
+  redirect('./admin.php');
+} catch (PDOException $e){
+  $_SESSION['msg'] = 'データベースエラーが発生しました';
+  redirect('./admin.php');
+}
