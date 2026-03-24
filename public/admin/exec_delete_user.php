@@ -31,10 +31,14 @@ try {
   // 削除実行
   $deleted_count = deleteUserById($user_id);
 
-  if ($deleted_count > 0) {
+  //削除された行が0より大きければ成功
+  if ($deleted_count === 1) {
     $_SESSION['success'] = 'ユーザーを削除しました';
-  } else {
+  } elseif ($deleted_count === 0) {
     $_SESSION['error'] = 'ユーザーが見つかりませんでした';
+  } else {
+    // 通常は起こらない（DBの主キー制約が壊れている場合）
+    $_SESSION['error'] = 'データベースに異常が発生しました';
   }
 
   redirect('./admin.php');

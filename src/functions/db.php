@@ -76,6 +76,7 @@ function deleteUserById(int $id): int
   $stmt->bindValue(':ID', $id, PDO::PARAM_INT);
   $stmt->execute();
   return $stmt->rowCount();
+  // 削除された行を返す 1 →1行削除された（成功） 0 →削除されてない（失敗）
 }
 
 // ユーザー登録（新規ユーザーをusersテーブルに挿入）
