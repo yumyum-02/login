@@ -7,10 +7,10 @@ function getIconDirectory(): string
 }
 
 // アイコンファイルのパスを生成
-// extension: 拡張子（jpg, png等） / isTemp: 一時ファイルならtrue
+// extension: 拡張子（jpg, png等） / isTemp: プレビュー用ファイル（*_temp.*）ならtrue
 function getIconFilePath(int $userId, string $extension, bool $isTemp = false): string
 {
-  // 一時ファイルなら "{userId}_temp.{拡張子}"、本番なら "{userId}.{拡張子}"
+  // プレビュー用ファイルなら "{userId}_temp.{拡張子}"、本番なら "{userId}.{拡張子}"
   $filename = $isTemp ? "{$userId}_temp.{$extension}" : "{$userId}.{$extension}";
   return getIconDirectory() . $filename;
 }
@@ -36,6 +36,16 @@ function getImageMimeType(string $filePath): ?string
 {
   $imageInfo = getimagesize($filePath);
   return $imageInfo['mime'] ?? null;
+  /*
+  getimagesize()の戻り値：
+  $imageInfo = [
+    0 => 800,              // 画像の幅（ピクセル）
+    1 => 600,              // 画像の高さ（ピクセル）
+    2 => IMAGETYPE_JPEG,   // 画像タイプ（定数） これをみたいので[2]
+    3 => 'width="800" height="600"',
+    'mime' => 'image/jpeg'や'image/png'
+  ];
+  */
 }
 
 // アップロード一時ファイルを指定パスに移動
@@ -43,8 +53,21 @@ function moveUploadedIconFile(string $tmpPath, string $destPath): bool
 {
   return move_uploaded_file($tmpPath, $destPath);
   // move_uploaded_file() はPHPの組み込み関数
-  // - ファイルが本当にアップロードされたものかチェック（セキュリティ対策）
-  // - アップロードファイルしか移動できない（勝手に他のファイルを移動させない）
+  /*
+  1. セキュリティチェック
+  /tmp/phpYhfR3F は本当にアップロードされたファイルか？
+  → PHPの内部リストを確認
+  → はい、$_FILES経由でアップロードされたものである
+  2. ファイルを移動
+  /tmp/phpYhfR3F（元）
+  ↓ 移動
+  /var/www/login/public/image/icon/123_temp.jpg（新）
+  3. 元のファイルを削除
+  /tmp/phpYhfR3F を削除
+  4. 結果を返す
+  成功 → true を返す
+  失敗 → false を返す
+  */
 }
 
 // ファイルをリネーム
@@ -78,6 +101,7 @@ function deleteAllIconFiles(int $userId, bool $isTemp = false): void
 {
   $extensions = ['jpg', 'jpeg', 'png'];
 
+  // ユーザーID・拡張子・temp/本番フラグから、アイコンファイルの完全パスを生成 → そのパスにファイルが存在すれば削除
   foreach ($extensions as $ext) {
     $path = getIconFilePath($userId, $ext, $isTemp);
     deleteIconFileIfExists($path);

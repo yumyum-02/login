@@ -15,7 +15,7 @@ if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
 destroyCsrfToken();
 
 try {
-  // アイコンをリセット（本番ファイル削除、DB NULL）
+  // アイコンをリセット（該当ユーザーの画像を全削除、DB NULL）
   resetIcon($_SESSION['user']['id']);
 
   // セッションのユーザー情報を更新

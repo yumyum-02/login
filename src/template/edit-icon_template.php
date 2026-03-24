@@ -85,7 +85,7 @@
               <!-- アイコンプレビュー -->
               <div class="icon-preview-container" id="iconPreviewContainer">
                 <?php
-                // セッションに一時ファイル名があればそれを表示
+                // セッションにプレビュー用ファイル名（*_temp.*）があればそれを表示
                 if (!empty($_SESSION['temp_icon'])) {
                   $previewPath = '/image/icon/' . $_SESSION['temp_icon'];
                 } else {
