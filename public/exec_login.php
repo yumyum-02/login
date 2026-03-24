@@ -2,11 +2,7 @@
 require '../src/bootstrap.php';
 
 // CSRFトークン検証
-if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-  exit('不正なリクエストです');
-}
-// CSRFトークンを破棄
-destroyCsrfToken();
+requireValidCsrfToken();
 
 // バリデーション
 // 空白の削除

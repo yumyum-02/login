@@ -8,11 +8,7 @@ require_once dirname(__DIR__, 2) . '/src/functions/icon.php';
 requireLogin('../login.php');
 
 // CSRFトークン検証
-if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-  exit('不正なリクエストです');
-}
-// CSRFトークンを破棄
-destroyCsrfToken();
+requireValidCsrfToken();
 
 // ファイルを取得
 $file = $_FILES['icon'] ?? null;

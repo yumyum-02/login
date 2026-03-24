@@ -20,3 +20,12 @@ function destroyCsrfToken(): void
 {
   unset($_SESSION['csrf_token']);
 }
+
+// CSRFトークンを検証し、無効なら終了、有効なら破棄
+function requireValidCsrfToken(): void
+{
+  if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+    exit('不正なリクエストです');
+  }
+  destroyCsrfToken();
+}

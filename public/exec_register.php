@@ -2,9 +2,7 @@
 require '../src/bootstrap.php';
 
 // CSRFトークン検証
-if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-  exit('不正なリクエストです');
-}
+requireValidCsrfToken();
 
 $name = getTrimmedPostValue('name');
 $email = getTrimmedPostValue('email');
@@ -22,8 +20,6 @@ $errors = [
 $hasErrors = !empty($errors['name']) || !empty($errors['email']) || !empty($errors['password']);
 // エラーがあれば登録処理を中止してフォームに戻る
 if ($hasErrors) {
-  // エラー時はCSRFトークンを生成
-  $csrf_token = generateCsrfToken();
   redirectWithErrors($errors, ['name' => $name, 'email' => $email],'./regist.php');
 }
 
@@ -46,9 +42,6 @@ try {
 
   // 登録されていないメールアドレスの場合は、usersテーブルに新規登録
   $user_id = registerUser($name, $email, $password_hash);
-
-  // 登録成功時はCSRFトークンを破棄
-  destroyCsrfToken();
 
   $_SESSION['msg'] = "会員登録が完了しました。ログインしてください。";
   redirect('./login.php');

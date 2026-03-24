@@ -5,11 +5,7 @@ require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 requireLogin('../login.php');
 
 // CSRFトークン検証
-if (!verifyCsrfToken($_POST['csrf_token'] ?? '' )){
-  exit('不正なリクエストです');
-}
-// CSRFトークンを破棄
-destroyCsrfToken();
+requireValidCsrfToken();
 
 // バリデーション
 $current_password = $_POST['current_password'] ?? '';
