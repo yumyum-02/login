@@ -7,7 +7,7 @@ requireLogin('../login.php');
 $users_info = getUsersInfo();
 
 // メッセージ取得
-$msg = getMessage();
+$messages = getMessages();
 
 // CSRFトークンを生成
 $csrf_token = generateCsrfToken();

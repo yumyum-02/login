@@ -69,12 +69,12 @@
   </div>
 
   <main class="p-4">
-    <?php if ($msg): ?>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= escape($msg) ?>
+    <?php foreach ($messages as $message): ?>
+      <div class="alert alert-<?= $message['type'] ?> alert-dismissible fade show" role="alert">
+        <?= escape($message['text']) ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
       </div>
-    <?php endif; ?>
+    <?php endforeach; ?>
     <div class="d-flex justify-content-between align-items-start mb-4">
       <div>
         <h1 class="h3 fw-bold mb-1">ユーザー一覧</h1>

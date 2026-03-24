@@ -33,3 +33,27 @@ function getMessage(): ?string
   // セッションになければURLから取得
   return getUrlMessage();
 }
+
+// メッセージを取得してクリア（タイプ別に対応）
+function getMessages(): array
+{
+  $messages = [];
+
+  if (!empty($_SESSION['success'])) {
+    $messages[] = [
+      'text' => $_SESSION['success'],
+      'type' => 'success'
+    ];
+    unset($_SESSION['success']);
+  }
+
+  if (!empty($_SESSION['error'])) {
+    $messages[] = [
+      'text' => $_SESSION['error'],
+      'type' => 'danger'
+    ];
+    unset($_SESSION['error']);
+  }
+
+  return $messages;
+}
