@@ -58,8 +58,8 @@ function getPasswordValidationErrors(string $password): array
 	if (!isPasswordFormat($password)) {
 			$errors[] = 'パスワードは半角英数字と記号で入力してください。';
 	}
-	if (!isWithinLength($password, 16, 64)) {
-    $errors[] = 'パスワードは16文字以上64文字以内で入力してください。';
+	if (!isWithinLength($password, 8, 64)) {
+    $errors[] = 'パスワードは8文字以上64文字以内で入力してください。';
   }
 	return $errors;
 }
@@ -69,7 +69,7 @@ function getPasswordValidationErrors(string $password): array
 function getSimplePasswordErrors(string $password): array
 {
 	// 何かエラーがあれば統一メッセージ
-	if (isEmpty($password) || !isPasswordFormat($password) || !isWithinLength($password, 16, 64)) {
+	if (isEmpty($password) || !isPasswordFormat($password) || !isWithinLength($password, 8, 64)) {
 		return ['ログイン情報が正しくありません。'];
 	}
 	return [];
