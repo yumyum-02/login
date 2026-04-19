@@ -1,7 +1,17 @@
+main.p-4{
+  padding-top: 5rem !important;
+}
+
 /* ナビゲーションバーのスタイル */
 .navbar-brand {
   font-weight: 600;
   letter-spacing: -0.5px;
+}
+
+.navbar{
+  position: fixed;
+  width: 100%;
+  z-index: 100;
 }
 
 /* カードのアクセントボーダー */
