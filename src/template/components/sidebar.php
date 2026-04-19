@@ -41,6 +41,12 @@ $logout_path = $logout_path ?? '../logout.php';
         </li>
       <?php endif; ?>
       <li class="nav-item">
+        <a class="nav-link <?= $active_page === 'chat' ? 'active' : '' ?>" href="<?= $base_path ?>chat.php">
+          <i class="bi bi-chat-text-fill"></i>
+          掲示板
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link <?= $active_page === 'account' ? 'active' : '' ?>" href="<?= $base_path ?>account.php">
           <i class="bi bi-person-fill"></i>
           アカウント情報
