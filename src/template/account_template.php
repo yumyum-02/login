@@ -11,56 +11,15 @@
 </head>
 
 <body class="bg-light min-vh-100">
-  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-    <div class="container-fluid">
-      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="./dashboard.php">
-        <i class="bi bi-house-door-fill me-2"></i>Dashboard
-      </a>
-      <div class="d-flex align-items-center">
-        <span class="text-white me-3 d-none d-md-inline d-flex align-items-center">
-          <?= displayIcon(AuthUser::getUserId(), 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
-          <?= escape(AuthUser::getName()) ?>
-        </span>
-      </div>
-    </div>
-  </nav>
+  <?php
+  // ナビゲーションバー
+  require_once __DIR__ . '/components/navbar.php';
 
-  <div class="offcanvas offcanvas-start bg-white shadow-sm" tabindex="-1" id="sidebarMenu">
-    <div class="offcanvas-header border-bottom d-md-none">
-      <h5 class="offcanvas-title d-flex align-items-center">
-        <?= displayIcon($_SESSION['user']['id'], 24, 'rounded-circle me-2', 'ユーザーアイコン') ?>
-        <?= escape($_SESSION['user']['name']) ?>
-      </h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="./dashboard.php">
-            <i class="bi bi-house-door-fill"></i>
-            ダッシュボード
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="./account.php">
-            <i class="bi bi-person-fill"></i>
-            アカウント情報
-          </a>
-        </li>
-        <li class="nav-item mt-3">
-          <form action="../logout.php" method="post" class="p-2">
-            <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-            <button type="submit" class="btn btn-outline-danger btn-sm w-100" name="logout">
-              <i class="bi bi-box-arrow-right me-1"></i>ログアウト
-            </button>
-          </form>
-        </li>
-      </ul>
-    </div>
-  </div>
+  // サイドバー
+  $active_page = 'account';
+  $is_admin = false;
+  require_once __DIR__ . '/components/sidebar.php';
+  ?>
 
   <main class="p-4">
     <div class="container-fluid">
