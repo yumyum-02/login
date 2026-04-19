@@ -142,3 +142,59 @@ function getUserIcon(int $userId): ?string
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
   return $result['icon'] ?? null;
 }
+
+/**
+ * 掲示板投稿を posts テーブルに保存する
+ */
+function insertPost(string $message, int $createdBy): int
+{
+  $pdo = connectDb();
+  $stmt = $pdo->prepare('INSERT INTO posts (message, created_by) VALUES (:message, :created_by)');
+  $stmt->bindValue(':message', $message, PDO::PARAM_STR);
+  $stmt->bindValue(':created_by', $createdBy, PDO::PARAM_INT);
+  $stmt->execute();
+
+  return (int)$pdo->lastInsertId();
+}
+
+/**
+ * 掲示板一覧（削除済み除外、投稿者名付き）
+ * @return list<array{id:int,message:string,created_at:string,created_by:int,author_name:string}>
+ */
+function getPostsForChatList(): array
+{
+  $pdo = connectDb();
+  $sql = '
+    SELECT p.id, p.message, p.created_at, p.created_by, u.name AS author_name
+    FROM posts p
+    INNER JOIN users u ON u.id = p.created_by
+    WHERE p.deleted_at IS NULL
+    ORDER BY p.created_at ASC, p.id ASC
+  ';
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * 自分の投稿を論理削除する（行は残し deleted_at のみ設定）
+ * @return int 更新された行数（0 または 1）
+ */
+function softDeletePostForOwner(int $postId, int $ownerUserId): int
+{
+  $pdo = connectDb();
+  $sql = '
+    UPDATE posts
+    SET deleted_at = CURRENT_TIMESTAMP(6)
+    WHERE id = :id
+      AND created_by = :created_by
+      AND deleted_at IS NULL
+  ';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':id', $postId, PDO::PARAM_INT);
+  $stmt->bindValue(':created_by', $ownerUserId, PDO::PARAM_INT);
+  $stmt->execute();
+
+  return $stmt->rowCount();
+}

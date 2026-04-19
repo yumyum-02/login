@@ -8,5 +8,8 @@ requireLogin('../login.php');
 // CSRFトークンを生成
 $csrf_token = generateCsrfToken();
 
+// 投稿一覧取得（処理は public/chat/exec_chat.php）
+require_once dirname(__DIR__) . '/chat/exec_chat.php';
+
 // テンプレート読み込み
 require_once dirname(__DIR__, 2) . '/src/template/chat_template.php';

@@ -140,3 +140,17 @@ function getIconValidationErrors(?array $file): array
 
 	return $errors;
 }
+
+// 投稿のばりでーしょん
+function getChatPostValidationErrors(string $chatpost): array
+{
+	if (isEmpty($chatpost)){
+		return ['入力して下さい'];
+	}
+
+	$errors = [];
+	if (!isWithinLength($chatpost, 1, 140)) {
+		$errors[] = '投稿は1文字以上140文字以内で入力してください。';
+	}
+	return $errors;
+}

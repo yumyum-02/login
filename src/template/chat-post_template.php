@@ -36,10 +36,25 @@
           <section class="card shadow-sm border-0">
             <div class="card-body p-4">
               <p class="mb-0 flex-grow-1 text-secondary"><?= escape(AuthUser::getName()) ?></p>
-              <form action="">
-                <input type="text">
-                <button>投稿</button>
-                <button>キャンセル</button>
+              <form action="../chat/exec_chat-post.php" method="post">
+                <input type="text"
+                  class="form-control <?= !empty($errors) ? 'is-invalid' : '' ?>"
+                  name="chatpost"
+                  value="<?= escape($old_input['chatpost'] ?? '') ?>">
+                <?php if (!empty($errors)): ?>
+                <div class="invalid-feedback d-block">
+                  <?php foreach ($errors as $error): ?>
+                    <div><?= escape($error) ?></div>
+                  <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <button type="submit" class="btn btn-primary" name="chat_post_submit">
+                  <i class="bi bi-check-lg me-2"></i>投稿
+                </button>
+                <a href="../admin/chat.php" class="btn btn-outline-secondary">
+                  <i class="bi bi-x-lg me-2"></i>キャンセル
+                </a>
               </form>
             </div>
         </section>

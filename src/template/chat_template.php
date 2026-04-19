@@ -53,58 +53,29 @@
               <a class="btn btn-primary" href="../admin/chat-post.php">投稿</a>
             </div>
             <ul class="card-body p-4 mb-0">
+              <?php $current_user_id = AuthUser::getUserId(); ?>
+              <?php foreach ($posts as $post): ?>
               <li class="row align-items-center pb-3">
                 <div class="d-flex mb-2">
-                  <p class="mb-0 flex-grow-1 text-secondary"><?= escape(AuthUser::getName()) ?></p>
+                  <p class="mb-0 flex-grow-1 text-secondary"><?= escape($post['author_name']) ?></p>
+                  <?php if ($current_user_id !== null && (int)$post['created_by'] === $current_user_id): ?>
                   <div class="col-sm-3 text-end">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                      <i class="bi bi-trash"></i> 削除
-                    </button>
+                    <form action="../chat/exec_chat-delete.php" method="post" class="d-inline"
+                      onsubmit="return confirm('本当に削除しますか？');">
+                      <input type="hidden" name="csrf_token" value="<?= escape($csrf_token) ?>">
+                      <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
+                      <button type="submit" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> 削除
+                      </button>
+                    </form>
                   </div>
+                  <?php endif; ?>
                 </div>
                 <div>
-                  <p class="mb-0">コメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメント</p>
+                  <p class="mb-0"><?= escape($post['message']) ?></p>
                 </div>
               </li>
-              <li class="row align-items-center pb-3">
-                <div class="d-flex mb-2">
-                  <p class="mb-0 flex-grow-1 text-secondary"><?= escape(AuthUser::getName()) ?></p>
-                  <div class="col-sm-3 text-end">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                      <i class="bi bi-trash"></i> 削除
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <p class="mb-0">コメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメント</p>
-                </div>
-              </li>
-              <li class="row align-items-center pb-3">
-                <div class="d-flex mb-2">
-                  <p class="mb-0 flex-grow-1 text-secondary"><?= escape(AuthUser::getName()) ?></p>
-                  <div class="col-sm-3 text-end">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                      <i class="bi bi-trash"></i> 削除
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <p class="mb-0">コメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメント</p>
-                </div>
-              </li>
-              <li class="row align-items-center pb-3">
-                <div class="d-flex mb-2">
-                  <p class="mb-0 flex-grow-1 text-secondary"><?= escape(AuthUser::getName()) ?></p>
-                  <div class="col-sm-3 text-end">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                      <i class="bi bi-trash"></i> 削除
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <p class="mb-0">コメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメント</p>
-                </div>
-              </li>
+              <?php endforeach; ?>
           </ul>
         </section>
       </div>
